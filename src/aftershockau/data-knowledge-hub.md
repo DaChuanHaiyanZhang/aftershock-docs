@@ -1,5 +1,7 @@
 # Knowledge Hub
 
+[[toc]]
+
 ## 首页
 
 ### 数据流

@@ -1,10 +1,17 @@
 import { defineConfig } from "vitepress";
+import { withMermaid } from "vitepress-plugin-mermaid";
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default withMermaid(defineConfig({
   title: "aftershcok-docs",
   description: "aftershcok website docs",
   srcDir: "src/",
+  mermaid: {
+    theme: "default",
+  },
+  mermaidPlugin: {
+    class: "mermaid my-class", // set additional css classes for parent container
+  },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: "/imgs/logo.svg",
@@ -42,6 +49,8 @@ export default defineConfig({
               text: "Flagship Showroom",
               link: "/aftershockau/data-flagship-showroom",
             },
+            { text: "Contact Us", link: "/aftershockau/data-contact-us" },
+            {text: "FAQ Hub", link: "/aftershockau/data-faq-hub" },
           ],
         },
         {
@@ -51,9 +60,15 @@ export default defineConfig({
               text: "Knowledge Hub",
               link: "/aftershockau/routes-knowledge-hub",
               items: [
-                { text: 'Knowledge Hub Categories', link: '/aftershockau/routes-knowlede-hub-categories' },
-                { text: 'Knowledge Hub Post', link: '/aftershockau/routes-knowlede-hub-post' }
-              ]
+                {
+                  text: "Knowledge Hub Categories",
+                  link: "/aftershockau/routes-knowlede-hub-categories",
+                },
+                {
+                  text: "Knowledge Hub Post",
+                  link: "/aftershockau/routes-knowlede-hub-post",
+                },
+              ],
             },
             {
               text: "Flagship Showroom",
@@ -63,6 +78,7 @@ export default defineConfig({
               text: "Contact Us",
               link: "/aftershockau/routes-contact-us",
             },
+            { text: "FAQ Hub", link: "/aftershockau/routes-faq-hub" },
           ],
         },
       ],
@@ -74,4 +90,4 @@ export default defineConfig({
       },
     ],
   },
-});
+}));

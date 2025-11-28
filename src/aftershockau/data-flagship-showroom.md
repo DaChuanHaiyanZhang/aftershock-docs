@@ -1,5 +1,7 @@
 # Flagship Showroom
 
+[[toc]]
+
 ## 数据流
 
 数据在 Prismic 上维护，然后通过 API 的形式调取到数据，并完成渲染。

@@ -1,5 +1,7 @@
 # Layout 全局数据流
 
+[[toc]]
+
 ## Layout 头部内容 Header
 
 ### 横幅的内容
@@ -177,7 +179,7 @@ export function LogoLink() {
 - 更新到 shopify 的 [Metaobjects](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004) 👇
 - 然后在 [Hydrogen](https://hydrogen.shopify.dev/) 项目使用 [storefront Api](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching) 👌
 
-如下如所示：
+如下图所示：
 
 ![aftershock](/screenshots/ScreenShot_2025-11-26_105721_008.png "aftershock")
 
@@ -715,6 +717,7 @@ export function PageLayout() {
 - （Knowledge Hub）帮助中心
 - （Flagship Showroom）展厅信息
 - （Contact Us）联系我们
+- Check Your Build Status
 
 #### 插件
 
@@ -722,10 +725,12 @@ export function PageLayout() {
 
 其中在线聊天工具就使用到了 [FrontApp](https://front.com/) 这个工具，它是在官网注入相关代码之后，用户在 aftershock 和客服在 frontapp 后台聊天
 
+> [!INFO]
 > Tips: 也许我们后续还可以对用户在线聊天的信息进行数据分析，得出一些结论，方便做商业规划，[查看建议方案](./suggestion.md)
 
 > FrontApp 的 ChartId dcccf16bf7f8867dc9516ad40e69defe
 
+> [!DANGER]
 > Tips: 这些敏感信息是不是可以存储到 metaobjects 中呢？
 
 <details>
@@ -891,7 +896,7 @@ const loadChatBot = () => {
 
 </details>
 
-在entry.server.jsx配置相关头
+在 entry.server.jsx 配置相关头
 
 ```jsx
 // 包含frontapp的域名信息
@@ -901,12 +906,12 @@ import {
   mergeCSPDirectives,
   newDirectives,
   parseCSPHeader,
-} from 'utils/cspUtils';
+} from "utils/cspUtils";
 
 export default async function handleRequest() {
   const finalDirectives = mergeCSPDirectives(baseDirectives, newDirectives);
   const finalCSPHeader = buildCSPHeader(finalDirectives);
-  responseHeaders.set('Content-Security-Policy', finalCSPHeader);
+  responseHeaders.set("Content-Security-Policy", finalCSPHeader);
 }
 ```
 
@@ -916,9 +921,281 @@ export default async function handleRequest() {
 2. [Knowledge Hub](./data-knowledge-hub.md) 链接到对应的页面，[功能说明](./routes-knowledge-hub.md)
 3. [Flagship Showroom](./data-flagship-showroom.md) 点击之后跳转到对应的页面
 4. [Contact Us](./data-contact-us.md) 点击之后跳转到联系我们界面
+5. Check Your Build Status 在获取到表单数据之后携带数据跳转到 [order-tracker]('./data-order-tracker.md') 界面
 
 #### 组件引用结构链
 
+```mermaid
+flowchart LR
+root.jsx --> PageLayout.jsx --> AsideProvider --> HelpAside
+```
+
 ### 用户中心
 
+#### 数据源
+
+- 登录功能
+- 注册功能
+
+### 组件引用结构链
+
+```mermaid
+flowchart LR
+root.jsx --> PageLayout.jsx --> AsideProvider --> AccountAside
+```
+
+> [!INFO] >**AsideProvider** 组件是数据共享的一个组件，具体可参照 [React 文档](https://react.docschina.org/reference/react/createContext#provider)
+
+- AccountAside 在登录的时候调用组件负责表单提交 LoginForm 组件完成用户登录
+
+  ```jsx
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setMessage("");
+
+    try {
+      const response = await fetch("/account/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setMessage("Login successful!");
+        // setFormState('profile'); // Переключение на профиль или нужный маршрут
+        setIsCustomerLoggedIn(true);
+        navigate(window.location.pathname);
+      } else {
+        setError(result.error || "An error occurred during login.");
+      }
+    } catch (error) {
+      setError("An unexpected error occurred.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  ```
+
+- AccountAside 在注册的时候调用组件负责表单提交 RegisterForm 组件完成用户注册
+
+  ```jsx
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setMessage("");
+
+    const isValid = await validateForm();
+    if (!isValid) {
+      setLoading(false);
+      return;
+    }
+
+    const formData = {
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: email.toLowerCase().trim(),
+      password,
+      confirmPassword,
+      subscribe,
+    };
+
+    setMessage("Creating your account... Please wait.");
+
+    try {
+      const response = await fetch("/account/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setMessage(
+          result.message || "Account created successfully! Please log in."
+        );
+
+        const verificationTimeout = setTimeout(async () => {
+          const checkResult = await checkAccountExists(formData.email);
+          if (checkResult.exists && checkResult.customer) {
+            setMessage((prev) => prev + " Account verified.");
+          } else {
+            setMessage(
+              (prev) =>
+                prev +
+                " Account created successfully. Verification may take a few minutes."
+            );
+          }
+        }, 1000);
+
+        const redirectTimeout = setTimeout(() => {
+          setFormState("login");
+        }, 2500);
+
+        timeoutsRef.current.push(verificationTimeout, redirectTimeout);
+      } else {
+        setError(result.error || "An error occurred. Please try again.");
+      }
+    } catch {
+      setError("An unexpected error occurred. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  ```
+
+- AccountAside 在重置密码的时候调用 PasswordResetForm 组件完成用户重置密码
+
+  ```jsx
+  <fetcher.Form
+    method="post"
+    action="/account/passwordReset"
+    className="flex flex-col gap-4 w-full"
+  >
+  <!-- code -->
+  </fetcher.Form>
+  ```
+
 ### 购物车
+
+#### 数据源
+
+1. 在 root.jsx 中先从`contenxt`中获取
+
+```jsx
+const { customerAccount, cart } = context;
+const customerAccessToken = context.session.get("customerAccessToken");
+```
+
+2. 购物车数据 (cartData)
+
+```jsx
+async function getCart() {
+  return await cart.get();
+}
+const cartData = await getCart();
+```
+
+3. 过滤特定产品的逻辑
+
+```jsx
+const nonTracked = cartData.lines.nodes
+  .filter(
+    (node) =>
+      node.merchandise?.product?.handle?.includes("shipping-protection") ||
+      node.merchandise?.product?.handle?.includes("payment-fee")
+  )
+  .map((cl) => cl.id);
+```
+
+#### 组件引用结构链
+
+> [!INFO]
+> 这里需要特别注意的是使用到了 shopify 的 hydrogen 组件的 [Analytics.Provider](https://shopify.dev/docs/api/hydrogen/2024-04)和[Analytics.CartView](https://shopify.dev/docs/api/hydrogen/2024-04/components/analytics/analytics-cartview)组件
+
+```mermaid
+flowchart LR
+root.jsx --> Analytics.Provider --> PageLayout --> AsideProvider --> CartAside --> NewCartMain --> Analytics.CartView
+```
+
+## Footer 组件
+
+### 数据源
+
+footer 组件的数据源实际上跟 header 的一模一样，因为都是从 metaobjects 中取的
+
+```jsx
+const [footerTemp] = await Promise.all([
+  storefront.query(GET_METAOBJECTS_BY_HANDLE, {
+    variables: footerVariables,
+    cache: storefront.CacheLong(),
+  }),
+]);
+
+const footer = JSON.parse(
+  footerTemp?.metaobject?.fields?.find((field) => field.key === "data")?.value
+);
+
+const formattedFooter = footer ? footerFormatting(footer?.data?.body) : null;
+
+// 然后再 PageLayout 中注入...
+<PageLayout {...data}>{children}</PageLayout>;
+```
+
+### 组件引用结构链
+
+```mermaid
+flowchart TD
+    PageLayout --> Footer
+
+    Footer --> NewsRegister
+    Footer --> DesktopFooter
+    Footer --> MobileFooter
+    Footer --> Copyright
+
+    DesktopFooter --> FooterLinks
+    DesktopFooter --> ContactUs
+
+    MobileFooter --> FooterSection
+    MobileFooter --> ContactSection
+    MobileFooter --> SocialLinks
+
+    ContactUs --> ContactSection
+    ContactUs --> SocialLinks
+```
+
+- NewsRegister 是订阅邮箱的组件，核心代码就是调用表单提交，发起订阅:
+
+::: code-group
+
+```javascript
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (
+    email.match(
+      /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+    )
+  ) {
+    setError(false);
+    const response = await fetch("/api/newsRegister", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({ email }),
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      setSuccess(true);
+      setEmail("");
+    } else {
+      setError(true);
+      setErrorMessage(result.error || "Subscription failed.");
+    }
+  } else {
+    setError(true);
+    setErrorMessage("Please enter a valid e-mail address");
+  }
+};
+```
+
+```
+app\components\Footer\NewsRegister\index.jsx
+```
+:::
+
+其中该服务也开发了订阅的入口接口 app\routes\api.newsRegister.jsx，此处更新了数据到了[instant one](https://www.instant.one/)(我不太确定，因为还是没看到具体的数据流向)
+
+- DesktopFooter PC端展示 Footer 数据
+- MobileFooter 移动端展示 Footer 数据
+- Copyright 展示版权信息
+- SocialLinks 的数据属于静态文件
