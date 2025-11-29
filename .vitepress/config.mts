@@ -41,6 +41,7 @@ export default withMermaid(defineConfig({
           text: "数据渲染流",
           items: [
             { text: "Layout 全局数据流", link: "/aftershockau/data-layout" },
+            { text: "Home Page", link: "/aftershockau/data-home" },
             {
               text: "Knowledge Hub",
               link: "/aftershockau/data-knowledge-hub",
@@ -56,6 +57,7 @@ export default withMermaid(defineConfig({
         {
           text: "功能说明",
           items: [
+            { text: "Home Page", link: "/aftershockau/routes-home" },
             {
               text: "Knowledge Hub",
               link: "/aftershockau/routes-knowledge-hub",

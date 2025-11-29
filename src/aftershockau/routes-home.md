@@ -2,59 +2,86 @@
 
 ## Banner
 
-app\components\Slices\LandingPageSlices\HeroBanner\index.jsx
+首页Banner图展示的区域，一般为活动、商品的入口，点击之后跳转到对应的页面。
+
+![aftershock](/screenshots/ScreenShot_2025-11-29_075857_299.png "aftershock")
 
 ## Categories 类型分组
 
-app\components\Slices\LandingPageSlices\NewCategories\index.jsx
+此处展示商品分类的快捷入口
+
+![aftershock](/screenshots/ScreenShot_2025-11-29_075916_900.png "aftershock")
 
 ## AFTERSHOCK SPECIAL EDITIONS
 
-app\components\Slices\LandingPageSlices\LimitedEditionSlice\index.jsx
+此处展示的是aftershock的联名款或者独家设计
+
+![aftershock](/screenshots/ScreenShot_2025-11-29_075944_115.png "aftershock")
 
 ## Ultra-labs Builds
 
-app\components\Slices\LandingPageSlices\UltracoreCarousel\index.jsx
+此处展示aftershock的概念型产品。
+
+![aftershock](/screenshots/ScreenShot_2025-11-29_080318_080.png "aftershock")
 
 ## Embed Video
 
-app\components\Slices\LandingPageSlices\EmbedVideo\index.jsx
+此处展示youtobue视频，做宣传使用。
+
+![aftershock](/screenshots/ScreenShot_2025-11-29_080549_122.png "aftershock")
 
 ## Australia’s #1 Performance PC Company
 
-app\components\Slices\LandingPageSlices\NewAwards\index.jsx
+展示荣誉，澳大利亚排名第一的性能PC公司！
+
+![aftershock](/screenshots/ScreenShot_2025-11-29_080947_838.png "aftershock")
 
 ## Ready To Ship PCs
 
-app\components\Slices\LandingPageSlices\RTSPCs\index.jsx
+现货供应列表
+
+![aftershock](/screenshots/ScreenShot_2025-11-29_081017_242.png "aftershock")
 
 ## PERFORMANCE PCS BUILT TO PERFECTION
 
-app\components\Slices\LandingPageSlices\ThreeCategory\index.jsx
+定制属于自己的PC
+
+![aftershock](/screenshots/ScreenShot_2025-11-29_081049_853.png "aftershock")
 
 ## EXPLORE OUR RANGE
 
-app\components\Slices\LandingPageSlices\DesktopsCarousell\index.jsx
+产品系列展示
+
+![aftershock](/screenshots/ScreenShot_2025-11-29_081158_354.png "aftershock")
 
 ## Make Your Dream Rig A Reality
 
-app\components\Slices\LandingPageSlices\TikTokVideos\index.jsx
+TickTock 视频展示
+
+![aftershock](/screenshots/ScreenShot_2025-11-29_081252_972.png "aftershock")
 
 ## Trusted partners & Customers
 
-app\components\Slices\LandingPageSlices\TrustedPartners\index.jsx
+合作伙伴展示。
+
+![aftershock](/screenshots/ScreenShot_2025-11-29_081842_443.png "aftershock")
 
 ## POWERING CREATORS, STREAMERS & INFLUENCERS
 
-app\components\Slices\LandingPageSlices\ReviewsCarousel\index.jsx
+专注于为内容创作领域的专业人士提供顶级的工作站和游戏/直播电脑
+
+![aftershock](/screenshots/ScreenShot_2025-11-29_082110_326.png "aftershock")
 
 ## 3 countries. Over 200,000 happy customers
 
-app\components\Slices\LandingPageSlices\ReviewsIoCarouselWidget\index.jsx
+好评如潮。
+
+![aftershock](/screenshots/ScreenShot_2025-11-29_082150_061.png "aftershock")
 
 ## Australian Owned and Operated
 
-app\components\Slices\LandingPageSlices\LocationBanner\index.jsx
+线下实体店以及信息展示。
 
-## 静态HTML导入
+![aftershock](/screenshots/ScreenShot_2025-11-29_082305_639.png "aftershock")
+
 
