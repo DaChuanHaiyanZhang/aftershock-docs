@@ -368,3 +368,96 @@ CSS hover 完全能替代你当前 GSAP 的所有功能，等价的 css 就是�
 ## 首页 EXPLORE OUR RANGE （DesktopsCarousell） 组件优化建议
 
 该组件是简单粗暴的tabs点击切换，是否可以考虑使用滑块效果做tabs，使用其他插件也可。
+
+## TrackerForm 缺陷
+
+- 产生根本原因
+
+  Shopify Storefront API 没有直接的 `orderByNumber` 查询，导致只能通过列表查询，然后前端进行分析、查询。
+
+- 当前解决方案
+  - 登录状态下的用户进入该界面后，先缓存100条订单数据，然后前端使用 `find` 方法进行查询。
+    
+    ```jsx
+    //  order-tracker.jsx
+    export async function loader({context}) {
+      const {session, storefront} = context;
+      const customerAccessToken = session.get('customerAccessToken');
+      let orders = null;
+      if (customerAccessToken) {
+        const response = await storefront.query(CUSTOMER_ORDERS_QUERY, {
+          variables: {customerAccessToken, first: 100},
+        });
+        orders = response?.customer?.orders;
+      }
+      return data(
+        {orders, isLoggedIn: !!customerAccessToken, customerAccessToken},
+        {
+          headers: {
+            'Oxygen-Cache-Control': 'public, max-age=1, stale-while-revalidate=9',
+          },
+        },
+      );
+    }
+
+    ```
+    - ❌ 缺陷：
+      1. 导致前端进入页面时的卡顿
+      2. **只能从100条**的数据中查询订单信息
+    - ✅ 优势：
+      1. 用户在查询的时候会非常快，因为直接从前端缓存中获取数据。
+      2. 一般的用户不可能下100个订单，这就导致实际上这个缺陷也不是尖锐的缺陷。但是实际上还是有业务逻辑的缺陷。
+    - 🛠️ 解决方案：
+      
+      在用户进入界面后，输入订单号查询时再查询数据，或者先缓存前100条，如果数据量大于100，且没有查询到的情况下，则向下查询，这样会保证如果订单号存在的情况下，不论如何都能查询到数据。
+
+  - 登录状态下的用户，进入页面，在查询的时候，先查询前面100条，然后前端使用 `find` 方法进行查询。
+
+      ```jsx
+      // OrderTracker\index.jsx
+      const handleSearch = async () => {
+        try {
+          const requestBody = {
+            orderNumber: orderNum,
+            email: emailValue.trim(),
+          };
+
+          const response = await fetch('/api/track-order', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(requestBody),
+          });
+
+          const data = await response.json();
+          setApiLoading(false);
+
+          if (data.error) {
+            if (data.error === 'Order number and email do not match') {
+              setOrderNumberError('Order number and email do not match');
+              setEmailError('Order number and email do not match');
+            } else if (data.error === 'Order not found') {
+              setOrderNumberError(
+                'Order number not found. New orders may take up to 24 hours to show. No email after 24 hours? Contact support',
+              );
+            } else if (data.error === 'Invalid email address') {
+              setEmailError('Invalid email address');
+            } else {
+              setStatusError(data.error);
+            }
+            return;
+          }
+
+          setStatusError('');
+          setFetcherData(data);
+        } catch (err) {
+          setApiLoading(false);
+          console.error('API Error:', err);
+          setStatusError('Internal error');
+        }
+      }
+      ```
+
+    - ❌ 缺陷 **只能从100条**的数据中查询订单信息，可能导致数据缺失，前提是用户的订单数量超过100条。
+    - 🛠️ 解决方案：
+
+      在用户进入界面后，输入订单号查询时再查询数据，或者先缓存前100条，如果数据量大于100，且没有查询到的情况下，则向下查询，这样会保证如果订单号存在的情况下，不论如何都能查询到数据。

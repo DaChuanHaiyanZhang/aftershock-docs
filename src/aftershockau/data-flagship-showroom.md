@@ -4,7 +4,9 @@
 
 ## 数据流
 
-数据在 Prismic 上维护，然后通过 API 的形式调取到数据，并完成渲染。
+数据在 Prismic 上维护，[`#aux-flagship-showroom`](https://aftershockpc.prismic.io/builder/pages/ZUxSRhYAACYAIJby?s=published)
+
+然后通过 API 的形式调取到数据，并完成渲染。
 
 ```jsx
 const page = await prismicClient.getByUID("aux_page", params.handle, {

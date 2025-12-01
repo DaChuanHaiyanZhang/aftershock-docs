@@ -4,7 +4,9 @@
 
 ## 数据流
 
-该界面数据依旧保留在 Prismic 当中。通过 webhooks 监听数据变更然后同步到 metaobjects 当中，而后通过网站调用。
+该界面数据依旧保留在 Prismic 当中，[`#faq-hub`](https://aftershockpc.prismic.io/builder/pages/Y6Q0VhEAACoAJF_n?s=published)。
+
+通过 webhooks 监听数据变更然后同步到 metaobjects 当中，而后通过网站调用。
 
 ```mermaid
 flowchart LR
