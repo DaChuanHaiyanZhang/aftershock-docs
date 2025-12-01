@@ -194,11 +194,11 @@ app\components\Slices\LandingPageSlices\NewAwards\index.jsx
 这里调用了 RTSPCs 组件，内部使用 Swiper 构成。并将产品卡片使用 RTSCard 卡片进行了抽象。
 
 引用关系：
+
 ```mermaid
 flowchart LR
 RTSPCs --> RTSCard
 ```
-
 
 > [!NOTE]
 > RTSCard 使用了 [framer-motion](https://motion.dev/) 插件，是一款动画库
@@ -228,11 +228,22 @@ app\components\Slices\LandingPageSlices\ThreeCategory\index.jsx
 
 ### EXPLORE OUR RANGE
 
+该组件主要显示 aftershock 的系列。而这里主要的入口是定制门户。
+
+顶部的 tabs 效果使用原生 active 的方式实现。
+
+> [!WARNING]
+> 此处应该加上滑块效果，[修改建议](./suggestion#首页-explore-our-range-desktopscarousell-组件优化建议)
+
+实际上这里也使用了 [Swiper 组件](https://swiperjs.com/react)
+
 ```bash
 app\components\Slices\LandingPageSlices\DesktopsCarousell\index.jsx
 ```
 
-### Make Your Dream Rig A Reality
+### Make Your Dream Rig A Reality Aftershock PCs
+
+该组件主要使用了 [Swiper 组件](https://swiperjs.com/react) 搭配 ifreme 以 embd 的方式播放（获取 ticktok 的视频 ID，类似于抖音视频）。
 
 ```bash
 app\components\Slices\LandingPageSlices\TikTokVideos\index.jsx
@@ -240,11 +251,15 @@ app\components\Slices\LandingPageSlices\TikTokVideos\index.jsx
 
 ### Trusted partners & Customers
 
+该组件使用了无缝滚动。
+
 ```bash
 app\components\Slices\LandingPageSlices\TrustedPartners\index.jsx
 ```
 
 ### POWERING CREATORS, STREAMERS & INFLUENCERS
+
+该组件使用了 [Swiper 组件](https://swiperjs.com/react)，其他没有任何内容。
 
 ```bash
 app\components\Slices\LandingPageSlices\ReviewsCarousel\index.jsx
@@ -252,14 +267,61 @@ app\components\Slices\LandingPageSlices\ReviewsCarousel\index.jsx
 
 ### 3 countries. Over 200,000 happy customers
 
+该组件使用了懒加载的方式加载了三方评论插件 [reviews](https://www.reviews.io/)，展示站内的好评如潮信息。点击之后弹出 modal 可以查看详情信息。
+
 ```bash
 app\components\Slices\LandingPageSlices\ReviewsIoCarouselWidget\index.jsx
 ```
 
 ### Australian Owned and Operated
 
+该组件展示体验店信息，数据完全静态。
+
 ```bash
 app\components\Slices\LandingPageSlices\LocationBanner\index.jsx
 ```
 
 ### 静态 HTML 导入
+
+```bash
+app\components\Slices\AuxPagesSlices\StaticCode\index.jsx
+```
+
+除过以上的组件之外，首页还支持静态 HTML 组件或者代码的植入。入口如下：
+
+```jsx
+import { useEffect, useRef } from "react";
+
+export function StaticCode({ data }) {
+  const { html, css, js } = data.primary;
+  const containerRef = useRef(null);
+
+  // Вставка CSS
+  useEffect(() => {
+    if (css) {
+      const style = document.createElement("style");
+      style.innerHTML = css;
+      document.head.appendChild(style);
+      return () => {
+        document.head.removeChild(style);
+      };
+    }
+  }, [css]);
+
+  // Вставка HTML и выполнение JS после рендера
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.innerHTML = html;
+
+      if (js) {
+        const script = document.createElement("script");
+        script.type = "text/javascript";
+        script.textContent = js;
+        containerRef.current.appendChild(script);
+      }
+    }
+  }, [html, js]);
+
+  return <div ref={containerRef} />;
+}
+```
