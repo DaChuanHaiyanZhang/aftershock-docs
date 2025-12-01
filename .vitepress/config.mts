@@ -57,7 +57,21 @@ export default withMermaid(
               { text: "About us", link: "/aftershockau/data-about-us" },
               { text: "Warranty", link: "/aftershockau/data-warranty" },
               { text: "Drivers", link: "/aftershockau/data-drivers" },
-              { text: "Order tracker", link: "/aftershockau/data-order-tracker" },
+              
+              {
+                text: "用户信息",
+                collapsed: true,
+                items: [
+                  {
+                    text: "用户个人信息",
+                    link: "/aftershockau/data-user-account",
+                  },
+                  {
+                    text: "Order tracker",
+                    link: "/aftershockau/data-order-tracker",
+                  },
+                ],
+              },
             ],
           },
           {
@@ -92,6 +106,20 @@ export default withMermaid(
               { text: "About Us", link: "/aftershockau/routes-about-us" },
               { text: "Warranty", link: "/aftershockau/routes-warranty" },
               { text: "Drivers", link: "/aftershockau/routes-drivers" },
+              {
+                text: "用户信息",
+                collapsed: true,
+                items: [
+                  {
+                    text: "用户个人信息",
+                    link: "/aftershockau/routes-user-account",
+                  },
+                  {
+                    text: "Order tracker",
+                    link: "/aftershockau/routes-order-tracker",
+                  },
+                ],
+              },
             ],
           },
           {
