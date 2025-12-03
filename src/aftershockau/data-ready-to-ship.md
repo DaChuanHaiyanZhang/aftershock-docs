@@ -7,7 +7,7 @@
 >[!DANGER]
 >注意：RTS 的 `handle` 在 `Shopify` 的 Collections 中维护。其配置方式为 `ready-top-ship/${handle}`
 
-RTS 商品的数据，实际上就是从商城获取到的现货信息，直接从 `Shopify` 中通过 `GraphQL` 查询。
+RTS 商品的数据，是从 Shopify 获取到的现货信息，直接从 `Shopify` 中通过 `GraphQL` 查询。
 
 > [!NOTE] 
 > `Ready To Ship` 简称 `RTS` 是`现货`的意思。

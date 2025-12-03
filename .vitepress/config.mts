@@ -43,8 +43,21 @@ export default withMermaid(
             items: [
               { text: "Layout 全局数据流", link: "/aftershockau/data-layout" },
               { text: "Home Page", link: "/aftershockau/data-home" },
-              { text: "Sale 促销界面", link: "/aftershockau/data-sale" },
-              { text: "Read To Ship", link: "/aftershockau/data-ready-to-ship" },
+              {
+                text: "Products",
+                collapsed: true,
+                items: [
+                  { text: "Sale 促销界面", link: "/aftershockau/data-sale" },
+                  {
+                    text: "Read To Ship",
+                    link: "/aftershockau/data-ready-to-ship",
+                  },
+                  { text: "Collection", link: "/aftershockau/data-collection" },
+                  { text: "SLP", link: "/aftershockau/data-series" },
+                  { text: "Limited Edition", link: "/aftershockau/data-limited-edition" }
+                ],
+              },
+
               {
                 text: "Knowledge Hub",
                 link: "/aftershockau/data-knowledge-hub",
@@ -59,7 +72,7 @@ export default withMermaid(
               { text: "About us", link: "/aftershockau/data-about-us" },
               { text: "Warranty", link: "/aftershockau/data-warranty" },
               { text: "Drivers", link: "/aftershockau/data-drivers" },
-              
+
               {
                 text: "用户信息",
                 collapsed: true,
@@ -80,7 +93,21 @@ export default withMermaid(
             text: "功能说明",
             items: [
               { text: "Home Page", link: "/aftershockau/routes-home" },
-              { text: "Sale 促销界面", link: "/aftershockau/route-sale" },
+              {
+                text: "Products",
+                collapsed: true,
+                items: [
+                  { text: "Sale 促销界面", link: "/aftershockau/route-sale" },
+                  {
+                    text: "Read To Ship",
+                    link: "/aftershockau/routes-ready-to-ship",
+                  },
+                  { text: "Collection", link: "/aftershockau/routes-collection" },
+                  { text: "SLP", link: "/aftershockau/routes-series" },
+                  { text: "Limited Edition", link: "/aftershockau/routes-limited-edition" }
+                ],
+              },
+
               {
                 text: "Knowledge Hub",
                 link: "/aftershockau/routes-knowledge-hub",

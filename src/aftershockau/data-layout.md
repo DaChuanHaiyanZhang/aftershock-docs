@@ -921,7 +921,7 @@ export default async function handleRequest() {
 2. [Knowledge Hub](./data-knowledge-hub.md) 链接到对应的页面，[功能说明](./routes-knowledge-hub.md)
 3. [Flagship Showroom](./data-flagship-showroom.md) 点击之后跳转到对应的页面
 4. [Contact Us](./data-contact-us.md) 点击之后跳转到联系我们界面
-5. Check Your Build Status 在获取到表单数据之后携带数据跳转到 [order-tracker]('./data-order-tracker.md') 界面
+5. Check Your Build Status 在获取到表单数据之后携带数据跳转到 [order-tracker](./data-order-tracker.md) 界面
 
 #### 组件引用结构链
 

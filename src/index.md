@@ -43,6 +43,8 @@ features:
 
 因为一些 API、组件的说明文档，有时候是真不好找，所以这里做了快速导航。
 
+- [Graphql storefront](https://shopify.dev/docs/api/storefront/latest)
+- [Graphql Admin](https://shopify.dev/docs/api/admin-graphql/latest)
 - [Hydrogen](https://hydrogen.shopify.dev/)
 - [Hydrogen 组件](https://shopify.dev/docs/api/checkout-extensions/post-purchase/components)
 - [React](https://zh-hans.react.dev/learn)
