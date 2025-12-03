@@ -32,7 +32,14 @@ jobs:
       # 4. 构建项目
       - name: Build VitePress
         run: npm run docs:build
-      
+        
+      # 🔥 关键修复：手动创建 .nojekyll 文件
+      - name: Create .nojekyll file to disable Jekyll
+        run: |
+          echo "Disabling Jekyll processing" > ./.vitepress/dist/.nojekyll
+          echo "✅ 验证文件已创建:"
+          ls -la ./.vitepress/dist/.nojekyll
+          
       # 5. 部署到 gh-pages 分支
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
