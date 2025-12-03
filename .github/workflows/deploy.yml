@@ -46,6 +46,11 @@ jobs:
           
           # 发布到的分支
           publish_branch: gh-pages
+
+          # 关键修复
+          enable_jekyll: false
+
+          keep_files: false  # 每次完全清理 gh-pages 分支
           
           # 可选：如果之前已经存在 gh-pages 分支，是否强制推送
           force_orphan: true
