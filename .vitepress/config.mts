@@ -7,6 +7,7 @@ export default withMermaid(
     title: "aftershcok-docs",
     description: "aftershcok website docs",
     srcDir: "src/",
+    base: "/aftershock-docs/",
     mermaid: {
       theme: "default",
     },
@@ -54,7 +55,10 @@ export default withMermaid(
                   },
                   { text: "Collection", link: "/aftershockau/data-collection" },
                   { text: "SLP", link: "/aftershockau/data-series" },
-                  { text: "Limited Edition", link: "/aftershockau/data-limited-edition" }
+                  {
+                    text: "Limited Edition",
+                    link: "/aftershockau/data-limited-edition",
+                  },
                 ],
               },
 
@@ -102,9 +106,15 @@ export default withMermaid(
                     text: "Read To Ship",
                     link: "/aftershockau/routes-ready-to-ship",
                   },
-                  { text: "Collection", link: "/aftershockau/routes-collection" },
+                  {
+                    text: "Collection",
+                    link: "/aftershockau/routes-collection",
+                  },
                   { text: "SLP", link: "/aftershockau/routes-series" },
-                  { text: "Limited Edition", link: "/aftershockau/routes-limited-edition" }
+                  {
+                    text: "Limited Edition",
+                    link: "/aftershockau/routes-limited-edition",
+                  },
                 ],
               },
 
