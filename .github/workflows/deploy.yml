@@ -10,7 +10,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+    # 关键：添加权限配置
+    permissions:
+      contents: write  # 允许写入仓库
+      pages: write     # 允许写入 GitHub Pages
+      id-token: write  # 允许 OIDC 令牌
+      
     steps:
       # 1. 检出代码
       - name: Checkout
@@ -68,6 +73,3 @@ jobs:
           
           # 可选：提交信息
           commit_message: ${{ github.event.head_commit.message }}
-          
-          # 可选：启用详细日志
-          verbose: true
