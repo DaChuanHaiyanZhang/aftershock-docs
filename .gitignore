@@ -2,8 +2,11 @@ node_modules
 /.DS_Store
 /.cache
 /build
+/.vitepress/dist
 /dist
 /public/build
 /.mf
 .env
 .shopify
+.env.local
+.env.*.local
