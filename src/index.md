@@ -1,31 +1,62 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
-
+title: AftershockAU 技术文档
+description: 系统梳理 Aftershock PC 商城的技术方案，涵盖技术架构、数据源、页面结构等核心内容
 hero:
-  name: "AftershcokAU 技术文档"
-  text: ""
-  tagline: 本文档记录和描述了Aftershcok PC商城所有的技术架构，数据源，页面结构以及开发方式等等，会在需求更新之后不定时更新。
+  name: AftershockAU 技术文档
+  text: 系统技术方案梳理
+  tagline: 助力团队共同成长
   actions:
     - theme: brand
-      text: 澳大利亚站
-      link: https://aftershockpc.com.au/
-    - theme: brand
-      text: 新加坡站
-      link: https://www.aftershockpc.com/
-    - theme: brand
-      text: Hydrogen 组件集
-      link: https://shopify.dev/docs/api/checkout-extensions/post-purchase/components
-      
+      text: 开始阅读
+      link: /aftershockau/
+    - theme: alt
+      text: 查看组成
+      link: /aftershockau/data-layout
+features:
+  - icon: 🛠️
+    title: 架构清晰
+    details: 完整的技术架构和组件说明
+  - icon: 🔧
+    title: 开发便捷
+    details: 提供详细的API和工具使用文档
+  - icon: 📚
+    title: 持续更新
+    details: 文档持续更新，欢迎提出意见
+---
 
-# features:
-#   - title: Feature A
-#     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-#   - title: Feature B
-#     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-#   - title: Feature C
-#     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-# ---
+本文档系统梳理了 `Aftershock PC` 商城的整体技术方案，涵盖 `技术架构` 、 `数据源` 、 `页面结构` 及`开发方式` 等核心内容。文档将不定期更新，并欢迎随时提出宝贵意见和建议，助力团队共同成长。
 
-# tagline: 本文档记录和描述了Aftershcok PC商城所有的技术架构，数据源，页面结构以及开发方式等等，会在需求更新之后不定时更新。
+整个公司目前使用的技术栈及第三方工具种类较多，相关文档需要持续跟进更新，否则将影响后续工作的顺利推进。
 
+## 官网快速导航
+
+- [Aftershock AU](https://aftershockpc.com.au/)
+- [Aftershock SG](https://www.aftershockpc.com/)
+
+## 项目剖析快速导航
+
+- [Aftershock AU](./aftershockau/index.md)
+- [Thetechyardau](./thetechyardau/index.md)
+
+## 技术文档导航
+
+因为一些 API、组件的说明文档，有时候是真不好找，所以这里做了快速导航。
+
+- [Hydrogen](https://hydrogen.shopify.dev/)
+- [Hydrogen 组件](https://shopify.dev/docs/api/checkout-extensions/post-purchase/components)
+- [React](https://zh-hans.react.dev/learn)
+- [React Router](https://reactrouter.remix.org.cn/)
+- [Remix](https://remix.org.cn/docs/en/main/discussion/introduction)
+- [Vite](https://vitejs.cn/vite3-cn/guide/)
+- [Swiper](https://swiperjs.com/)
+- [gsap.js](https://gsap.com/)
+
+> [!WARNING]
+> 实名吐槽！😂 `Hydrogen`、`Shopify` 的文档里面的内容很难找，真怀疑是不是人类写出来的。
+
+## 常用 API 文档
+
+这里文档展示的是，目前已知的一些常用的 `API` 文档，具体要参照英文文档。
+
+- Hydrogen [Storefront API](./hydrogen/storefront-api.md)

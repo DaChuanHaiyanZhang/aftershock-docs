@@ -19,7 +19,7 @@ export default withMermaid(
       siteTitle: false,
       outline: {
         label: "页面导航",
-        level: "deep",
+        level: [2, 3],
       },
       search: {
         provider: "local",
@@ -43,6 +43,8 @@ export default withMermaid(
             items: [
               { text: "Layout 全局数据流", link: "/aftershockau/data-layout" },
               { text: "Home Page", link: "/aftershockau/data-home" },
+              { text: "Sale 促销界面", link: "/aftershockau/data-sale" },
+              { text: "Read To Ship", link: "/aftershockau/data-ready-to-ship" },
               {
                 text: "Knowledge Hub",
                 link: "/aftershockau/data-knowledge-hub",
@@ -78,6 +80,7 @@ export default withMermaid(
             text: "功能说明",
             items: [
               { text: "Home Page", link: "/aftershockau/routes-home" },
+              { text: "Sale 促销界面", link: "/aftershockau/route-sale" },
               {
                 text: "Knowledge Hub",
                 link: "/aftershockau/routes-knowledge-hub",
