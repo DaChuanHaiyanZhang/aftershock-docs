@@ -1,7 +1,7 @@
 import { defineConfig } from "vitepress";
 import { withMermaid } from "vitepress-plugin-mermaid";
 
-// https://vitepress.dev/reference/site-config
+// https://vitepress.dev/reference/site-config ？
 export default withMermaid(
   defineConfig({
     title: "aftershcok-docs",
