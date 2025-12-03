@@ -27,7 +27,7 @@ jobs:
       
       # 3. 安装依赖
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps  # 强制忽略 peer 依赖冲突
+        run: npm install --legacy-peer-deps  # 强制忽略 peer 依赖冲突
       
       # 4. 构建项目
       - name: Build VitePress
