@@ -8,6 +8,9 @@ export default withMermaid(
     description: "aftershcok website docs",
     srcDir: "src/",
     base: "/aftershock-docs/",
+    head: [
+      ['link', { rel: 'icon', href: 'https://cdn.shopify.com/s/files/1/0522/3320/7988/files/favicon.ico?v=1726679956' }]
+    ],
     mermaid: {
       /**
        * 主题
@@ -70,6 +73,7 @@ export default withMermaid(
                     link: "/aftershockau/data-limited-edition",
                   },
                   { text: "Products", link: "/aftershockau/data-products" },
+                  { text: "Workstations", link: "/aftershockau/data-workstations" },
                 ],
               },
 

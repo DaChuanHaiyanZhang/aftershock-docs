@@ -57,7 +57,7 @@ async function loadCriticalData(context, params, prismicData, previewData) {
 }
 ```
 
-> [!NOTE] 
+> [!DANGER] 
 >`fetchFeaturesForModels` 方法中使用了 `Promise.all` 加载所有相关的 `models` 对应的数据，这里目前使用的是 `METAOBJECT_QUERY` 查询方式可以替换为 `metaobjects`，[**查看替代方案**](./suggestion.md#workstations-页面-fetchfeaturesformodels-方法替代方案)😘
 
 ## 组件引用结构链
