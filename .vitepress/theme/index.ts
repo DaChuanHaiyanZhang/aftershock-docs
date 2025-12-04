@@ -4,6 +4,7 @@ import { useRoute } from 'vitepress'
 import mediumZoom from 'medium-zoom'
 import './global.css'
 
+// 设置zoom选项
 const zoomOptions = {
   margin: 24,
   background: 'rgba(0, 0, 0, 0.6)',

@@ -69,6 +69,7 @@ export default withMermaid(
                     text: "Limited Edition",
                     link: "/aftershockau/data-limited-edition",
                   },
+                  { text: "Products", link: "/aftershockau/data-products" },
                 ],
               },
 
@@ -125,6 +126,7 @@ export default withMermaid(
                     text: "Limited Edition",
                     link: "/aftershockau/routes-limited-edition",
                   },
+                  { text: "Products", link: "/aftershockau/routes-products" },
                 ],
               },
 

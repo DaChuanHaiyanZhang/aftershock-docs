@@ -228,6 +228,9 @@ export function SliceRenderer({ slices }) {
 
 因为很多地方都使用了 swiper ，而且在修饰商品详情页时，为了一些动画效果也会使用到，所以我更建议在引入 swiper 之后将 swiper 对象注册到全局。
 
+>[!NOTE]
+>如果后续要在 Static Code 做 Swiper 效果，则需要全局注册，这样能较少很多不必要的脚本引入，也能减少脚本引用和使用的困难。
+
 ## NewCategories 的优化方案
 
 <details>
@@ -461,3 +464,166 @@ CSS hover 完全能替代你当前 GSAP 的所有功能，等价的 css 就是�
     - 🛠️ 解决方案：
 
       在用户进入界面后，输入订单号查询时再查询数据，或者先缓存前100条，如果数据量大于100，且没有查询到的情况下，则向下查询，这样会保证如果订单号存在的情况下，不论如何都能查询到数据。
+
+
+## toStaticCode 优化方案
+
+::: code-group
+
+```bash
+app\routes\products.$handle.jsx
+```
+```javascript
+function toStaticCode(metaobject) {
+  const fields = metaobject?.fields || [];
+  const map = {};
+
+  fields.forEach((f) => {
+    map[f.key] = f.value || "";
+  });
+
+  return {
+    html: map.html || null,
+    css: map.css || null,
+    js: map.js || null,
+  };
+}
+```
+:::
+
+
+
+### 原代码的问题是：
+
+1. 字段是写死的，只返回 html/css/js，如果以后 metaobject 多加一个 json 字段 → 要改代码。
+2. JSON 字符串无法解析，如果字段本身是 JSON（你项目里经常这样），原代码会返回字符串，不可用。
+3. 这段代码会把空字符串变成 ""，而不是 null，造成前端类型不一致。
+4. 如果字段不存在，map.html 会是 undefined → fallback 到 null，行为可能不对
+
+### 真实收益
+
+1. ✔ 更健壮，自动处理多字段，自动解析 JSON，处理 null，避免 bug
+2. ✔ 更可维护，以后 metaobject 再加字段，不用改任何地方
+3. ✔ 更安全，不会因为 JSON 字符串导致报错，不会返回错误格式
+4. ✔ 代码更短更可读，尤其是 Object.fromEntries 版本
+
+### 优化结果
+```javascript
+function toStaticCode(metaobject) {
+  return Object.fromEntries(
+    (metaobject?.fields || []).map(f => [
+      f.key,
+      f.value ?? null
+    ])
+  );
+}
+```
+
+## 商品详情业务逻辑优化
+
+```bash
+app\routes\products.$handle.jsx
+```
+
+>[!DANGER]
+>看了 `promise.all` 基本无法淡定。
+
+### 优化原因
+
+代码逻辑繁杂，导致浏览很费时费力。
+
+### 优化策略
+
+封装、业务逻辑分离。
+
+## ErrorBoundary 优化
+
+### 问题
+
+每次在跳转到其他界面，在发生错误时，先会跳转到最基础的错误界面，然后再跳转到对应的错误界面。整个 redirect 过程是明显可见的。
+
+### 解决方案
+
+希望每次在跳转到错误界面时，都可以秒到错误界面，而不是 redirect 过去。目前还不知道是否可以实现，因为貌似可以通过不同的组件替换实现。
+
+## Workstations 页面 `fetchFeaturesForModels` 方法替代方案。
+
+### 问题
+
+如果一直使用 `Promise.all` 会导致比较严重的性能问题，举个例子👉，有10条数据，原本一次可以拉取完成，但是我要在服务器查询10回完成。性能影响可能不止10倍。
+
+问题代码片段：
+
+```javascript
+async function fetchFeaturesForModels(models, storefront, prismicData) {
+    const METAOBJECT_QUERY = `
+      query GetMetaobject($handle: MetaobjectHandleInput!) {
+        metaobject(handle: $handle) { 
+          fields {
+            key
+            value
+          }
+        }
+      }
+    `;
+
+    const uniqueFeatureIds = [
+      ...new Set(models.map((m) => prismicMap[m.prismic_uid]).filter(Boolean)),
+    ];
+
+    await Promise.all( // [!code error]
+      uniqueFeatureIds.map(async (id) => { // [!code error]
+        try { // [!code error]
+          const res = await storefront.query(METAOBJECT_QUERY, { // [!code error]
+            variables: { // [!code error]
+              handle: {type: 'prismic_cache_features_list', handle: id}, // [!code error]
+            }, // [!code error]
+          }); // [!code error]
+          // [!code error]
+          const dataField = res?.metaobject?.fields?.find(// [!code error]
+            (f) => f.key === 'data',// [!code error]
+          ); // [!code error]
+          if (dataField?.value) { // [!code error]
+            metaobjectCache[id] = JSON.parse(dataField.value); // [!code error]
+          }// [!code error]
+        } catch { // [!code error]
+          metaobjectCache[id] = null; // [!code error]
+        } // [!code error]
+      }),// [!code error]
+    );
+  }
+```
+### 解决方案
+
+使用 [metaobjects](https://shopify.dev/docs/api/admin-graphql/latest/queries/metaobjects?example=fetch-metaobjects-with-string-search) 替代现有的 `metaobject`，这样可以一次性查询完成，而不是查询N次✌️。
+
+```javascript
+async function fetchFeaturesForModels(models, storefront, prismicData) {
+  const METAOBJECTS_BATCH_QUERY = `
+    query GetMetaobjectsBatch($handles: [MetaobjectHandleInput!]!) {
+      metaobjects(handles: $handles, first: 100) {
+        nodes {
+          handle
+          fields {
+            key
+            value
+          }
+        }
+      }
+    }
+  `;
+  // code ...
+  // 批量查询 handles
+  const handles = uniqueFeatureIds.map(id => ({
+    handle: id,
+    type: 'prismic_cache_features_list'
+  }));
+  // code ...
+  const result = await storefront.query(METAOBJECTS_BATCH_QUERY, {
+    variables: { handles }
+  });
+  // code ...
+}
+```
+>[!NOTE]
+>多看看其他地方的 `Promise.all` 或许都可以通过这个方式解决。
