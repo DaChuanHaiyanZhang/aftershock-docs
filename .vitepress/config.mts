@@ -9,7 +9,17 @@ export default withMermaid(
     srcDir: "src/",
     base: "/aftershock-docs/",
     mermaid: {
-      theme: "default",
+      /**
+       * 主题
+       * default - 这是所有图表的默认主题。
+       * neutral - 该主题非常适合要打印的黑白文档。
+       * dark - 这个主题与深色元素或夜间模式很相配。
+       * forest - 这个主题包含绿色阴影。
+       * base - 这是唯一可以修改的主题。使用此主题作为自定义的基础。
+       */
+      theme: "forest",
+      markdownAutoWrap: true, // 是否自动换行
+      look: 'handDrawn'
     },
     mermaidPlugin: {
       class: "mermaid my-class", // set additional css classes for parent container

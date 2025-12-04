@@ -2,7 +2,7 @@
 
 [[toc]]
 
-## Layout 头部内容 Header
+## Header
 
 ### 横幅的内容
 
@@ -18,7 +18,9 @@
 
 ##### 组件引用结构链
 
-组件路径: app\components\Header\ShippingBanner\index.jsx
+```bash
+app\components\Header\ShippingBanner\index.jsx
+```
 
 组件被调用的地方为 Header 组件，但是数据传入的地方为 root.jsx，关键代码如下：
 
@@ -56,11 +58,15 @@ export async function loader(args) {
 
 2. 在 PageLayout 组件中调用 Header 组件并将数据传入
 
-**AsideProvider** 是一个全局组件，它记录了很多状态类似于 Vue 的全局状态管理，Vuex 或者 Pinna，做了**全局状态共享**。
+`AsideProvider` 是一个全局组件，它记录了很多状态类似于 Vue 的全局状态管理，Vuex 或者 Pinna，做了 `全局状态共享`。
 
-**AsideProvider**组件地址：app\components\Aside\AsideProvider\index.jsx
+```bash
+app\components\Aside\AsideProvider\index.jsx
+```
 
-> Tips: [provider](https://react.dev/reference/react/createContext#provider)的使用
+
+>[!NOTE]
+>[provider](https://react.dev/reference/react/createContext#provider)的使用
 
 ```jsx
 // PageLayout/index.jsx
@@ -179,9 +185,15 @@ export function LogoLink() {
 - 更新到 shopify 的 [Metaobjects](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004) 👇
 - 然后在 [Hydrogen](https://hydrogen.shopify.dev/) 项目使用 [storefront Api](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching) 👌
 
-如下图所示：
+<!-- 如下图所示：
 
-![aftershock](/screenshots/ScreenShot_2025-11-26_105721_008.png "aftershock")
+![aftershock](/screenshots/ScreenShot_2025-11-26_105721_008.png "aftershock") -->
+
+```mermaid
+flowchart LR
+Prismic -- webhook --> SM[Shopify Metaobjects] -- GraphQL --> Aftershock
+```
+
 
 #### 组件引用结构链
 
@@ -250,11 +262,9 @@ export function Layout({ children }) {
 }
 ```
 
-> Tips [Remix React useRouteLoaderData('root')](https://remix.org.cn/docs/en/main/hooks/use-route-loader-data#userouteloaderdata)
-
-> Tips [Hydrogen storefront 文档](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
-
-> Tips [createStorefrontClient](https://shopify.dev/docs/api/hydrogen/latest/utilities/createstorefrontclient?utm_source=chatgpt.com)
+- [Remix React useRouteLoaderData('root')](https://remix.org.cn/docs/en/main/hooks/use-route-loader-data#userouteloaderdata)
+- [Hydrogen storefront 文档](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
+- [createStorefrontClient](https://shopify.dev/docs/api/hydrogen/latest/utilities/createstorefrontclient?utm_source=chatgpt.com)
 
 2. app\components\PageLayout.jsx 中的调用 👇
 
@@ -355,7 +365,7 @@ export function Header({
 
 4. app\components\Header\DesktopMenu\index.jsx 中调用
 
-参数**menuStructure**为菜单栏的数据
+参数 `menuStructure` 为菜单栏的数据
 
 ```jsx
 import { useAside } from "~/components/Aside/useAside";
@@ -504,11 +514,9 @@ export function Layout({ children }) {
 }
 ```
 
-> Tips [Remix React useRouteLoaderData('root')](https://remix.org.cn/docs/en/main/hooks/use-route-loader-data#userouteloaderdata)
-
-> Tips [Hydrogen storefront 文档](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
-
-> Tips [createStorefrontClient](https://shopify.dev/docs/api/hydrogen/latest/utilities/createstorefrontclient?utm_source=chatgpt.com)
+- [Remix React useRouteLoaderData('root')](https://remix.org.cn/docs/en/main/hooks/use-route-loader-data#userouteloaderdata)
+- [Hydrogen storefront 文档](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
+- [createStorefrontClient](https://shopify.dev/docs/api/hydrogen/latest/utilities/createstorefrontclient?utm_source=chatgpt.com)
 
 2. app\components\PageLayout.jsx 中的调用 👇
 
@@ -578,44 +586,6 @@ export function MobileMenuAside({
 
 ![aftershock](/screenshots/2025-11-26_162456_892.png "aftershock")
 
----
-
-#### 组件引用结构链
-
-该组件的调用路径为 root.jsx/PageLayout/Header/HeaderCtas
-
-父组件地址：app\components\Header\HeaderCtas\index.jsx
-
-组件地址有两个：
-
-- PC 端
-
-app\components\Header\HeaderCtas\SearchComponent\index.jsx
-
-![aftershock](/screenshots/2025-11-26_162456_892.png "aftershock")
-
-- 移动端
-
-app\components\Header\HeaderCtas\SearchToggle\index.jsx
-
-![aftershock](/screenshots/ScreenShot_2025-11-26_163238_047.png "aftershock")
-
-- 最后都调用了 **SearchFormPredictive** 组件
-
-组件地址：app\components\Search\SearchResults\index.jsx
-
-- SearchResults 组件调用了 Remix 的组件
-
-```jsx
-import { useFetcher } from "@remix-run/react";
-
-const fetcher = useFetcher({ key: "search" });
-```
-
-> Tips: [useFetcher(params)](https://remix.org.cn/docs/en/main/hooks/use-fetcher)
-
----
-
 #### 数据流
 
 在用户输入了相关的搜索关键词以后开始调用查询，查询的规则如下：
@@ -659,11 +629,38 @@ async function predictiveSearch({ request, context }) {
 }
 ```
 
-> Tips: 这里大量使用了 [Graphql](https://graphql.cn/)
+- 这里大量使用了 [Graphql](https://graphql.cn/)
+- 需要去看[search](https://shopify.dev/docs/api/storefront/latest/queries/search)的相关代码
+- 另外还要去查看 [Hydrogen Graphi](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching/graphiql#graphiql)
 
-> Tips: 需要去看[search](https://shopify.dev/docs/api/storefront/latest/queries/search)的相关代码
+#### 组件引用结构链
 
-> Tips: 另外还要去查看 [Hydrogen Graphi](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching/graphiql#graphiql)
+该组件的调用路径为 root.jsx/PageLayout/Header/HeaderCtas
+
+```mermaid
+flowchart LR
+root.jsx --> PageLayout --> Header --> HeaderCtas
+```
+
+```bash
+app\components\Header\HeaderCtas\index.jsx
+app\components\Header\HeaderCtas\SearchComponent\index.jsx
+app\components\Header\HeaderCtas\SearchToggle\index.jsx
+app\components\Search\SearchResults\index.jsx
+```
+
+- SearchResults 组件调用了 Remix 的组件
+
+```jsx
+import { useFetcher } from "@remix-run/react";
+
+const fetcher = useFetcher({ key: "search" });
+```
+
+> Tips: [useFetcher(params)](https://remix.org.cn/docs/en/main/hooks/use-fetcher)
+
+---
+
 
 ### 地区切换
 
@@ -725,13 +722,14 @@ export function PageLayout() {
 
 其中在线聊天工具就使用到了 [FrontApp](https://front.com/) 这个工具，它是在官网注入相关代码之后，用户在 aftershock 和客服在 frontapp 后台聊天
 
-> [!INFO]
-> Tips: 也许我们后续还可以对用户在线聊天的信息进行数据分析，得出一些结论，方便做商业规划，[查看建议方案](./suggestion.md)
+>[!INFO]
+>也许我们后续还可以对用户在线聊天的信息进行数据分析，得出一些结论，方便做商业规划，[查看建议方案](./suggestion.md)
 
+>[!WARNING]
 > FrontApp 的 ChartId dcccf16bf7f8867dc9516ad40e69defe
 
-> [!DANGER]
-> Tips: 这些敏感信息是不是可以存储到 metaobjects 中呢？
+>[!DANGER]
+> 这些敏感信息是不是可以存储到 metaobjects 中呢？
 
 <details>
 <summary>查看引入的代码</summary>
@@ -944,7 +942,8 @@ flowchart LR
 root.jsx --> PageLayout.jsx --> AsideProvider --> AccountAside
 ```
 
-> [!INFO] >**AsideProvider** 组件是数据共享的一个组件，具体可参照 [React 文档](https://react.docschina.org/reference/react/createContext#provider)
+> [!INFO]
+>**AsideProvider** 组件是数据共享的一个组件，具体可参照 [React 文档](https://react.docschina.org/reference/react/createContext#provider)
 
 - AccountAside 在登录的时候调用组件负责表单提交 LoginForm 组件完成用户登录
 
