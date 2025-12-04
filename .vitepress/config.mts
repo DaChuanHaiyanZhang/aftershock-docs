@@ -11,6 +11,17 @@ export default withMermaid(
     head: [
       ['link', { rel: 'icon', href: 'https://cdn.shopify.com/s/files/1/0522/3320/7988/files/favicon.ico?v=1726679956' }]
     ],
+    locales:{
+      root: {
+        label: '简体中文',
+        lang: 'zh-CN',
+      },
+      en: {
+        label: 'English',
+        lang: 'en-US',
+        link: '/en/',
+      },
+    },
     mermaid: {
       /**
        * 主题
