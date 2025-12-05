@@ -2,7 +2,6 @@
 
 [[toc]]
 
-
 ## Layout
 aftershock 页面的Layout主要分Header、Main和Footer作为项目的主体部分，在所有页面通用，当然是被划分为不同的组件进行渲染。
 

@@ -1,11 +1,48 @@
-# 🧩 AftershockPC-AU-Hydrogen
+# AftershockPC-AU-Hydrogen
 
-## 概述
+[[toc]]
 
-本项目基于 `Shopify Hydrogen` + `Remix + React`，结合多种现代前端工具和第三方服务，实现电商前端的高性能、可扩展开发体验。
+## Overview
+
+This project is based on `Shopify Hydrogen` + `Remix + React`, combined with various modern frontend tools and third-party services, to achieve a high-performance, scalable e-commerce frontend development experience.
+
+## Project Tools
+
+### [Prismic](https://prismic.io/)
+
+`Prismic` is a Content Management System (CMS) that can integrate with `Shopify` via `API` to combine content with e-commerce functionality.
+
+If we compare the entire digital store to a physical store, `Shopify` is the backend warehouse, cash register, and inventory system, ensuring efficient and reliable transactions; while `Prismic` is the front window design, product display, and shopping guide manual, responsible for attracting customers, telling brand stories, and enhancing the experience. The two work together to create a store that is both beautiful and sells well.
+
+### [Vercel](https://vercel.com/)
+### [Shopify Store](https://admin.shopify.com/store/aftershockpcau)
+### [Shopify Storefront API](https://shopify.dev/docs/api/storefront/latest)
+
+## Project Tools Relationship Diagram
+
+```mermaid
+flowchart LR
+
+  A[Prismic] -->|Webhook Update Content| B[Vercel]
+  B -->|API Call| D[Shopify Store]
+  D -->|Frontend Read| E[Shopify Storefront]
+
+  classDef cms fill:#f9f,stroke:#333,stroke-width:1px;
+  classDef serverless fill:#bbf,stroke:#333,stroke-width:1px;
+  classDef store fill:#bfb,stroke:#333,stroke-width:1px;
+  classDef frontend fill:#ffb,stroke:#333,stroke-width:1px;
+
+  class A cms;
+  class B,C serverless;
+  class D store;
+  class E,F frontend;
+
+```
 
 
-## Node 环境要求
+## NodeJS Environment Requirements
+
+Currently using `v22.21.0`.
 
 ``` json
 "engines": {
@@ -14,25 +51,28 @@
 
 ```
 
-## 快速启动
+## Quick Start
 
 >[!NOTE]
->[官网快速启动](https://shopify.dev/docs/storefronts/headless/hydrogen/getting-started)
+>[Official Quick Start](https://shopify.dev/docs/storefronts/headless/hydrogen/getting-started)
 
-先链接到shopify
+### 1. First, link to Shopify.
 ``` bash
 npx shopify hydrogen link
 ```
-运行启动指令
+### 2. Run the start command.
 ``` bash
 npm run dev
 ```
 
-发布到 Oxygen
+### 3. Deploy to Oxygen.
 ```bash
 npx shopify hydrogen deploy
 ```
 
-## 开发工具
+>[!WARNING]
+>😒 Currently unsure how to deploy to the staging server.
 
-建议使用 `vsode`
+## Development Tools
+
+Recommended to use `VSCode`.

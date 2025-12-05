@@ -38,6 +38,7 @@ export default withMermaid(
           ],
           sidebar: {
             "/en/aftershockau/": [
+              { text: "Overview", link: "/aftershockau/index" },
               { text: "Page Structure", link: "/en/aftershockau/routes" },
               { text: "Plugins and Dependencies", link: "/en/aftershockau/dependencies" },
               {
@@ -214,6 +215,7 @@ export default withMermaid(
       ],
       sidebar: {
         "/aftershockau/": [
+          { text: "快速开始", link: "/aftershockau/index" },
           { text: "页面组成", link: "/aftershockau/routes" },
           { text: "插件和依赖", link: "/aftershockau/dependencies" },
           {
