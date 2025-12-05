@@ -13,6 +13,9 @@ hero:
     - theme: alt
       text: 查看组成
       link: /aftershockau/data-layout
+    - theme: alt
+      text: 操作手册
+      link: https://doc.clickup.com/42660084/p/h/18nw7m-4822/45aab2d9affb13a
 features:
   - icon: 🛠️
     title: 架构清晰

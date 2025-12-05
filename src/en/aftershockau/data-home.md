@@ -1,24 +1,24 @@
-# 首页
+# Homepage
 
 [[toc]]
 
-首页的入口文件为 \_index.jsx，在获取到数据后整个结构是拉取到数据之后将数据传入到 SliceRenderer 组件，然后根据不同的类型选用对应的组件呈现。
+The entry file for the homepage is \_index.jsx. After fetching the data, the overall structure passes the data into the SliceRenderer component, which then selects corresponding components based on different types for presentation.
 
-## 数据源
+## Data Source
 
-首页大部分数据源在 Prismic 当中。通过 [storefront Api](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching) 从 shopify metaobjects 中以 graphQL 的方式调用。
+Most of the data for the homepage is stored in Prismic. It is fetched via the [storefront API](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching) from Shopify's metaobjects using GraphQL.
 
 ```mermaid
 flowchart LR
   Prismic --Webhook--> Metaobjects --GraphQL--> Hydrogen --React--> HP[Home Page] --> SliceRenderer
 ```
 
-核心代码：
+Core Code:
 
 ::: code-group
 
 ```javascript
-// 数据拉取
+// Data fetching
 const variables = {
   handle: { handle: "homepage-new", type: "prismic_cache_landing_page" },
 };
@@ -34,7 +34,7 @@ homePage = JSON.parse(
 ```
 
 ```graphql
-<!-- 查询规则 -->
+<!-- Query rule -->
 export const GET_METAOBJECTS_BY_HANDLE = `
   query GetMetaobject($handle: MetaobjectHandleInput!) {
     metaobject(handle: $handle) {
@@ -50,7 +50,7 @@ export const GET_METAOBJECTS_BY_HANDLE = `
 ```
 
 ```jsx
-// SliceRenderer 组件分发
+// SliceRenderer component distribution
 function renderSlice(slice, index) {
   switch (slice.slice_type) {
     case "hero_banner":
@@ -110,41 +110,41 @@ export function SliceRenderer({ slices }) {
 
 :::
 
-## 组件引用结构链
+## Component Reference Chain
 
 ### Banner
 
-Banner 组件使用了 HeroBanner 组件接收数据。
+The Banner component uses the HeroBanner component to receive data.
 
 > [!NOTE]
-> 这里插件使用了 [Swiper React](https://swiperjs.com/react)
+> The [Swiper React](https://swiperjs.com/react) plugin is used here.
 
 ```bash
 app\components\Slices\LandingPageSlices\HeroBanner\index.jsx
 ```
 
-数据是通过 SliceRenderer 组件分发后获取。
+The data is fetched after being distributed by the SliceRenderer component.
 
 ### Categories
 
-Categories 使用了 NewCategories 组件
+The Categories component uses the NewCategories component.
 
 ```bash
 app\components\Slices\LandingPageSlices\NewCategories\index.jsx
 ```
 
-数据是通过 SliceRenderer 组件分发后获取。
+The data is fetched after being distributed by the SliceRenderer component.
 
 > [!WARNING]
-> 该组件目前存在比较大的性能问题，因为这里滥用了 gsap.js。[查看优化建议](./suggestion#newcategories-的优化方案)
+> This component currently has significant performance issues due to the misuse of gsap.js. [View optimization suggestions](./suggestion#newcategories-optimization-solution)
 
 ### AFTERSHOCK SPECIAL EDITIONS
 
 > [!NOTE]
-> 这里插件使用了 [Swiper React](https://swiperjs.com/react)，基于 Swiper 实现。
+> The [Swiper React](https://swiperjs.com/react) plugin is used here, based on Swiper.
 
 > [!DANGER]
-> 貌似这里的鼠标悬停等效果都可以使用配置去实现~~
+> It seems that mouse hover and other effects here could be implemented using configurations.
 
 ```bash
 app\components\Slices\LandingPageSlices\LimitedEditionSlice\index.jsx
@@ -152,11 +152,11 @@ app\components\Slices\LandingPageSlices\LimitedEditionSlice\index.jsx
 
 ### Ultra-labs Builds
 
-这里使用了 UltracoreCarousel 组件进行了开发，数据是通过 SliceRenderer 组件分发后获取。
+The UltracoreCarousel component is used here for development. The data is fetched after being distributed by the SliceRenderer component.
 
-值得注意的是 DesktopModal 和 MobileModal 也使用了 [Swiper 组件](https://swiperjs.com/react)
+It's worth noting that DesktopModal and MobileModal also use the [Swiper component](https://swiperjs.com/react).
 
-组件调用链路：
+Component call chain:
 
 ```mermaid
 flowchart LR
@@ -172,10 +172,10 @@ app\components\Slices\LandingPageSlices\UltracoreCarousel\MobileModal\index.jsx
 
 ### Embed Video
 
-这里实际上就是一个视频播放器，而且引入了 [react-player](https://github.com/CookPete/react-player) 用作播放视频。
+This is essentially a video player, and it uses [react-player](https://github.com/CookPete/react-player) to play videos.
 
 > [!NOTE]
-> Loading 过程是不是需要优化呢？
+> Does the loading process need optimization?
 
 ```bash
 app\components\Slices\LandingPageSlices\EmbedVideo\index.jsx
@@ -183,7 +183,7 @@ app\components\Slices\LandingPageSlices\EmbedVideo\index.jsx
 
 ### Australia’s #1 Performance PC Company
 
-这里调用了 NewAwards 组件，内部全是 UI 内容。
+This section calls the NewAwards component, which contains only UI content.
 
 ```bash
 app\components\Slices\LandingPageSlices\NewAwards\index.jsx
@@ -191,9 +191,9 @@ app\components\Slices\LandingPageSlices\NewAwards\index.jsx
 
 ### Ready To Ship PCs
 
-这里调用了 RTSPCs 组件，内部使用 Swiper 构成。并将产品卡片使用 RTSCard 卡片进行了抽象。
+This section calls the RTSPCs component, which internally uses Swiper. The product cards are abstracted using the RTSCard component.
 
-引用关系：
+Reference relationship:
 
 ```mermaid
 flowchart LR
@@ -201,7 +201,7 @@ RTSPCs --> RTSCard
 ```
 
 > [!NOTE]
-> RTSCard 使用了 [framer-motion](https://motion.dev/) 插件，是一款动画库
+> RTSCard uses the [framer-motion](https://motion.dev/) plugin, which is an animation library.
 
 ```jsx
 <motion.div
@@ -220,7 +220,7 @@ app\components\Slices\LandingPageSlices\RTSPCs\RTSCard\index.jsx
 
 ### PERFORMANCE PCS BUILT TO PERFECTION
 
-该模块主要表示可定制的内容，点击之后跳转到对应的定制界面。实际上这里也使用了 [Swiper 组件](https://swiperjs.com/react)
+This module mainly represents customizable content. Clicking on it redirects to the corresponding customization interface. The [Swiper component](https://swiperjs.com/react) is also used here.
 
 ```bash
 app\components\Slices\LandingPageSlices\ThreeCategory\index.jsx
@@ -228,14 +228,14 @@ app\components\Slices\LandingPageSlices\ThreeCategory\index.jsx
 
 ### EXPLORE OUR RANGE
 
-该组件主要显示 aftershock 的系列。而这里主要的入口是定制门户。
+This component mainly displays Aftershock's series. The main entry here is the customization portal.
 
-顶部的 tabs 效果使用原生 active 的方式实现。
+The tabs effect at the top is implemented using the native active method.
 
 > [!WARNING]
-> 此处应该加上滑块效果，[修改建议](./suggestion#首页-explore-our-range-desktopscarousell-组件优化建议)
+> A slider effect should be added here. [Modification suggestion](./suggestion#homepage-explore-our-range-desktopscarousell-component-optimization-suggestion)
 
-实际上这里也使用了 [Swiper 组件](https://swiperjs.com/react)
+The [Swiper component](https://swiperjs.com/react) is also used here.
 
 ```bash
 app\components\Slices\LandingPageSlices\DesktopsCarousell\index.jsx
@@ -243,7 +243,7 @@ app\components\Slices\LandingPageSlices\DesktopsCarousell\index.jsx
 
 ### Make Your Dream Rig A Reality Aftershock PCs
 
-该组件主要使用了 [Swiper 组件](https://swiperjs.com/react) 搭配 ifreme 以 embd 的方式播放（获取 ticktok 的视频 ID，类似于抖音视频）。
+This component uses the [Swiper component](https://swiperjs.com/react) with an iframe in an embed format to play TikTok videos (fetching TikTok video IDs, similar to Douyin videos).
 
 ```bash
 app\components\Slices\LandingPageSlices\TikTokVideos\index.jsx
@@ -251,7 +251,7 @@ app\components\Slices\LandingPageSlices\TikTokVideos\index.jsx
 
 ### Trusted partners & Customers
 
-该组件使用了无缝滚动。
+This component uses seamless scrolling.
 
 ```bash
 app\components\Slices\LandingPageSlices\TrustedPartners\index.jsx
@@ -259,7 +259,7 @@ app\components\Slices\LandingPageSlices\TrustedPartners\index.jsx
 
 ### POWERING CREATORS, STREAMERS & INFLUENCERS
 
-该组件使用了 [Swiper 组件](https://swiperjs.com/react)，其他没有任何内容。
+This component uses the [Swiper component](https://swiperjs.com/react) and has no other content.
 
 ```bash
 app\components\Slices\LandingPageSlices\ReviewsCarousel\index.jsx
@@ -267,7 +267,7 @@ app\components\Slices\LandingPageSlices\ReviewsCarousel\index.jsx
 
 ### 3 countries. Over 200,000 happy customers
 
-该组件使用了懒加载的方式加载了三方评论插件 [reviews](https://www.reviews.io/)，展示站内的好评如潮信息。点击之后弹出 modal 可以查看详情信息。
+This component lazily loads the third-party review plugin [reviews](https://www.reviews.io/), displaying rave reviews from the site. Clicking on it opens a modal to view detailed information.
 
 ```bash
 app\components\Slices\LandingPageSlices\ReviewsIoCarouselWidget\index.jsx
@@ -275,19 +275,19 @@ app\components\Slices\LandingPageSlices\ReviewsIoCarouselWidget\index.jsx
 
 ### Australian Owned and Operated
 
-该组件展示体验店信息，数据完全静态。
+This component displays store information and is completely static.
 
 ```bash
 app\components\Slices\LandingPageSlices\LocationBanner\index.jsx
 ```
 
-### 静态 HTML 导入
+### Static HTML Import
 
 ```bash
 app\components\Slices\AuxPagesSlices\StaticCode\index.jsx
 ```
 
-除过以上的组件之外，首页还支持静态 HTML 组件或者代码的植入。入口如下：
+In addition to the above components, the homepage also supports the embedding of static HTML components or code. The entry is as follows:
 
 ```jsx
 import { useEffect, useRef } from "react";
@@ -296,7 +296,7 @@ export function StaticCode({ data }) {
   const { html, css, js } = data.primary;
   const containerRef = useRef(null);
 
-  // Вставка CSS
+  // Insert CSS
   useEffect(() => {
     if (css) {
       const style = document.createElement("style");
@@ -308,7 +308,7 @@ export function StaticCode({ data }) {
     }
   }, [css]);
 
-  // Вставка HTML и выполнение JS после рендера
+  // Insert HTML and execute JS after rendering
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.innerHTML = html;

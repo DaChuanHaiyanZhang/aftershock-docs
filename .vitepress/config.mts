@@ -9,7 +9,8 @@ export default withMermaid(
     srcDir: "src/",
     base: "/aftershock-docs/",
     head: [
-      ['link', { rel: 'icon', href: 'https://cdn.shopify.com/s/files/1/0522/3320/7988/files/favicon.ico?v=1726679956' }]
+      // https://cdn.shopify.com/s/files/1/0522/3320/7988/files/favicon.ico?v=1726679956
+      ['link', { rel: 'icon', href: '/favicon.svg' }]
     ],
     locales:{
       root: {
@@ -20,6 +21,158 @@ export default withMermaid(
         label: 'English',
         lang: 'en-US',
         link: '/en/',
+        themeConfig: {
+          outline: {
+            label: "On this page",
+            level: [2, 3],
+          },
+          nav: [
+            { text: "Overview", link: "/en/" },
+            {
+              text: "Sites",
+              items: [
+                { text: "Aftershock AU", link: "/en/aftershockau" },
+                { text: "thetechyardau", link: "/en/thetechyardau" },
+              ],
+            },
+          ],
+          sidebar: {
+            "/en/aftershockau/": [
+              { text: "Page Structure", link: "/en/aftershockau/routes" },
+              { text: "Plugins and Dependencies", link: "/en/aftershockau/dependencies" },
+              {
+                text: "Data Flow",
+                items: [
+                  { text: "Layout Global Data Flow", link: "/en/aftershockau/data-layout" },
+                  { text: "Home Page", link: "/en/aftershockau/data-home" },
+                  {
+                    text: "Products",
+                    collapsed: true,
+                    items: [
+                      { text: "Sale", link: "/en/aftershockau/data-sale" },
+                      {
+                        text: "Read To Ship",
+                        link: "/en/aftershockau/data-ready-to-ship",
+                      },
+                      { text: "Collection", link: "/en/aftershockau/data-collection" },
+                      { text: "SLP", link: "/en/aftershockau/data-series" },
+                      {
+                        text: "Limited Edition",
+                        link: "/en/aftershockau/data-limited-edition",
+                      },
+                      { text: "Products", link: "/en/aftershockau/data-products" },
+                      { text: "Workstations", link: "/en/aftershockau/data-workstations" },
+                    ],
+                  },
+
+                  {
+                    text: "Knowledge Hub",
+                    link: "/en/aftershockau/data-knowledge-hub",
+                  },
+                  {
+                    text: "Flagship Showroom",
+                    link: "/en/aftershockau/data-flagship-showroom",
+                  },
+                  { text: "Contact us", link: "/en/aftershockau/data-contact-us" },
+                  { text: "FAQ Hub", link: "/en/aftershockau/data-faq-hub" },
+                  { text: "Careers", link: "/en/aftershockau/data-careers" },
+                  { text: "About us", link: "/en/aftershockau/data-about-us" },
+                  { text: "Warranty", link: "/en/aftershockau/data-warranty" },
+                  { text: "Drivers", link: "/en/aftershockau/data-drivers" },
+
+                  {
+                    text: "User Info",
+                    collapsed: true,
+                    items: [
+                      {
+                        text: "User Account",
+                        link: "/en/aftershockau/data-user-account",
+                      },
+                      {
+                        text: "Order tracker",
+                        link: "/en/aftershockau/data-order-tracker",
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                text: "Feature Explanation",
+                items: [
+                  { text: "Home Page", link: "/en/aftershockau/routes-home" },
+                  {
+                    text: "Products",
+                    collapsed: true,
+                    items: [
+                      { text: "Sale", link: "/en/aftershockau/route-sale" },
+                      {
+                        text: "Read To Ship",
+                        link: "/en/aftershockau/routes-ready-to-ship",
+                      },
+                      {
+                        text: "Collection",
+                        link: "/en/aftershockau/routes-collection",
+                      },
+                      { text: "SLP", link: "/en/aftershockau/routes-series" },
+                      {
+                        text: "Limited Edition",
+                        link: "/en/aftershockau/routes-limited-edition",
+                      },
+                      { text: "Products", link: "/en/aftershockau/routes-products" },
+                    ],
+                  },
+
+                  {
+                    text: "Knowledge Hub",
+                    link: "/en/aftershockau/routes-knowledge-hub",
+                    collapsed: true,
+                    items: [
+                      {
+                        text: "Knowledge Hub Categories",
+                        link: "/en/aftershockau/routes-knowlede-hub-categories",
+                      },
+                      {
+                        text: "Knowledge Hub Post",
+                        link: "/en/aftershockau/routes-knowlede-hub-post",
+                      },
+                    ],
+                  },
+                  {
+                    text: "Flagship Showroom",
+                    link: "/en/aftershockau/routes-flagship-showroom",
+                  },
+                  {
+                    text: "Contact Us",
+                    link: "/en/aftershockau/routes-contact-us",
+                  },
+                  { text: "FAQ Hub", link: "/en/aftershockau/routes-faq-hub" },
+                  { text: "Careers", link: "/en/aftershockau/routes-careers" },
+                  { text: "About Us", link: "/en/aftershockau/routes-about-us" },
+                  { text: "Warranty", link: "/en/aftershockau/routes-warranty" },
+                  { text: "Drivers", link: "/en/aftershockau/routes-drivers" },
+                  {
+                    text: "User Info",
+                    collapsed: true,
+                    items: [
+                      {
+                        text: "User Account",
+                        link: "/en/aftershockau/routes-user-account",
+                      },
+                      {
+                        text: "Order tracker",
+                        link: "/en/aftershockau/routes-order-tracker",
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                text: "Feedback",
+                link: "/en/aftershockau/suggestion",
+              },
+            ],
+          },
+        }
       },
     },
     mermaid: {

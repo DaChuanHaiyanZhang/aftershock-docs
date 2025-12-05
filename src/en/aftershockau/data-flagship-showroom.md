@@ -2,11 +2,11 @@
 
 [[toc]]
 
-## 数据流
+## Data Flow
 
-数据在 Prismic 上维护，[`#aux-flagship-showroom`](https://aftershockpc.prismic.io/builder/pages/ZUxSRhYAACYAIJby?s=published)
+Data is maintained on Prismic, [`#aux-flagship-showroom`](https://aftershockpc.prismic.io/builder/pages/ZUxSRhYAACYAIJby?s=published).
 
-然后通过 API 的形式调取到数据，并完成渲染。
+The data is then fetched via an API and rendered.
 
 ```jsx
 const page = await prismicClient.getByUID("aux_page", params.handle, {
@@ -22,19 +22,19 @@ if (documentId) {
 }
 ```
 
-## 组件使用
+## Component Usage
 
 ### PrismicPreviewWrapperAux
 
-这是一个外层的wrapper包裹层。
+This is an outer wrapper layer.
 
-> Tips: [Suspense](https://zh-hans.react.dev/reference/react/Suspense)
+> Tips: [Suspense](https://react.dev/reference/react/Suspense)
 
-> Tips: [Await](https://remix.org.cn/docs/en/main/components/await)
+> Tips: [Await](https://remix.run/docs/en/main/components/await)
 
 ### AuxSkeleton
 
-骨架屏组件，貌似没显示，这里使用了[react-loading-skeleton](https://github.com/dvtng/react-loading-skeleton) 插件
+A skeleton screen component that doesn't seem to be displayed. It uses the [react-loading-skeleton](https://github.com/dvtng/react-loading-skeleton) plugin.
 
 ```
 app\components\Slices\AuxPagesSlices\AuxSkeleton\index.jsx
@@ -42,11 +42,8 @@ app\components\Slices\AuxPagesSlices\AuxSkeleton\index.jsx
 
 ### AuxSliceRenderer
 
-通过不同的id等使用不同的组件对界面进行渲染。里面代码非常丰满。
+Renders the interface using different components based on various IDs. The code inside is quite extensive.
 
 ```
 app\components\Slices\AuxPagesSlices\AuxSliceRenderer.jsx
 ```
-
-
-
