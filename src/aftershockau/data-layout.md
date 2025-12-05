@@ -166,7 +166,8 @@ export function LogoLink() {
 }
 ```
 
-> Tips [Image 组件地址](https://shopify.dev/docs/api/checkout-extensions/post-purchase/components/image)
+>[!NOTE] 
+>[Image 组件地址](https://shopify.dev/docs/api/checkout-extensions/post-purchase/components/image)
 
 </details>
 
@@ -657,7 +658,8 @@ import { useFetcher } from "@remix-run/react";
 const fetcher = useFetcher({ key: "search" });
 ```
 
-> Tips: [useFetcher(params)](https://remix.org.cn/docs/en/main/hooks/use-fetcher)
+>[!NOTE] 
+>[useFetcher(params) 文档地址](https://remix.org.cn/docs/en/main/hooks/use-fetcher)
 
 ---
 
