@@ -166,7 +166,7 @@ export function LogoLink() {
 }
 ```
 >[!NOTE] 
->[Image 组件地址](https://shopify.dev/docs/api/checkout-extensions/post-purchase/components/image)
+>[Image 组件地址](https://shopify.dev/docs/api/hydrogen/latest/components/image)
 
 </details>
 

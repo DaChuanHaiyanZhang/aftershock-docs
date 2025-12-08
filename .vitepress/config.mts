@@ -63,6 +63,7 @@ export default withMermaid(
                       },
                       { text: "Products", link: "/en/aftershockau/data-products" },
                       { text: "Workstations", link: "/en/aftershockau/data-workstations" },
+                      { text: "PC Models", link: "/en/aftershockau/data-pc-models" },
                     ],
                   },
 

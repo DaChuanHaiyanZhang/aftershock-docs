@@ -253,6 +253,9 @@ export function CategoryCard({ category }) {
 }
 ```
 
+>[!NOTE] 
+>[Image 组件地址](https://shopify.dev/docs/api/hydrogen/latest/components/image)
+
 ### 数据源
 
 数据源于 Prismic， 因为有个很明显的信号，在 CategoryCard 的链接中，传入了分组的 uid（prismic）的，到详情页进行查询。

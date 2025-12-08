@@ -627,3 +627,10 @@ async function fetchFeaturesForModels(models, storefront, prismicData) {
 ```
 >[!NOTE]
 >多看看其他地方的 `Promise.all` 或许都可以通过这个方式解决。
+
+## 原图片很大的问题，技术端建议。
+
+原图片加载确实会因为图片的大小耗费很多资源，最终导致加载太慢。要想解决这个问题，就需要从两手准备。
+
+1. 在图片上传之前压缩。
+2. 在图片上传之后，技术端更新代码， Hydrogen 提供了 `OSS` 的能力，可以在具体布局的地方，在调用时进行裁剪，也可达到裁剪的效果。

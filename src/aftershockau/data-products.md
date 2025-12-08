@@ -269,7 +269,7 @@ useEffect 监听滚动事件
 #### 数据流向映射表
 
 | 数据状态 | 定义位置 | 主要使用者 | 更新触发器 | 影响范围 |
-|---------|---------|-----------|-----------|----------|
+|:------:|:------:|:------:|:-------:|:-------------|
 | `activeProducts` | NewProductRTS | UpsellProducts, CartSection | setActiveProducts | 购物车、总价、产品列表 |
 | `selectedPc` | NewProductRTS | RtsConfigurator, PcSummary | setSelectedPc | PC配置器、摘要显示 |
 | `selectedDesign` | NewProductRTS | RtsConfigurator, DesignSummary | setSelectedDesign | 设计选择器、摘要显示 |
@@ -333,3 +333,10 @@ Products (爷爷) → NewProductRTS (父亲) → UpsellProducts (儿子) → Acc
 ### 另外需要注意
 
 所有的商品详情界面，可以注入静态 `html` 用来描述商品的内容
+
+## 三方插件
+
+>[!IMPORTANT]
+>这里评论插件使用到了 [Reviews](https://www.reviews.io/)
+>
+>😂 目前只能使用调取API的行为获取到对应的评论的 html 数据
