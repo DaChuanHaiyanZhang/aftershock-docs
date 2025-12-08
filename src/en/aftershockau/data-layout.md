@@ -1,35 +1,43 @@
-# Layout 全局数据流
+# Layout Global Data Flow
 
 [[toc]]
 
 ## Header
 
-### 横幅的内容
+### Banner Content
 
-该组件主要用来提醒用户一些信息，例如促销活动等，点击之后直接进入地址。
+This component is primarily used to notify users of information such as promotional activities. Clicking on it directly navigates to the address.
 
 ![aftershock](/screenshots/ScreenShot_2025-11-26_174932_840.png "aftershock")
 
-#### 数据源
+#### Data Source
 
-目前在 [Prismic](https://aftershockpc.prismic.io/builder/pages/Zip6gxcAAKUIv3ry?s=published) 维护活动的内容等。
+The content is currently maintained in [Prismic](https://aftershockpc.prismic.io/builder/pages/Zip6gxcAAKUIv3ry?s=published). The specific business process is as follows:
+
+```mermaid
+flowchart LR
+
+Prismic --webhook--> SM[Shopify Metaobject] --GraphQL--> SA[Storefront API]
+```
 
 ![aftershock](/screenshots/ScreenShot_2025-11-27_080611_384.png "aftershock")
 
-##### 组件引用结构链
+##### Component Reference Chain
 
 ```bash
 app\components\Header\ShippingBanner\index.jsx
 ```
 
-组件被调用的地方为 Header 组件，但是数据传入的地方为 root.jsx，关键代码如下：
+The component is called by the Header component, but the data is injected from root.jsx. Key code:
 
-1. 在 root.jsx 的 loader 中加载所有 Metaobjects 数据，其中就包含 shippingBanner 的数据，然后将数据传入到 PageLayout 组件
+1. Load all Metaobjects data in the loader of root.jsx.
+
+    This includes shippingBanner data, which is then passed to the PageLayout component.
 
 ```jsx
 // root.jsx
-// 注意：这是代码片段 不是全部
-// loader中加载
+// Note: This is a code snippet, not the complete file.
+// Load in loader
 export async function loader(args) {
   const [criticalData, headerTemp, footerTemp] = await Promise.all([
     loadCriticalData(args),
@@ -52,32 +60,31 @@ export async function loader(args) {
   };
 }
 
-// 数据传入PageLayout
+// Pass data to PageLayout
 <PageLayout {...data}>{children}</PageLayout>;
 ```
 
-2. 在 PageLayout 组件中调用 Header 组件并将数据传入
+2. Call the Header component in the PageLayout component and pass the data.
 
-`AsideProvider` 是一个全局组件，它记录了很多状态类似于 Vue 的全局状态管理，Vuex 或者 Pinna，做了 `全局状态共享`。
+`AsideProvider` is a global component that records many states, similar to Vue's global state management (Vuex or Pinia), implementing `global state sharing`.
 
 ```bash
 app\components\Aside\AsideProvider\index.jsx
 ```
 
-
 >[!NOTE]
->[provider](https://react.dev/reference/react/createContext#provider)的使用
+>Usage of [provider](https://react.dev/reference/react/createContext#provider)
 
 ```jsx
 // PageLayout/index.jsx
-// 注意：这里是代码片段，不是全部
-// 这里是数据注入的全过程
+// Note: This is a code snippet, not the complete file.
+// This is the complete data injection process.
 export function PageLayout({
   shippingBanner
 }) {
   return (
     <AsideProvider
-      {/* 这里将数据注入到AsideProvider中 */}
+      {/* Inject data into AsideProvider here */}
       shippingBanner={shippingBanner}
       customerAccessToken={customerAccessToken}
       isCustomerLoggedIn={isCustomerLoggedIn}
@@ -92,19 +99,19 @@ export function PageLayout({
 }
 ```
 
-3. 在 Header 组件的使用
+3. Usage in the Header component.
 
 ```jsx
 // Header/index.jsx
-// 注意：这只是代码片段
+// Note: This is just a code snippet.
 import {useAside} from '../Aside/useAside';
 
 export function Header({
   shippingBanner,
 }) {
-  // 使用全局状态
+  // Use global state
   const {type, close, isBannerVisible, isBannerLoaded, closeBanner} = useAside();
-  // 使用shipingBanner组件
+  // Use the shippingBanner component
   return (
     {isBannerLoaded && isBannerVisible && (
       <ShippingBanner shippingBanner={shippingBanner} onClose={closeBanner} />
@@ -115,19 +122,21 @@ export function Header({
 
 ### Logo
 
-左上角 Logo 相关代码和引用关系
+Top-left logo related code and reference relationships.
 
-##### 数据源
+##### Data Source
 
-静态数据，在组件中维护。
+Static data, maintained within the component.
 
-##### 组件引用结构链
+##### Component Reference Chain
 
-- app\components\Header\index.jsx 👇
-- app\components\Header\LogoLink\index.jsx
+```bash
+app\components\Header\index.jsx 👇
+app\components\Header\LogoLink\index.jsx
+```
 
 <details>
-<summary>查看代码</summary>
+<summary>View Code</summary>
 
 ```jsx
 import { Link } from "@remix-run/react";
@@ -152,7 +161,7 @@ export function LogoLink() {
         className="flex items-center w-[167px] h-[36px]"
         prefetch="viewport"
       >
-        {/* 图片地址 调用Hydrogen的Image组件 */}
+        {/* Image URL, calling Hydrogen's Image component */}
         <Image
           src="https://cdn.shopify.com/s/files/1/0522/3320/7988/files/header_logo_5d52404a-f89d-4a2b-a73e-7b79d8dd8640.svg?v=1723189737"
           alt="Aftershock Logo"
@@ -165,39 +174,35 @@ export function LogoLink() {
   );
 }
 ```
+
 >[!NOTE] 
->[Image 组件地址](https://shopify.dev/docs/api/hydrogen/latest/components/image)
+>[Image Component Documentation](https://shopify.dev/docs/api/hydrogen/latest/components/image)
 
 </details>
 
-### Menu 桌面端(菜单栏)
+### Menu Desktop
 
 ![aftershock](/screenshots/ScreenShot_2025-11-26_152548_672.png "aftershock")
 
-#### 数据源
+#### Data Source
 
-这里实际上是从[Metaobjects](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004)调取的数据
+The data is fetched from [Metaobjects](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004).
 
-**引用流程**
+**Reference Flow**
 
-- 在 [Prismic](https://prismic.io/) 更新数据源 👇
-- 更新以后通过 [Prismic](https://prismic.io/) 的 [Webhooks](https://prismic.io/docs/webhooks) 调用 api（api 地址应该是在 admin app 当中开发过） 👇
-- 更新到 shopify 的 [Metaobjects](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004) 👇
-- 然后在 [Hydrogen](https://hydrogen.shopify.dev/) 项目使用 [storefront Api](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching) 👌
-
-<!-- 如下图所示：
-
-![aftershock](/screenshots/ScreenShot_2025-11-26_105721_008.png "aftershock") -->
+- Update data source in [Prismic](https://prismic.io/) 👇
+- After updating, use [Prismic](https://prismic.io/)'s [Webhooks](https://prismic.io/docs/webhooks) to call an API (the API address should have been developed in the admin app) 👇
+- Update to Shopify's [Metaobjects](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004) 👇
+- Then use [storefront API](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching) in the [Hydrogen](https://hydrogen.shopify.dev/) project 👌
 
 ```mermaid
 flowchart LR
 Prismic -- webhook --> SM[Shopify Metaobjects] -- GraphQL --> Aftershock
 ```
 
+#### Component Reference Chain
 
-#### 组件引用结构链
-
-1. app\root.jsx 中的调用以及组装流程 👇
+1. Call and assembly process in app\root.jsx 👇
 
 ```jsx
 /** GET_METAOBJECTS_BY_HANDLE
@@ -226,7 +231,7 @@ export async function loader(args) {
     },
   };
 
-  // 获取菜单栏信息 -- headerTemp
+  // Get menu bar information -- headerTemp
   const [criticalData, headerTemp, footerTemp] = await Promise.all([
     loadCriticalData(args),
     storefront.query(GET_METAOBJECTS_BY_HANDLE, {
@@ -239,34 +244,37 @@ export async function loader(args) {
     }),
   ]);
 
-  // 解析菜单栏信息
+  // Parse menu bar information
   const header = JSON.parse(
     headerTemp?.metaobject?.fields?.find((field) => field.key === "data")?.value
   );
 
-  // 格式化菜单栏信息 menuFormatting的位置 -> helpers\menuFormatting.js
+  // Format menu bar information. Location of menuFormatting -> helpers\menuFormatting.js
   const formattedMenu = header ? menuFormatting(header) : null;
 
-  // 在loader中返回
+  // Return in loader
   return {
     formattedMenu: formattedMenu || [],
   };
 }
 
-// 在PageLayout组件中注入数据 data是解构了数据
+// Inject data in PageLayout component. Data is destructured.
 export function Layout({ children }) {
   // code
-  const data = useRouteLoaderData("root"); // 解析loader的数据
+  const data = useRouteLoaderData("root"); // Parse loader data
   render(<PageLayout {...data}>{children}</PageLayout>);
   // code
 }
 ```
 
-- [Remix React useRouteLoaderData('root')](https://remix.org.cn/docs/en/main/hooks/use-route-loader-data#userouteloaderdata)
-- [Hydrogen storefront 文档](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
-- [createStorefrontClient](https://shopify.dev/docs/api/hydrogen/latest/utilities/createstorefrontclient?utm_source=chatgpt.com)
+>[!NOTE]
+>[Remix React useRouteLoaderData('root') Documentation](https://remix.run/docs/en/main/hooks/use-route-loader-data#userouteloaderdata)
+>
+>[Hydrogen storefront Documentation](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
+>
+>[createStorefrontClient Documentation](https://shopify.dev/docs/api/hydrogen/latest/utilities/createstorefrontclient?utm_source=chatgpt.com)
 
-2. app\components\PageLayout.jsx 中的调用 👇
+2. Call in app\components\PageLayout.jsx 👇
 
 ```jsx
 import { Header } from "./Header";
@@ -297,7 +305,7 @@ export function PageLayout({
         isLoggedIn={isLoggedIn}
         isCustomerLoggedIn={isCustomerLoggedIn}
       />
-      {/* 调用Header组件，在Header组件中注入数据 formattedMenu */}
+      {/* Call Header component, inject formattedMenu data into Header component */}
       {formattedMenu && (
         <Header
           isLoggedIn={isLoggedIn}
@@ -317,10 +325,10 @@ export function PageLayout({
 }
 ```
 
-3. app\components\Header\index.jsx 中调用 👇
+3. Call in app\components\Header\index.jsx 👇
 
 ```jsx
-// Header 组件接收 formattedMenu 参数
+// Header component receives formattedMenu parameter
 export function Header({
   isLoggedIn,
   publicStoreDomain,
@@ -363,9 +371,9 @@ export function Header({
 }
 ```
 
-4. app\components\Header\DesktopMenu\index.jsx 中调用
+4. Call in app\components\Header\DesktopMenu\index.jsx
 
-参数 `menuStructure` 为菜单栏的数据
+Parameter `menuStructure` is the menu bar data.
 
 ```jsx
 import { useAside } from "~/components/Aside/useAside";
@@ -395,7 +403,7 @@ const DesktopMenu = memo(function DesktopMenu({
 export { DesktopMenu };
 ```
 
-5. 然后 **FirstLevelMenu** 组件中调用数据，并最终与以下组件完成组合
+5. Then the **FirstLevelMenu** component uses the data and ultimately combines with the following components to complete the menu.
 
    - **FirstLevelMenu**
 
@@ -439,17 +447,15 @@ export { DesktopMenu };
 
      ![aftershock](/screenshots/ScreenShot_2025-11-26_151918_983.png "aftershock")
 
-### Menu 移动端(菜单栏)
+### Menu Mobile
 
-![aftershock](/screenshots/ScreenShot_2025-11-26_160405_772.png "aftershock")
+#### Data Source
 
-#### 数据源
+This data is also fetched from [Metaobjects](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004).
 
-这里实际上也是从[Metaobjects](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004)调取的数据
+#### Component Reference Chain
 
-#### 组件引用结构链
-
-1. app\root.jsx 中的调用以及组装流程 👇
+1. Call and assembly process in app\root.jsx 👇
 
 ```jsx
 /** GET_METAOBJECTS_BY_HANDLE
@@ -478,7 +484,7 @@ export async function loader(args) {
     },
   };
 
-  // 获取菜单栏信息 -- headerTemp
+  // Get menu bar information -- headerTemp
   const [criticalData, headerTemp, footerTemp] = await Promise.all([
     loadCriticalData(args),
     storefront.query(GET_METAOBJECTS_BY_HANDLE, {
@@ -491,34 +497,37 @@ export async function loader(args) {
     }),
   ]);
 
-  // 解析菜单栏信息
+  // Parse menu bar information
   const header = JSON.parse(
     headerTemp?.metaobject?.fields?.find((field) => field.key === "data")?.value
   );
 
-  // 格式化菜单栏信息 menuFormatting的位置 -> helpers\menuFormatting.js
+  // Format menu bar information. Location of menuFormatting -> helpers\menuFormatting.js
   const formattedMenu = header ? menuFormatting(header) : null;
 
-  // 在loader中返回
+  // Return in loader
   return {
     formattedMenu: formattedMenu || [],
   };
 }
 
-// 在PageLayout组件中注入数据 data是解构了数据
+// Inject data in PageLayout component. Data is destructured.
 export function Layout({ children }) {
   // code
-  const data = useRouteLoaderData("root"); // 解析loader的数据
+  const data = useRouteLoaderData("root"); // Parse loader data
   render(<PageLayout {...data}>{children}</PageLayout>);
   // code
 }
 ```
 
-- [Remix React useRouteLoaderData('root')](https://remix.org.cn/docs/en/main/hooks/use-route-loader-data#userouteloaderdata)
-- [Hydrogen storefront 文档](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
-- [createStorefrontClient](https://shopify.dev/docs/api/hydrogen/latest/utilities/createstorefrontclient?utm_source=chatgpt.com)
+>[!NOTE]
+>[Remix React useRouteLoaderData('root') Documentation](https://remix.run/docs/en/main/hooks/use-route-loader-data#userouteloaderdata)
+>
+>[Hydrogen storefront Documentation](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
+>
+>[createStorefrontClient Documentation](https://shopify.dev/docs/api/hydrogen/latest/utilities/createstorefrontclient?utm_source=chatgpt.com)
 
-2. app\components\PageLayout.jsx 中的调用 👇
+2. Call in app\components\PageLayout.jsx 👇
 
 ```jsx
 import { Header } from "./Header";
@@ -534,7 +543,7 @@ export function PageLayout({
       customerAccessToken={customerAccessToken}
       isCustomerLoggedIn={isCustomerLoggedIn}
     >
-      {/* 调用MobileMenuAside组件，并在组件中注入数据 formattedMenu */}
+      {/* Call MobileMenuAside component and inject formattedMenu data */}
       <MobileMenuAside
         header={header}
         publicStoreDomain={publicStoreDomain}
@@ -551,7 +560,7 @@ export function PageLayout({
 }
 ```
 
-3. app\components\Aside\MobileMenuAside\index.jsx 中使用 👇
+3. Usage in app\components\Aside\MobileMenuAside\index.jsx 👇
 
 ```jsx
 export function MobileMenuAside({
@@ -571,31 +580,31 @@ export function MobileMenuAside({
     (item) => item.primary.title.toLowerCase() === "special offers"
   );
 
-  // Aside组件内使用
+  // Used inside the Aside component
   <Aside type="mobile" heading="MENU" menuStructure={formattedMenu}>
-    {/* 使用的业务逻辑 */}
+    {/* Business logic used */}
   </Aside>;
 }
 ```
 
-4. 然后与**MobileMenuFooter**组件组合最终完成了菜单栏的设计。
+4. Combined with the **MobileMenuFooter** component, the menu bar design is ultimately completed.
 
-### 搜索栏
+### Search Bar
 
-该搜索栏在输入内容之后会根据内容查询对应的商品列表
+This search bar queries corresponding product lists based on input content.
 
 ![aftershock](/screenshots/2025-11-26_162456_892.png "aftershock")
 
-#### 数据流
+#### Data Flow
 
-在用户输入了相关的搜索关键词以后开始调用查询，查询的规则如下：
+After the user inputs relevant search keywords, the query is invoked. The query rules are as follows:
 
-1. 组成查询条件如下：
-   - 查询的关键词
-   - 最匹配的前五条数据
-   - 并开启预查询
-2. 组成调用的方法、地址
-3. 执行查询
+1. Formulate query conditions:
+   - Query keywords
+   - Top 5 most matching data
+   - Enable predictive search
+2. Formulate the method and address for the call.
+3. Execute the query.
 
 ```jsx
 export const SEARCH_ENDPOINT = "/search";
@@ -615,27 +624,32 @@ function fetchResults(event) {
 }
 ```
 
-4. 接口地址 **/search** 的来源：
+4. Source of the `/search` interface:
 
-组件地址: app\routes\search.jsx
+```bash
+app\routes\search.jsx
+```
 
-因为 remix 就是服务端语言，因此它在 search.jsx 中做了一个搜索接口去查询内容。
+Since Remix is a server-side language, it creates a search interface in `search.jsx` to query content.
 
-搜索的核心代码如下：
+Core search code:
 
 ```javascript
 async function predictiveSearch({ request, context }) {
-  // 代码太多建议直接去看
+  // Too much code, suggest viewing directly
 }
 ```
 
-- 这里大量使用了 [Graphql](https://graphql.cn/)
-- 需要去看[search](https://shopify.dev/docs/api/storefront/latest/queries/search)的相关代码
-- 另外还要去查看 [Hydrogen Graphi](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching/graphiql#graphiql)
+>[!NOTE]
+>This heavily uses [GraphQL](https://graphql.org/).
+>
+>Need to review [search](https://shopify.dev/docs/api/storefront/latest/queries/search) related code.
+>
+>Also check [Hydrogen Graphi](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching/graphiql#graphiql).
 
-#### 组件引用结构链
+#### Component Reference Chain
 
-该组件的调用路径为 root.jsx/PageLayout/Header/HeaderCtas
+The component's call path is root.jsx/PageLayout/Header/HeaderCtas.
 
 ```mermaid
 flowchart LR
@@ -649,26 +663,26 @@ app\components\Header\HeaderCtas\SearchToggle\index.jsx
 app\components\Search\SearchResults\index.jsx
 ```
 
-- SearchResults 组件调用了 Remix 的组件
+- The SearchResults component uses a Remix component.
 
 ```jsx
 import { useFetcher } from "@remix-run/react";
 
 const fetcher = useFetcher({ key: "search" });
 ```
+
 >[!NOTE] 
->[useFetcher(params) 文档地址](https://remix.org.cn/docs/en/main/hooks/use-fetcher)
+>[useFetcher(params) Documentation](https://remix.run/docs/en/main/hooks/use-fetcher)
 
 ---
 
+### Region Switching
 
-### 地区切换
+#### Data Source
 
-#### 数据源
+The data is static, maintained within the project and referenced.
 
-数据为静态数据，在项目内维护，做了引用
-
-数据路径: utils\constants\countryLinks.js
+Data path: utils\constants\countryLinks.js
 
 ```jsx
 export const countryLinks = [
@@ -686,9 +700,9 @@ export const countryLinks = [
 ];
 ```
 
-#### 组件引用结构链
+#### Component Reference Chain
 
-1. 在 PageLayout 中直接引用
+1. Directly referenced in PageLayout.
 
 ```jsx
 export function PageLayout() {
@@ -700,43 +714,48 @@ export function PageLayout() {
 }
 ```
 
-2. **LanguageAside** 组件
+2. **LanguageAside** component.
 
-组件地址: app\components\Aside\LanguageAside\index.jsx
+Component path: app\components\Aside\LanguageAside\index.jsx
 
-具体的业务流程参照具体代码即可，比较简单。
+Refer to the specific code for the business process; it is relatively simple.
 
-### 即时消息
+### Instant Messaging
 
-在点击查看即时消息的时候会有以下选项
+When clicking to view instant messages, the following options are available:
 
-- （Live Chat）在线聊天工具，
-- （Knowledge Hub）帮助中心
-- （Flagship Showroom）展厅信息
-- （Contact Us）联系我们
-- Check Your Build Status
+>[!IMPORTANT]
+> 💬 Live Chat online chat tool.
+>
+> 📚 Knowledge Hub help center.
+>
+> 🏢 Flagship Showroom showroom information.
+>
+> 📞 Contact Us contact us.
+>
+> 🔍 Check Your Build Status.
 
-#### 插件
+#### Plugin
 
 [@frontapp/plugin-sdk](https://dev.frontapp.com/reference/installation)
 
-其中在线聊天工具就使用到了 [FrontApp](https://front.com/) 这个工具，它是在官网注入相关代码之后，用户在 aftershock 和客服在 frontapp 后台聊天
+The online chat tool uses [FrontApp](https://front.com/). After injecting relevant code on the official website, users chat with customer service on the frontapp backend from Aftershock.
 
 >[!INFO]
->也许我们后续还可以对用户在线聊天的信息进行数据分析，得出一些结论，方便做商业规划，[查看建议方案](./suggestion.md)
+>Perhaps we could later analyze user online chat data to draw conclusions for business planning. [View suggestion plan](./suggestion.md).
 
 >[!WARNING]
-> FrontApp 的 ChartId dcccf16bf7f8867dc9516ad40e69defe
+> FrontApp ChartId: dcccf16bf7f8867dc9516ad40e69defe
 
 >[!DANGER]
-> 这些敏感信息是不是可以存储到 metaobjects 中呢？
+> Can these sensitive information be stored in metaobjects?
 
 <details>
-<summary>查看引入的代码</summary>
+<summary>View imported code</summary>
 
 ```jsx
 // root.jsx
-// 延迟加载过程 优化首页加载速度
+// Lazy loading process to optimize homepage loading speed.
 return (
   <script
     nonce={nonce}
@@ -752,11 +771,11 @@ return (
             if (loaded) return;
             loaded = true;
             
-            // Для мобильных - используем requestIdleCallback с большей задержкой для снижения TBT
+            // For mobile - use requestIdleCallback with greater delay to reduce TBT
             var idleCallback = window.requestIdleCallback || function(cb) { return setTimeout(cb, 10000); };
             
             idleCallback(function() {
-              // Klaviyo - отложенная загрузка
+              // Klaviyo - lazy loading
               var klaviyo = document.createElement('script');
               klaviyo.id = 'klaviyo-js';
               klaviyo.src = 'https://static.klaviyo.com/onsite/js/MvXF9E/klaviyo.js';
@@ -764,7 +783,7 @@ return (
               klaviyo.defer = true;
               document.head.appendChild(klaviyo);
               
-              // Instant Pixel - отложенная загрузка
+              // Instant Pixel - lazy loading
               var instant = document.createElement('script');
               instant.id = 'instant-pixel';
               instant.innerHTML = '!function(i,n,s,t,a,u,d){i.InstantConfig=i.InstantConfig||{},d=i.InstantJS=i.InstantJS||{},d.trackQueue=[],d.track=function(){d.trackQueue.push(arguments)},u=n.createElement(s),u.async=!0,u.src=t,a=n.getElementsByTagName(s)[0],a.parentNode.insertBefore(u,a)}(window,document,"script","https://cdn.instant.one/instant.js?siteId=site_d0215b799aeb40159179ee9562bd38c1");';
@@ -772,7 +791,7 @@ return (
             }, { timeout: 12000 });
           };
           
-          // Загружаем при первом взаимодействии или через 12 секунд (увеличено для мобильных)
+          // Load on first interaction or after 12 seconds (increased for mobile)
           window.addEventListener('scroll', loadOnInteraction, {passive: true, once: true});
           window.addEventListener('click', loadOnInteraction, {once: true});
           window.addEventListener('touchstart', loadOnInteraction, {passive: true, once: true});
@@ -794,7 +813,7 @@ return (
 </details>
 
 <details>
-<summary>查看初始化的代码</summary>
+<summary>View initialization code</summary>
 
 ```jsx
 useEffect(() => {
@@ -810,7 +829,7 @@ useEffect(() => {
 }, [isKnowledgeHub, location.pathname]);
 
 useEffect(() => {
-  // Отложенная загрузка чата - только после взаимодействия пользователя
+  // Lazy load chat - only after user interaction
   let chatInitialized = false;
   const initializeChat = () => {
     if (chatInitialized) return;
@@ -835,7 +854,7 @@ useEffect(() => {
     }
   };
 
-  // Загружаем чат после первого взаимодействия пользователя (scroll, click, touch)
+  // Load chat after first user interaction (scroll, click, touch)
   const loadOnInteraction = () => {
     initializeChat();
     window.removeEventListener("scroll", loadOnInteraction, {
@@ -847,10 +866,10 @@ useEffect(() => {
     });
   };
 
-  // Загружаем чат с задержкой после загрузки страницы (3 секунды)
+  // Load chat with delay after page load (3 seconds)
   const timeoutId = setTimeout(initializeChat, 3000);
 
-  // Или загружаем при взаимодействии пользователя
+  // Or load on user interaction
   window.addEventListener("scroll", loadOnInteraction, {
     passive: true,
     once: true,
@@ -894,11 +913,11 @@ const loadChatBot = () => {
 
 </details>
 
-在 entry.server.jsx 配置相关头
+Configure relevant headers in entry.server.jsx.
 
 ```jsx
-// 包含frontapp的域名信息
-// 代码片段
+// Includes frontapp domain information
+// Code snippet
 import {
   buildCSPHeader,
   mergeCSPDirectives,
@@ -913,29 +932,29 @@ export default async function handleRequest() {
 }
 ```
 
-#### 数据源
+#### Data Source
 
-1. Live Chat 的数据源在 [FrontApp](https://front.com/) 但是可以使用 [API](https://dev.frontapp.com/reference/installation) 调用
-2. [Knowledge Hub](./data-knowledge-hub.md) 链接到对应的页面，[功能说明](./routes-knowledge-hub.md)
-3. [Flagship Showroom](./data-flagship-showroom.md) 点击之后跳转到对应的页面
-4. [Contact Us](./data-contact-us.md) 点击之后跳转到联系我们界面
-5. Check Your Build Status 在获取到表单数据之后携带数据跳转到 [order-tracker](./data-order-tracker.md) 界面
+1. Live Chat data source is in [FrontApp](https://front.com/), but can be called using [API](https://dev.frontapp.com/reference/installation).
+2. [Knowledge Hub](./data-knowledge-hub.md) links to the corresponding page, [functional description](./routes-knowledge-hub.md).
+3. [Flagship Showroom](./data-flagship-showroom.md) redirects to the corresponding page upon click.
+4. [Contact Us](./data-contact-us.md) redirects to the contact us page upon click.
+5. Check Your Build Status redirects to the [order-tracker](./data-order-tracker.md) page after obtaining form data.
 
-#### 组件引用结构链
+#### Component Reference Chain
 
 ```mermaid
 flowchart LR
 root.jsx --> PageLayout.jsx --> AsideProvider --> HelpAside
 ```
 
-### 用户中心
+### User Center
 
-#### 数据源
+#### Data Source
 
-- 登录功能
-- 注册功能
+- Login functionality.
+- Registration functionality.
 
-### 组件引用结构链
+### Component Reference Chain
 
 ```mermaid
 flowchart LR
@@ -943,9 +962,9 @@ root.jsx --> PageLayout.jsx --> AsideProvider --> AccountAside
 ```
 
 > [!INFO]
->**AsideProvider** 组件是数据共享的一个组件，具体可参照 [React 文档](https://react.docschina.org/reference/react/createContext#provider)
+> **AsideProvider** component is a data-sharing component, refer to [React Documentation](https://react.dev/reference/react/createContext#provider) for details.
 
-- AccountAside 在登录的时候调用组件负责表单提交 LoginForm 组件完成用户登录
+- AccountAside calls the LoginForm component upon login to handle form submission for user login.
 
   ```jsx
   const handleSubmit = async (e) => {
@@ -967,7 +986,7 @@ root.jsx --> PageLayout.jsx --> AsideProvider --> AccountAside
 
       if (result.success) {
         setMessage("Login successful!");
-        // setFormState('profile'); // Переключение на профиль или нужный маршрут
+        // setFormState('profile'); // Switch to profile or desired route
         setIsCustomerLoggedIn(true);
         navigate(window.location.pathname);
       } else {
@@ -981,7 +1000,7 @@ root.jsx --> PageLayout.jsx --> AsideProvider --> AccountAside
   };
   ```
 
-- AccountAside 在注册的时候调用组件负责表单提交 RegisterForm 组件完成用户注册
+- AccountAside calls the RegisterForm component upon registration to handle form submission for user registration.
 
   ```jsx
   const handleSubmit = async (e) => {
@@ -1050,7 +1069,7 @@ root.jsx --> PageLayout.jsx --> AsideProvider --> AccountAside
   };
   ```
 
-- AccountAside 在重置密码的时候调用 PasswordResetForm 组件完成用户重置密码
+- AccountAside calls the PasswordResetForm component to handle user password reset.
 
   ```jsx
   <fetcher.Form
@@ -1062,18 +1081,18 @@ root.jsx --> PageLayout.jsx --> AsideProvider --> AccountAside
   </fetcher.Form>
   ```
 
-### 购物车
+### Shopping Cart
 
-#### 数据源
+#### Data Source
 
-1. 在 root.jsx 中先从`contenxt`中获取
+1. First obtained from `context` in root.jsx.
 
 ```jsx
 const { customerAccount, cart } = context;
 const customerAccessToken = context.session.get("customerAccessToken");
 ```
 
-2. 购物车数据 (cartData)
+2. Shopping cart data (cartData).
 
 ```jsx
 async function getCart() {
@@ -1082,7 +1101,7 @@ async function getCart() {
 const cartData = await getCart();
 ```
 
-3. 过滤特定产品的逻辑
+3. Logic to filter specific products.
 
 ```jsx
 const nonTracked = cartData.lines.nodes
@@ -1094,21 +1113,21 @@ const nonTracked = cartData.lines.nodes
   .map((cl) => cl.id);
 ```
 
-#### 组件引用结构链
+#### Component Reference Chain
 
 > [!INFO]
-> 这里需要特别注意的是使用到了 shopify 的 hydrogen 组件的 [Analytics.Provider](https://shopify.dev/docs/api/hydrogen/2024-04)和[Analytics.CartView](https://shopify.dev/docs/api/hydrogen/2024-04/components/analytics/analytics-cartview)组件
+> It is important to note that Shopify's Hydrogen components [Analytics.Provider](https://shopify.dev/docs/api/hydrogen/2024-04) and [Analytics.CartView](https://shopify.dev/docs/api/hydrogen/2024-04/components/analytics/analytics-cartview) are used here.
 
 ```mermaid
 flowchart LR
 root.jsx --> Analytics.Provider --> PageLayout --> AsideProvider --> CartAside --> NewCartMain --> Analytics.CartView
 ```
 
-## Footer 组件
+## Footer Component
 
-### 数据源
+### Data Source
 
-footer 组件的数据源实际上跟 header 的一模一样，因为都是从 metaobjects 中取的
+The `Footer` component's data source is exactly the same as the `Header`'s, as both are fetched from `metaobjects`.
 
 ```jsx
 const [footerTemp] = await Promise.all([
@@ -1124,11 +1143,11 @@ const footer = JSON.parse(
 
 const formattedFooter = footer ? footerFormatting(footer?.data?.body) : null;
 
-// 然后再 PageLayout 中注入...
+// Then inject in PageLayout...
 <PageLayout {...data}>{children}</PageLayout>;
 ```
 
-### 组件引用结构链
+### Component Reference Chain
 
 ```mermaid
 flowchart TD
@@ -1150,7 +1169,7 @@ flowchart TD
     ContactUs --> SocialLinks
 ```
 
-- NewsRegister 是订阅邮箱的组件，核心代码就是调用表单提交，发起订阅:
+- NewsRegister is a subscription email component. The core code is to call form submission and initiate subscription:
 
 ::: code-group
 
@@ -1192,9 +1211,9 @@ app\components\Footer\NewsRegister\index.jsx
 ```
 :::
 
-其中该服务也开发了订阅的入口接口 app\routes\api.newsRegister.jsx，此处更新了数据到了[instant one](https://www.instant.one/)(我不太确定，因为还是没看到具体的数据流向)
+This service also has a subscription entry interface at app\routes\api.newsRegister.jsx, which updates data to [instant one](https://www.instant.one/) (I'm not entirely sure, as the specific data flow hasn't been seen).
 
-- DesktopFooter PC端展示 Footer 数据
-- MobileFooter 移动端展示 Footer 数据
-- Copyright 展示版权信息
-- SocialLinks 的数据属于静态文件
+- DesktopFooter displays Footer data on PC.
+- MobileFooter displays Footer data on mobile.
+- Copyright displays copyright information.
+- SocialLinks data is static.

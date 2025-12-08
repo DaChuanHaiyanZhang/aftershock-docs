@@ -38,7 +38,7 @@ export default withMermaid(
           ],
           sidebar: {
             "/en/aftershockau/": [
-              { text: "Overview", link: "/aftershockau/index" },
+              { text: "Overview", link: "/en/aftershockau/index" },
               { text: "Page Structure", link: "/en/aftershockau/routes" },
               { text: "Plugins and Dependencies", link: "/en/aftershockau/dependencies" },
               {

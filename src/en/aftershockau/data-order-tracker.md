@@ -1,13 +1,13 @@
-# Order tracker
+# Order Tracker
 
 [[toc]]
 
-订单追踪界面
+Order Tracking Interface
 
-## 数据源
+## Data Source
 
 
-## 组件引用结构链
+## Component Reference Chain
 
 ```mermaid
 flowchart LR
@@ -17,8 +17,9 @@ OrderTracker --> OrderedItemsDesktop
 OrderTracker --> OrderedItemsMobile
 OrderTracker --> StatusSteps
 ```
+
 >[!NOTE]
->此处使用到了 [Skeleton](https://github.com/dvtng/react-loading-skeleton) 组件，这是一个三方组件。
+>The [Skeleton](https://github.com/dvtng/react-loading-skeleton) component is used here, which is a third-party component.
 
 ```bash
 app\components\OrderTracker\index.jsx
@@ -27,34 +28,33 @@ app\components\OrderTracker\TrackerForm\index.jsx
 
 ### TrackerForm
 
-- 登录状态
+- Logged-in State
 
-    页面加载时立即查询100个订单 → 缓存到前端 → 用户搜索时在前端查找
+    Query 100 orders immediately upon page load → Cache in frontend → Search within frontend when user searches.
 
     ```mermaid
         flowchart LR
-        进入界面 --> 加载前100条 --> 前端查询 --> 返回结果
+        Enter Page --> Load First 100 --> Frontend Query --> Return Result
     ```
-    
 
-- 未登录状态
-    
-    用户输入订单号和邮箱 → 点击查询 → 调用API /api/track-order
+- Logged-out State
+
+    User inputs order number and email → Click search → Call API /api/track-order.
 
     ```mermaid
         flowchart LR
-        进入界面 --> OR[Order No] --> API
-        进入界面 --> Email --> API
+        Enter Page --> OR[Order No] --> API
+        Enter Page --> Email --> API
 
-        API --> 前100条 --> 前端查询 --> 返回结果
+        API --> First 100 --> Frontend Query --> Return Result
     ```
 
 >[!CAUTION]
->目前不管是登录或者是未登录状态，都有个问题就是，用户只能从前100条订单中去查询他（她）的订单信息，[查看替代方案](./suggestion#trackerform-缺陷)
+>Currently, whether logged in or not, there is an issue: users can only search their order information from the first 100 orders. [View alternative solution](./suggestion#trackerform-defect).
 
-### /api/track-order 接口
+### /api/track-order Interface
 
-该接口属于自定义接口，接口业务逻辑的地址在routes当中:
+This interface is a custom interface. The business logic for this interface is located in the routes:
 
 ```bash
 app\routes\api.track-order.jsx

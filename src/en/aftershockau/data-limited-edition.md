@@ -1,10 +1,10 @@
-# Limited Edition (限量版)
+# Limited Edition
 
-## 数据源
+## Data Source
 
-该界面的数据 `Schema` 在 `Prismic` 当中维护。通过 `Prismic` 的 `webhooks` 同步到 Shopify，而后通过 `storefront API` 调用。[#limited-edition](https://aftershockpc.prismic.io/builder/pages/ZUsBFRYAACYAGr4e?s=published)
+The data `Schema` for this interface is maintained in `Prismic`. It is synchronized to Shopify via `Prismic`'s `webhooks`, and then fetched using the `storefront API`. [#limited-edition](https://aftershockpc.prismic.io/builder/pages/ZUsBFRYAACYAGr4e?s=published)
 
-调用结构如下：
+The call structure is as follows:
 
 ```mermaid
 flowchart LR
@@ -12,10 +12,10 @@ flowchart LR
 Prismic --webhooks--> SM[Shopify Metaobjects] --storefront--> limited-edition.jsx
 ```
 
-## 组件引用结构链
+## Component Reference Chain
 
 >[!NOTE]
->该页面上可以注入静态 html 代码
+>Static HTML code can be injected on this page.
 
 ```mermaid
 flowchart LR
@@ -23,4 +23,4 @@ limited-edition.jsx --> PrismicPreviewWrapperLimitedEdition --> Suspense --> Awa
 ```
 
 >[!NOTE]
->插件（组件）文档传送门: [Suspense](https://zh-hans.react.dev/reference/react/Suspense)、[react-loading-skeleton](https://github.com/dvtng/react-loading-skeleton)、[Await](https://remix.org.cn/docs/en/main/components/await)
+>Plugin (Component) Documentation: [Suspense](https://react.dev/reference/react/Suspense), [react-loading-skeleton](https://github.com/dvtng/react-loading-skeleton), [Await](https://remix.run/docs/en/main/components/await)

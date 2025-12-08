@@ -1,15 +1,15 @@
 # Warranty
 
-## 数据源
+## Data Source
 
-数据源在Prismic当中。[`#aux-warranty`](https://aftershockpc.prismic.io/builder/pages/YGULLxAAACMAJgbx?s=published)
+The data source is stored in Prismic. [`#aux-warranty`](https://aftershockpc.prismic.io/builder/pages/YGULLxAAACMAJgbx?s=published)
 
-## 组件引用结构链
+## Component Reference Chain
 
 ```mermaid
 flowchart TB
 
-pages.$hanlde.jsx --> AuxSliceRenderer 
+pages.$handle.jsx --> AuxSliceRenderer
 
 AuxSliceRenderer--renderAuxSlice--> AuxBanner
 AuxSliceRenderer--renderAuxSlice--> TextsOnly

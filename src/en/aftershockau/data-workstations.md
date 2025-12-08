@@ -2,18 +2,18 @@
 
 [[toc]]
 
-该界面主要展示 `workstations` 等相关的定制集合产品。
+This interface primarily displays custom collection products related to `workstations`.
 
-## 数据源
+## Data Source
 
-该界面的 Schema 数据模型，在 `Prismic` 完成之后，通过 Prismic 的 `webhook` 更新到 `Shopify Metaobjects` 然后通过 `Storefront API` 调用。而后使用 `Remix+React` 渲染
+The Schema data model for this interface is completed in `Prismic`, then updated to `Shopify Metaobjects` via Prismic's `webhook`, and finally fetched using the `Storefront API`. It is then rendered using `Remix+React`.
 
 ```mermaid
 flowchart LR
 Prismic --webhooks--> SM[Shopify Metaobjects] --Storefront API--> workstations.$handle.jsx
 ```
 
-### 1. 先获取到 Prismic 缓存的页面数据
+### 1. First, fetch the Prismic-cached page data.
 
 ```javascript
 const variables = {
@@ -29,7 +29,7 @@ const tempData = await storefront.query(GET_METAOBJECTS_BY_HANDLE, {
 });
 ```
 
-### 2. 获取到所有的 PC Models
+### 2. Fetch all PC Models.
 
 ```javascript
 async function loadCriticalData(context, params, prismicData, previewData) {
@@ -37,9 +37,9 @@ async function loadCriticalData(context, params, prismicData, previewData) {
 }
 ```
 
-### 3. 通过 Promise.all 获取到所有 对应的 Features List。
+### 3. Fetch all corresponding Features Lists using Promise.all.
 
-`loadCriticalData` 方法一般是本项目中辅助 `loader` 的数据加载函数.
+The `loadCriticalData` method is generally a helper data-loading function for `loader` in this project.
 
 ```javascript
 async function loadCriticalData(context, params, prismicData, previewData) {
@@ -58,9 +58,9 @@ async function loadCriticalData(context, params, prismicData, previewData) {
 ```
 
 > [!DANGER] 
->`fetchFeaturesForModels` 方法中使用了 `Promise.all` 加载所有相关的 `models` 对应的数据，这里目前使用的是 `METAOBJECT_QUERY` 查询方式可以替换为 `metaobjects`，[**查看替代方案**](./suggestion.md#workstations-页面-fetchfeaturesformodels-方法替代方案)😘
+>The `fetchFeaturesForModels` method uses `Promise.all` to load all relevant `models` data. Currently, it uses the `METAOBJECT_QUERY` query method, which could be replaced with `metaobjects`. [**View alternative solution**](./suggestion.md#workstations-page-fetchfeaturesformodels-method-alternative) 😘
 
-## 组件引用结构链
+## Component Reference Chain
 
 ```mermaid
 flowchart LR

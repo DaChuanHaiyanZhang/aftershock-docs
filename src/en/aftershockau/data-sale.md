@@ -2,12 +2,12 @@
 
 [[toc]]
 
-## 数据源
+## Data Source
 
-该界面的所有数据来源为 `Prismic`。是一个 `schema` 的数据模板，配置完成以后，`Prismic` 从 [Retool](https://retool.com/) 中选择 PC Model。
+All data for this interface originates from `Prismic`. It uses a `schema` data template. Once configured, `Prismic` selects PC Models from [Retool](https://retool.com/).
 
 >[!WARNING]
->这里还需要了解怎么从Retool获取PC Model
+>It's still necessary to understand how to fetch PC Models from Retool.
 
 ```mermaid
 flowchart LR
@@ -20,10 +20,11 @@ const page = await prismicClient.getByUID("sale_page", handle, {
   ref: previewRef,
 });
 ```
-## 组件引用结构链
+
+## Component Reference Chain
 
 ```mermaid
-flowchart TB
+flowchart LR
 PrismicPreviewWrapperSalePage --> SalePageTopBanner
 PrismicPreviewWrapperSalePage --> SalePageMenu
 PrismicPreviewWrapperSalePage --> SalePageSlices
@@ -36,8 +37,9 @@ SalePageSlices -- renderSlice --> ReadyToShipSlice
 SalePageSlices -- renderSlice --> CustomPCsSlice
 SalePageSlices -- renderSlice --> RtsCustomSlice
 ```
+
 >[!NOTE]
->这里动画特效使用了 [gsap.js](https://gsap.com/)，效果还是很漂亮的。
+>Here, the animation effects use [gsap.js](https://gsap.com/), and the results are quite beautiful.
 
 ```bash
 app\components\PrismicPreviewModes\PrismicPreviewWrapperSalePage.jsx

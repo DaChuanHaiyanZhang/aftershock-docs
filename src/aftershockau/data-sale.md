@@ -23,7 +23,7 @@ const page = await prismicClient.getByUID("sale_page", handle, {
 ## 组件引用结构链
 
 ```mermaid
-flowchart TB
+flowchart LR
 PrismicPreviewWrapperSalePage --> SalePageTopBanner
 PrismicPreviewWrapperSalePage --> SalePageMenu
 PrismicPreviewWrapperSalePage --> SalePageSlices

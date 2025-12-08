@@ -2,19 +2,19 @@
 
 [[toc]]
 
-## 数据源
+## Data Source
 
 >[!DANGER]
->注意：RTS 的 `handle` 在 `Shopify` 的 Collections 中维护。其配置方式为 `ready-top-ship/${handle}`
+>Note: The `handle` for RTS is maintained in `Shopify` Collections. The configuration format is `ready-to-ship/${handle}`.
 
-RTS 商品的数据，是从 Shopify 获取到的现货信息，直接从 `Shopify` 中通过 `GraphQL` 查询。
+RTS product data is fetched from Shopify as "in-stock" information, directly queried via `GraphQL` from `Shopify`.
 
 > [!NOTE] 
-> `Ready To Ship` 简称 `RTS` 是`现货`的意思。
+> `Ready To Ship`, abbreviated as `RTS`, means "in stock".
 
-核心代码
+Core Code
 
-- 查询帧数信息
+- Querying frame rate information
 
 ```javascript
 // ready-to-ship.$handle.jsx loadCriticalData
@@ -29,52 +29,52 @@ const panelNode = res?.metaobjects?.nodes?.find(
 ```
 
 > [!DANGER]
-> 这里代码执行结果是有问题的，因为查询到的数据里面不包含 `handle` 字段，导致后面业务逻辑受阻
+> The execution result of this code is problematic because the fetched data does not contain a `handle` field, which hinders subsequent business logic.
 
-- 查询商品信息
+- Querying product information
 
 ```javascript
-// Выполняем первый запрос для получения коллекции и метаполей
+// Execute the first query to get the collection and metafields
 const collectionData = await storefront.query(GetCollectionWithMetafields, {
   variables,
   cache: storefront.CacheLong(),
 });
 
-// Достаем значения из метаполей, проверяя, является ли значение JSON
+// Extract values from metafields, checking if the value is JSON
 const metafieldValues = collectionData.collectionByHandle?.metafields
   ?.map((mf) => {
     if (!mf?.value) return [];
 
     try {
-      // Проверяем, является ли значение JSON (начинается с [ или { )
+      // Check if the value is JSON (starts with [ or {)
       if (mf.value.trim().startsWith("{") || mf.value.trim().startsWith("[")) {
         const parsed = JSON.parse(mf.value);
-        return Array.isArray(parsed) ? parsed : [parsed]; // Всегда массив
+        return Array.isArray(parsed) ? parsed : [parsed]; // Always an array
       } else {
-        return []; // Если это просто строка, игнорируем
+        return []; // If it's just a string, ignore it
       }
     } catch (error) {
-      console.error(`Ошибка парсинга метаполя "${mf.key}":`, mf.value, error);
+      console.error(`Error parsing metafield "${mf.key}":`, mf.value, error);
       return [];
     }
   })
-  .flat() // Распаковываем массивы
-  .filter((id) => id?.startsWith("gid://shopify/Metaobject/")); // Оставляем только корректные GID
+  .flat() // Flatten the arrays
+  .filter((id) => id?.startsWith("gid://shopify/Metaobject/")); // Keep only valid GIDs
 
-// Запрашиваем метаобъекты по их GID
+// Query metaobjects by their GIDs
 const metaobjectsData = await storefront.query(GetMetaobjectsByIds, {
   variables: { ids: metafieldValues },
   cache: storefront.CacheLong(),
 });
 ```
-至此，完成了商品信息的查询。
+This completes the query for product information.
 
 >[!WARNING]
->对于数组的操作，后续还要做大力的优化，因为这会使得性能的明显提升。
+>Operations on arrays require significant optimization in the future, as this can noticeably improve performance.
 
-## 组件引用结构链
+## Component Reference Chain
 
-依据handle查询，之后使用 `Suspense`，`Await`，`ReadyToShipSkeleton`，组件做骨架屏，而后使用 `ReadyToShip` 组件渲染。
+Query based on the handle, then use `Suspense`, `Await`, `ReadyToShipSkeleton` components for skeleton screen, and finally render with the `ReadyToShip` component.
 
 ```mermaid
 flowchart LR
@@ -83,12 +83,10 @@ ready-to-ship.$handle.jsx --> Suspense --> ReadyToShipSkeleton --> Await --> Rea
 
 ```bash
 app\routes\ready-to-ship.$handle.jsx
-
 ```
 
 >[!NOTE]
->插件（组件）文档传送门: [Suspense](https://zh-hans.react.dev/reference/react/Suspense)、[react-loading-skeleton](https://github.com/dvtng/react-loading-skeleton)、[Await](https://remix.org.cn/docs/en/main/components/await)
-
+>Plugin (Component) Documentation: [Suspense](https://react.dev/reference/react/Suspense), [react-loading-skeleton](https://github.com/dvtng/react-loading-skeleton), [Await](https://remix.run/docs/en/main/components/await)
 
 ### ReadyToShip
 
@@ -116,4 +114,3 @@ app\components\ReadyToShip\ProductCard\*
 app\components\Shared\ReadyToShipFooter\*
 app\components\Accessories\NewFilters\*
 ```
-

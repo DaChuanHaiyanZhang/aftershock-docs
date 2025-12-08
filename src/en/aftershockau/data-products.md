@@ -1,69 +1,68 @@
-# Products 商品详情页
+# Products Product Details Page
 
 [[toc]]
 
-该界面涵盖了 `RTS`、`Wokstation`、`Laptop`、`Accessories` 等页面的商品信息。
+This interface covers product information for pages such as `RTS`, `Workstation`, `Laptop`, and `Accessories`.
 
-## 数据源
+## Data Source
 
-
-1. 获取商品信息
+1. Fetch product information.
 
 ```javascript
-// 获取商品信息
+// Fetch product information
 async function loadCriticalData(context, params) {
   const { storefront } = context;
-  const handle = params.handle; // 地址栏params参数
+  const handle = params.handle; // Params from the address bar
   const variables = {
     productHandle: handle,
   };
   const productData = await storefront.query(PRODUCT_BY_HANDLE_QUERY, {
     variables,
-    cache: storefront.CacheLong(), // 保证从缓存中获取
+    cache: storefront.CacheLong(), // Ensure fetching from cache
   });
 
-  // 获取 FPS 配置，有且只有 ready to ship 有效
+  // Fetch FPS configuration, only valid for "ready to ship"
   let fpsAdminPerformance = [];
   if (productData.product.productType?.toLowerCase() === "ready to ship") {
     fpsAdminPerformance = await fetchRtsFpsFromAdmin(storefront, handle);
   }
 
-  //
+  // ...
 }
 ```
 
-2. 根据商品信息获取相关信息
-    - RTS
-      - `Panel Print`, 
-      - `Disclaimer`, 
-      - `Configurates`, 
-      - `Design Promo Page`, 
-      - `Upsell Categories With Products`, 
-      - `RTS Bottom Banner`, 
-      - `Static Code`
-    - Accessories
-      - `variants`
-      - `recommended builds`
-      - `accessories`
-3. 继续获取其他商品相关信息并解析、解构。
-4. 😂 一大堆查询之后最终到了loader。这个过程简直 `非常过瘾`!
+2. Fetch related information based on the product.
+   - RTS
+     - `Panel Print`,
+     - `Disclaimer`,
+     - `Configurates`,
+     - `Design Promo Page`,
+     - `Upsell Categories With Products`,
+     - `RTS Bottom Banner`,
+     - `Static Code`
+   - Accessories
+     - `variants`
+     - `recommended builds`
+     - `accessories`
+3. Continue fetching and parsing/deconstructing other product-related information.
+4. 😂 After a huge number of queries, it finally reaches the loader. This process is `quite overwhelming`!
 
 >[!WARNING]
->`toStaticCode` 方法有待优化，[查看优化方案](./suggestion.md#tostaticcode-优化方案)
+>The `toStaticCode` method needs optimization. [View optimization plan](./suggestion.md#tostaticcode-optimization-plan).
 
 >[!DANGER]
->强烈建议：此处做业务分离，方便维护。业务代码太吓人了！！[优化建议](./suggestion.md#商品详情业务逻辑优化)
+>Strongly suggested: Separate business logic here for easier maintenance. The business code is quite daunting!! [Optimization suggestion](./suggestion.md#product-details-business-logic-optimization).
 
-## 组件引用结构链
+## Component Reference Chain
 
-组件中根据商品的 `productType` 区分组件，然后进行渲染。已知的 `productType` 如下：
+Components are distinguished and rendered based on the product's `productType`. Known `productType` values are:
 
 - `readytoship`
 - `clearance`
 - `Gift Card`
 - `accessories`
 
-在渲染逻辑上，这里被分为了几个不同的页面并进行了 `抽象` 处理。
+In the rendering logic, this is divided into several different pages and `abstracted` for processing.
 
 ```mermaid
 flowchart LR
@@ -85,11 +84,11 @@ app\components\Products\ProductsAccessories
 ```
 
 >[!NOTE]
->这里使用了 `Analytics` 组件，[文档传送门](https://shopify.dev/docs/api/hydrogen/2024-04/components/analytics/analytics-productview)
+>The `Analytics` component is used here. [Documentation portal](https://shopify.dev/docs/api/hydrogen/2024-04/components/analytics/analytics-productview).
 
 ### Clearance
 
-只传入了商品信息，无bundle，直接加入购物车，结算
+Only product information is passed, no bundles, directly added to cart and checkout.
 
 ```mermaid
 flowchart TD
@@ -98,7 +97,6 @@ ProductClearance --> ProductInfo
 ProductClearance --> WarrantySection
 ProductClearance --> CartSection
 ```
-
 
 ### GiftCard
 
@@ -122,16 +120,16 @@ ProductAccessories --> FeatureContentMobile
 ProductAccessories --> CartSection
 ```
 
-### RTS 组件数据更新流向图
+### RTS Component Data Update Flow Diagram
 
-#### 核心数据流架构
+#### Core Data Flow Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           NewProductRTS (根组件)                            │
+│                           NewProductRTS (Root Component)                    │
 │                                                                             │
 │  ┌─────────────────────┬─────────────────────┬──────────────────────┐      │
-│  │   useState 状态区    │     useRef 引用区     │     Props 接收区      │      │
+│  │   useState State    │     useRef Refs      │     Props Received     │      │
 │  ├─────────────────────┼─────────────────────┼──────────────────────┤      │
 │  │ • activeProducts    │ • leftColRef        │ • data              │      │
 │  │ • selectedPc        │ • productDetailsRef │ • print             │      │
@@ -146,148 +144,159 @@ ProductAccessories --> CartSection
 │  │ • showBackToTop     │                     │                      │      │
 │  └─────────────────────┴─────────────────────┴──────────────────────┘      │
 └─────────────────────────────────────────────────────────────────────────────┘
-                                  ↓ 状态提升
-                                  ↓ 回调传递
-                                  ↓ Props 分发
+                                  ↓ State Lifting
+                                  ↓ Callback Passing
+                                  ↓ Props Distribution
                                   │
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                          子组件数据接收与操作                                 │
+│                      Child Component Data Reception & Operations             │
 └─────────────────────────────────────────────────────────────────────────────┘
                                   │
         ┌─────────────────────────┼─────────────────────────┐
         │                         │                         │
         ▼                         ▼                         ▼
 ┌───────────────┐       ┌──────────────────┐       ┌─────────────────┐
-│ 配置器相关组件   │       │  产品展示与信息组件   │       │  购物车与交互组件   │
-├───────────────┤       ├──────────────────┤       ├─────────────────┤
-│ • RtsConfigurator│       │ • ImageSection      │       │ • CartSection       │
-│ • RtsDesktopSteps│       │ • InfoSection       │       │ • CartSectionMobile │
-│ • PcSummary      │       │ • StickyInfo        │       │ • ScrollToTopButton │
-│ • DesignSummary  │       │ • ProductDetails    │       │                     │
+│ Configurator  │       │ Product Display  │       │ Cart &          │
+│ Components    │       │ & Info Components │       │ Interaction     │
+├───────────────┤       ├──────────────────┤       │ Components      │
+│ • RtsConfigurator│       │ • ImageSection      │       ├─────────────────┤
+│ • RtsDesktopSteps│       │ • InfoSection       │       │ • CartSection       │
+│ • PcSummary      │       │ • StickyInfo        │       │ • CartSectionMobile │
+│ • DesignSummary  │       │ • ProductDetails    │       │ • ScrollToTopButton │
 │                 │       │ • ProductDetailsMobile│       │                     │
 └───────────────┘       └──────────────────┘       └─────────────────┘
         │                         │                         │
         │                         │                         │
         ▼                         ▼                         ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                       UpsellProducts (追加销售中枢)                           │
+│                       UpsellProducts (Upsell Hub)                           │
 │                                                                             │
 │      ┌──────────────┬──────────────┬──────────────┬──────────────┐         │
 │      │  Coolants    │   Bundles    │ CustomDesign │ Accessories  │         │
-│      │  (散热液)     │   (配件包)    │  (自定义设计)  │  (其他配件)   │         │
+│      │  (Coolants)  │   (Bundles)  │  (CustomDesign)│  (Accessories) │         │
 │      └──────────────┴──────────────┴──────────────┴──────────────┘         │
 │                                                                             │
-│  接收: upsellProductsNew, activeProducts, setActiveProducts, setImgObj      │
+│  Receives: upsellProductsNew, activeProducts, setActiveProducts, setImgObj  │
 │                                                                             │
-│  功能: 分类显示追加销售产品，提供添加/删除到购物车的功能                      │
+│  Function: Categorically displays upsell products, provides add/remove      │
+│            to cart functionality                                            │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### 详细数据更新流向
+#### Detailed Data Update Flow
 
-##### 1. 购物车更新流程 (核心联动)
+##### 1. Cart Update Flow (Core Interaction)
 
 ```
-用户点击"添加产品" → 触发子组件事件
+User clicks "Add Product" → Triggers child component event
         ↓
-子组件调用 setActiveProducts([...activeProducts, newProduct])
+Child component calls setActiveProducts([...activeProducts, newProduct])
         ↓
-setActiveProducts 更新 NewProductRTS 的 activeProducts 状态
+setActiveProducts updates NewProductRTS's activeProducts state
         ↓
-React 触发 NewProductRTS 重新渲染
+React triggers NewProductRTS re-render
         ↓
-所有接收 activeProducts 的子组件重新渲染：
+All child components receiving activeProducts re-render:
     ┌─────────────────────┬─────────────────────┬─────────────────────┐
     │ UpsellProducts      │ CartSection         │ CartSectionMobile   │
     ├─────────────────────┼─────────────────────┼─────────────────────┤
-    │ • 显示新添加的产品     │ • 更新购物车数量     │ • 更新移动端购物车   │
-    │ • 更新选中状态        │ • 重新计算总价       │ • 重新计算总价       │
-    │                     │ • 显示最新产品列表    │ • 显示最新产品列表    │
+    │ • Displays newly    │ • Updates cart      │ • Updates mobile    │
+    │   added product     │   quantity          │   cart quantity     │
+    │ • Updates selected  │ • Recalculates      │ • Recalculates      │
+    │   state             │   total price       │   total price       │
+    │                     │ • Shows latest      │ • Shows latest      │
+    │                     │   product list      │   product list      │
     └─────────────────────┴─────────────────────┴─────────────────────┘
 ```
 
-##### 2. RTS配置器流程
+##### 2. RTS Configurator Flow
 
 ```
-用户选择 PC 配置 → RtsConfigurator 组件
+User selects PC config → RtsConfigurator component
         ↓
-调用 setSelectedPc(newPc) 和 setActiveProducts([newPc])
+Calls setSelectedPc(newPc) and setActiveProducts([newPc])
         ↓
-NewProductRTS 更新 selectedPc 和 activeProducts
+NewProductRTS updates selectedPc and activeProducts
         ↓
-重新渲染触发：
+Re-render triggers:
     ┌─────────────────────┬─────────────────────┬─────────────────────┐
     │ PcSummary           │ RtsDesktopSteps     │ CartSection         │
     ├─────────────────────┼─────────────────────┼─────────────────────┤
-    │ • 显示选中的PC详情    │ • 更新步骤状态       │ • 更新购物车中的PC    │
-    │ • 显示价格和规格      │ • 高亮当前步骤       │ • 重新计算价格        │
+    │ • Displays selected │ • Updates step      │ • Updates PC in cart│
+    │   PC details        │   status            │ • Recalculates price│
+    │ • Shows price &     │ • Highlights        │                     │
+    │   specs             │   current step      │                     │
     └─────────────────────┴─────────────────────┴─────────────────────┘
         ↓
-用户选择设计 → 调用 setSelectedDesign(newDesign)
+User selects design → Calls setSelectedDesign(newDesign)
         ↓
-重新渲染触发 DesignSummary 显示设计详情
+Re-render triggers DesignSummary to show design details
 ```
 
-##### 3. 图片对象更新流程
+##### 3. Image Object Update Flow
 
 ```
-用户在 CustomDesign 上传图片
+User uploads image in CustomDesign
         ↓
-CustomDesign 调用 setImgObj(newImgObj)
+CustomDesign calls setImgObj(newImgObj)
         ↓
-NewProductRTS 更新 imgObj 状态
+NewProductRTS updates imgObj state
         ↓
-重新渲染相关组件：
+Re-renders related components:
     ┌─────────────────────┬─────────────────────┐
-    │ ImageSection        │ 其他需要图片的组件    │
-    ├─────────────────────┼─────────────────────┤
-    │ • 显示自定义图片      │ • 使用更新后的图片    │
-    │ • 更新图片预览        │  对象              │
+    │ ImageSection        │ Other components    │
+    ├─────────────────────┤ needing images      │
+    │ • Displays custom   │ • Uses updated      │
+    │   image             │   image object      │
+    │ • Updates image     │                     │
+    │   preview           │                     │
     └─────────────────────┴─────────────────────┘
 ```
 
-##### 4. 滚动交互流程
+##### 4. Scroll Interaction Flow
 
 ```
-用户滚动页面
+User scrolls the page
         ↓
-useEffect 监听滚动事件
+useEffect listens to scroll events
         ↓
-根据 headingRef 位置计算 showCartMobile
+Calculates showCartMobile based on headingRef position
         ↓
-根据 pds-top-sentinel 位置计算 showBackToTop
+Calculates showBackToTop based on pds-top-sentinel position
         ↓
-更新状态触发动画：
+Updates state triggers animations:
     ┌─────────────────────┬─────────────────────┐
     │ CartSectionMobile   │ ScrollToTopButton   │
     ├─────────────────────┼─────────────────────┤
-    │ • 滑入/滑出动画      │ • 淡入/淡出动画      │
-    │ • 条件渲染          │ • 条件渲染          │
+    │ • Slide in/out      │ • Fade in/out       │
+    │   animation         │   animation         │
+    │ • Conditional       │ • Conditional       │
+    │   rendering         │   rendering         │
     └─────────────────────┴─────────────────────┘
 ```
 
-#### 数据流向映射表
+#### Data Flow Mapping Table
 
-| 数据状态 | 定义位置 | 主要使用者 | 更新触发器 | 影响范围 |
-|---------|---------|-----------|-----------|----------|
-| `activeProducts` | NewProductRTS | UpsellProducts, CartSection | setActiveProducts | 购物车、总价、产品列表 |
-| `selectedPc` | NewProductRTS | RtsConfigurator, PcSummary | setSelectedPc | PC配置器、摘要显示 |
-| `selectedDesign` | NewProductRTS | RtsConfigurator, DesignSummary | setSelectedDesign | 设计选择器、摘要显示 |
-| `selectedStep` | NewProductRTS | RtsConfigurator, RtsDesktopSteps | setSelectedStep | 步骤导航、UI状态 |
-| `imgObj` | NewProductRTS | CustomDesign, ImageSection | setImgObj | 图片显示、自定义设计 |
-| `showCartMobile` | NewProductRTS | CartSectionMobile | 滚动监听 | 移动购物车显示 |
-| `showBackToTop` | NewProductRTS | ScrollToTopButton | IntersectionObserver | 返回顶部按钮 |
+| Data State | Defined In | Main Users | Update Trigger | Affected Scope |
+|------------|------------|------------|----------------|----------------|
+| `activeProducts` | NewProductRTS | UpsellProducts, CartSection | setActiveProducts | Cart, total price, product list |
+| `selectedPc` | NewProductRTS | RtsConfigurator, PcSummary | setSelectedPc | PC configurator, summary display |
+| `selectedDesign` | NewProductRTS | RtsConfigurator, DesignSummary | setSelectedDesign | Design selector, summary display |
+| `selectedStep` | NewProductRTS | RtsConfigurator, RtsDesktopSteps | setSelectedStep | Step navigation, UI state |
+| `imgObj` | NewProductRTS | CustomDesign, ImageSection | setImgObj | Image display, custom design |
+| `showCartMobile` | NewProductRTS | CartSectionMobile | Scroll listener | Mobile cart display |
+| `showBackToTop` | NewProductRTS | ScrollToTopButton | IntersectionObserver | Back to top button |
 
-#### 组件通信矩阵
+#### Component Communication Matrix
 
 ```
 ┌─────────────────┬─────────────────────────────────────────────────────────────┐
-│   子组件         │               可以修改的父组件状态                           │
+│   Child Comp.   │           Parent State It Can Modify                        │
 ├─────────────────┼─────────────────────────────────────────────────────────────┤
 │ RtsConfigurator │ • setSelectedPc    • setSelectedDesign                     │
 │                 │ • setActiveProducts • setSelectedStep                      │
 ├─────────────────┼─────────────────────────────────────────────────────────────┤
-│ UpsellProducts  │ • setActiveProducts (通过子组件)                           │
+│ UpsellProducts  │ • setActiveProducts (via child components)                 │
 │   ├─ Coolants   │ • setActiveProducts                                        │
 │   ├─ Bundles    │ • setActiveProducts                                        │
 │   ├─ CustomDesign│ • setActiveProducts • setImgObj                           │
@@ -299,37 +308,36 @@ useEffect 监听滚动事件
 └─────────────────┴─────────────────────────────────────────────────────────────┘
 ```
 
-#### 关键数据流特征
+#### Key Data Flow Characteristics
 
-##### 1. **单向数据流强化**
+##### 1. **Enhanced Unidirectional Data Flow**
 ```
-父组件状态 → Props → 子组件 → 事件 → 回调函数 → 更新父组件状态
+Parent state → Props → Child component → Event → Callback → Update parent state
 ```
 
-##### 2. **状态提升集中管理**
-- 所有共享状态都在 `NewProductRTS` 中定义
-- 子组件通过 props 获取数据和更新函数
-- 避免了 prop drilling 过深的问题
+##### 2. **Centralized State Lifting**
+- All shared states are defined in `NewProductRTS`
+- Child components obtain data and update functions via props
+- Avoids deep prop drilling issues
 
-##### 3. **实时同步机制**
-- 购物车状态更新立即同步到所有相关组件
-- 配置选择实时反映在摘要和购物车中
-- 滚动交互即时反馈
+##### 3. **Real-time Synchronization Mechanism**
+- Cart state updates immediately synchronized to all related components
+- Configuration selections instantly reflected in summary and cart
+- Scroll interactions provide immediate feedback
 
-##### 4. **分层数据传递**
+##### 4. **Layered Data Passing**
 ```
-Products (爷爷) → NewProductRTS (父亲) → UpsellProducts (儿子) → Accessories (孙子)
+Products (Grandparent) → NewProductRTS (Parent) → UpsellProducts (Child) → Accessories (Grandchild)
     ↓                     ↓                     ↓                     ↓
-数据预处理              状态管理              数据分类              具体操作
+Data preprocessing      State management      Data categorization    Specific operations
 ```
 
-这种架构确保了：
-1. **数据一致性** - 单一数据源，避免状态冲突
-2. **可维护性** - 状态逻辑集中，易于调试
-3. **扩展性** - 新增功能只需添加新的状态和回调
-4. **响应性** - 用户操作即时反馈，体验流畅
+This architecture ensures:
+1. **Data Consistency** - Single source of truth, avoiding state conflicts
+2. **Maintainability** - Centralized state logic, easy to debug
+3. **Scalability** - Adding new features only requires new states and callbacks
+4. **Responsiveness** - Immediate user operation feedback, smooth experience
 
+### Additional Notes
 
-### 另外需要注意
-
-所有的商品详情界面，可以注入静态 `html` 用来描述商品的内容
+All product detail pages can inject static `HTML` to describe product content.

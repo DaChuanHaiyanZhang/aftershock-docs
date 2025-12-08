@@ -4,11 +4,18 @@
 
 ## Data Source
 
-Data is stored in `Prismic`, [`#aux-careers`](https://aftershockpc.prismic.io/builder/pages/YGUBARAAACMAJdl4?s=published).
+After being maintained in `Prismic`, the data is saved to `Shopify Metaobjects` via `webhook`, and then fetched using the `Storefront API`. [`#aux-careers`](https://aftershockpc.prismic.io/builder/pages/YGUBARAAACMAJdl4?s=published)
+
+```mermaid
+flowchart LR
+
+Prismic#aux-careers --webhook--> SM[Shopify Metaobjects] --GraphQL--> SA[Storefront API]
+```
+
 
 ## Component Reference Chain
 
-The core component is the `JobsBlock` component, primarily responsible for displaying Aftershock's recruitment information.
+The core component is the JobsBlock component, primarily responsible for displaying Aftershock's recruitment information.
 
 ```mermaid
 flowchart LR

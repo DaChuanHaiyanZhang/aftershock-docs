@@ -2,16 +2,16 @@
 
 [[toc]]
 
-## 首页
+## Homepage
 
-### 数据流
+### Data Flow
 
-Knowledge Hub 首页的数据主要保存在 [Prismic](https://aftershock-knowledge-hub.prismic.io/builder/working) 中
+The data for the Knowledge Hub homepage is mainly stored in [Prismic](https://aftershock-knowledge-hub.prismic.io/builder/working).
 
-- Prismic 的 API & Security
+- Prismic API & Security
 
     <details>
-    <summary>查看 Prismic的 API & Security 配置内容</summary>
+    <summary>View Prismic API & Security Configuration</summary>
 
   ![aftershock](/screenshots/ScreenShot_2025-11-27_111127_260.png "aftershock")
 
@@ -21,7 +21,7 @@ Knowledge Hub 首页的数据主要保存在 [Prismic](https://aftershock-knowle
 - Previews
 
     <details>
-    <summary>查看 Prismic Previews 配置内容</summary>
+    <summary>View Prismic Previews Configuration</summary>
 
   ![aftershock](/screenshots/ScreenShot_2025-11-27_111237_639.png "aftershock")
     </details>
@@ -29,49 +29,46 @@ Knowledge Hub 首页的数据主要保存在 [Prismic](https://aftershock-knowle
 - Translations & Locales
 
     <details>
-    <summary>查看 Prismic Translations & Locales 配置内容</summary>
+    <summary>View Prismic Translations & Locales Configuration</summary>
     
     ![aftershock](/screenshots/ScreenShot_2025-11-27_111319_290.png "aftershock")
     </details>
 
-- webhook 的地址 Update
+- Webhook Update URL
 
   ```
   https://aftershock-pc-au-order-sync.vercel.app/api/prismic-webhook-update-knowledge-hub
   ```
 
-  - webhook 的地址 Delete
+  - Webhook Delete URL
 
   ```
   https://aftershock-pc-au-order-sync.vercel.app/api/prismic-webhook-delete-knowledge-hub
   ```
 
-### 组件引用结构链
+### Component Reference Chain
 
 #### **PrismicPreviewWrapperKnowledgeHub**
 
-该组件是 Knowledge Hub main 组件，用来包裹所有的首页组件
-
-组件地址：
-
+This component is the Knowledge Hub main component, used to wrap all homepage components.
 ```
 app\components\PrismicPreviewModes\PrismicPreviewWrapperKnowledgeHub.jsx
 ```
 
-#### **Header**(不是全局 header 组件)
+#### **Header** (Not the global header component)
 
-该组件在接收到参数之后进行渲染、展示工作，其中包含了 Title、Search 组件。
+This component renders and displays content after receiving parameters, including the Title and Search components.
 
-**Title** 组件用来展示标题
+**Title** component is used to display the title.
 
-**Search** 组件用来展示搜索框
+**Search** component is used to display the search box.
 
-搜索使用了插件：[Fuse.js](https://www.fusejs.io/)
+The search uses the [Fuse.js](https://www.fusejs.io/) plugin.
 
-并在数据渲染的时候通过 [**Prismic 的 Api 能力**](https://prismic.io/docs)查询了所有数据，在数据初始化的时候完成了注入。
+During data rendering, all data is queried via [**Prismic's API capabilities**](https://prismic.io/docs) and injected during data initialization.
 
 <details>
-<summary>查看相关代码</summary>
+<summary>View Related Code</summary>
 
 prismic.js
 
@@ -139,11 +136,11 @@ useEffect(() => {
 
 </details>
 
-如下图所示：
+As shown in the image below:
 
 ![aftershock](/screenshots/ScreenShot_2025-11-27_145637_990.png "aftershock")
 
-组件地址：
+Component Paths:
 
 ```
 app\components\KnowledgeHub\Header\index.jsx
@@ -151,13 +148,13 @@ app\components\KnowledgeHub\Header\Titles\index.jsx
 app\components\KnowledgeHub\Header\Search\index.jsx
 ```
 
-#### KnowledgeHub 组件
+#### KnowledgeHub Component
 
 ```
 app\components\KnowledgeHub\index.jsx
 ```
 
-**特别注意** knowledge-hub.jsx 文件在查询界面相关 categories 问题分类时，又使用了自定义字段到 metaobjects
+**Special Note**: When querying related categories in the knowledge-hub.jsx file, custom fields are also used in metaobjects.
 
 ```jsx
 export const GET_METAOBJECTS = `
@@ -183,36 +180,37 @@ storefront.query(GET_METAOBJECTS, {
 });
 ```
 
-> Tips: [Storefront Api 文档地址](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
+>[!NOTE]
+>[Storefront API Documentation](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
+>
+>[Metaobjects Documentation](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004)
 
-> Tips: [Metaobjects 文档地址](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004)
-
-该组件有两个组件控制数据的渲染和输出：
+This component has two components controlling data rendering and output:
 
 ![aftershock](/screenshots/ScreenShot_2025-11-27_154813_667.png "aftershock")
 
-CategoriesList 展示类型，点击之后进入到分组详情页面
+CategoriesList displays categories. Clicking on a category navigates to the group details page.
 
 ```
 app\components\KnowledgeHub\CategoriesList\index.jsx
 app\components\KnowledgeHub\CategoriesList\CategoryCard\index.jsx
 ```
 
-FeaturedList 展示 Featured，点击之后进入到分组详情页面
+FeaturedList displays featured content. Clicking on an item navigates to the group details page.
 
 ```
 app\components\KnowledgeHub\FeaturedList\index.jsx
 ```
 
-## Categories 分组页面
+## Categories Group Page
 
-/knowledge-hub/$handle
+`/knowledge-hub/$handle`
 
-Categories 的数据源于 CategoriesList 界面的传入，向上反推即可：
+The data for Categories originates from the CategoriesList page. Tracing backward:
 
-knowledge-hub.jsx(获取数据) 👉 KnowledgeHub 👉 CategoriesList
-
-![aftershock](/screenshots/ScreenShot_2025-11-27_155935_897.png "aftershock")
+```mermaid
+knowledge-hub.jsx(fetches data) --> KnowledgeHub --> CategoriesList
+```
 
 ```jsx
 import { CategoriesList } from "./CategoriesList";
@@ -231,7 +229,7 @@ export function KnowledgeHub({ mainPageContent, categories, featuredPosts }) {
 }
 ```
 
-CategoryCard 组件代码, 跳转到了分类界面
+CategoryCard component code, which navigates to the category page:
 
 ```jsx
 import { Link } from "@remix-run/react";
@@ -254,15 +252,15 @@ export function CategoryCard({ category }) {
 ```
 
 >[!NOTE] 
->[Image 组件地址](https://shopify.dev/docs/api/hydrogen/latest/components/image)
+>[Image Component Documentation](https://shopify.dev/docs/api/hydrogen/latest/components/image)
 
-### 数据源
+### Data Source
 
-数据源于 Prismic， 因为有个很明显的信号，在 CategoryCard 的链接中，传入了分组的 uid（prismic）的，到详情页进行查询。
+The data originates from Prismic, as indicated by the clear signal that the CategoryCard link passes the group's uid (from Prismic) to the details page for querying.
 
-查询根据分组的 UID
+Queries are based on the group's UID.
 
-knowledge-hub\_.$category.jsx 就可以印证
+knowledge-hub\_.$category.jsx confirms this:
 
 ```jsx
 export async function loader({ context, params, request }) {
@@ -280,11 +278,11 @@ export async function loader({ context, params, request }) {
 }
 ```
 
-### 组件引用链
+### Component Reference Chain
 
 #### PrismicPreviewWrapperKnowledgeHub
 
-最外层的 wrapper 包裹组件
+The outermost wrapper component.
 
 ```
 app\components\PrismicPreviewModes\PrismicPreviewWrapperKnowledgeHub.jsx
@@ -292,7 +290,7 @@ app\components\PrismicPreviewModes\PrismicPreviewWrapperKnowledgeHub.jsx
 
 #### CategoryPage
 
-列表折叠的组件显示名称、类型以及链接之类的数据
+Displays list collapse components, names, types, links, and other data.
 
 ```
 app\components\KnowledgeHub\CategoryPage\index.jsx
@@ -304,17 +302,18 @@ app\components\KnowledgeHub\CategoryPage\DiscussionsList\PostsList\PostCard\inde
 app\components\KnowledgeHub\CategoryPage\DiscussionsList\PostsList\PostCard\PostBadges\index.jsx
 ```
 
-## Categories 详情页
+## Category Details Page
 
-知识详情页
+Knowledge details page.
 
-> Tips：从 FeatureList 的 Item 中进入详情页
+>[!NOTE]
+>Enter the details page from an item in FeatureList.
 
-### 数据源
+### Data Source
 
-数据源于 Prismic ，可以使用 UID 的方式进行查询。
+The data originates from Prismic and can be queried using the UID method.
 
-knowledge-hub*.$category*.$post.jsx 关键代码如下：
+Key code from knowledge-hub*.$category*.$post.jsx:
 
 ```jsx
 export async function loader({ context, params, request }) {
@@ -323,14 +322,14 @@ export async function loader({ context, params, request }) {
   });
 }
 ```
+>[!NOTE]
+>[client.getByUID](https://prismic.io/docs/technical-reference/prismicio-client/v7#getbyuid)
 
-> Tips: [client.getByUID](https://prismic.io/docs/technical-reference/prismicio-client/v7#getbyuid)
-
-### 组件引用链
+### Component Reference Chain
 
 #### PrismicPreviewWrapperKnowledgeHub
 
-一个最外层包裹的 Wrapper
+The outermost wrapper component.
 
 ```
 app\components\PrismicPreviewModes\PrismicPreviewWrapperKnowledgeHub.jsx
@@ -338,7 +337,7 @@ app\components\PrismicPreviewModes\PrismicPreviewWrapperKnowledgeHub.jsx
 
 #### PostPageSidebar
 
-该组件主要用来展示左侧分组信息，分组信息通过解析详情获取，左侧点击实现 tabs 切换和锚点效果，解析代码如下：
+This component primarily displays left-side grouping information, obtained by parsing details. Clicking on the left side implements tabs switching and anchor effects. Parsing code is as follows:
 
 ```
 app\components\KnowledgeHub\PageSideBar\index.jsx
@@ -382,7 +381,7 @@ const preparedTitles = post.data?.body1.reduce((acc, block) => {
 
 #### KnowledgeHubBreadcrumbs
 
-该组件主要展示当前信息的面包屑位置，数据来源是 knowledge-hub*.$category*.$post.jsx 解析得来
+This component primarily displays the breadcrumb location of the current information, derived from parsing in knowledge-hub*.$category*.$post.jsx.
 
 ```jsx
 <KnowledgeHubBreadcrumbs
@@ -396,11 +395,11 @@ const preparedTitles = post.data?.body1.reduce((acc, block) => {
 
 #### PostHeaderContent
 
-该组件主要展示当前页面的头部信息，有标题、标签、视频、发送邮件、扫码打电话等功能
+This component primarily displays the header information of the current page, including title, tags, video, send email, scan to call, and other features.
 
-视频播放来关联的源是：youtube
+The video player source is linked to: YouTube.
 
-组件信息如下：
+Component paths:
 ```
 app\components\KnowledgeHub\PostHeaderContent\index.jsx
 app\components\KnowledgeHub\PostHeaderContent\TagsList\index.jsx
@@ -409,7 +408,7 @@ app\components\KnowledgeHub\PostHeaderContent\ActionsList\index.jsx
 
 #### PostsList
 
-问答被分成了很多明细信息，形成了PostList，在该组件中解析
+Q&As are divided into many detailed pieces of information, forming a PostsList, which is parsed within this component.
 
 ```
 app\components\KnowledgeHub\PostsList\index.jsx
@@ -422,7 +421,7 @@ app\components\KnowledgeHub\PostsList\Warning\index.jsx
 
 #### PostPageQuestion
 
-问题评分系统结果，目前属于隐藏状态，功能貌似还没完善
+Question rating system results, currently hidden as the feature seems incomplete.
 ```
 app\components\KnowledgeHub\PostPageQuestion\index.jsx
 ```

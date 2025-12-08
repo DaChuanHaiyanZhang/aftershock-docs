@@ -1,129 +1,127 @@
-# 依赖与插件
+# Dependencies & Plugins
 
 [[toc]]
 
-## 核心框架与运行环境
+## Core Frameworks & Runtime Environment
 
-| 包名 | 功能说明 |
+| Package | Description |
 |------|----------|
-| [@shopify/hydrogen](https://shopify.dev/docs/storefronts/headless/hydrogen/getting-started) | Shopify 官方 React 框架，支持服务器端渲染与 Hydrogen API。 |
-| [@shopify/remix-oxygen](https://shopify.dev/docs/storefronts/headless/hydrogen/getting-started) | Remix 与 Shopify Oxygen Edge Runtime 集成。 |
-| [@shopify/mini-oxygen](https://www.npmjs.com/package/@shopify/mini-oxygen) | 本地模拟 Oxygen 运行环境。（Mock数据使用） |
-| [@remix-run/react](https://github.com/remix-run/remix) / server-runtime / fs-routes / route-config / dev | Remix 框架核心模块，负责路由、数据加载、构建等功能。 |
-| [react / react-dom](https://zh-hans.react.dev/reference/react-dom) | React 主库与 DOM 渲染器。 |
-| [react-router-dom](https://reactrouter.remix.org.cn/) | 前端路由导航库。 |
-| [graphql](https://graphql.cn/) | 一种用于 API 的查询语言 |
+| [@shopify/hydrogen](https://shopify.dev/docs/storefronts/headless/hydrogen/getting-started) | Shopify's official React framework, supporting server-side rendering and Hydrogen APIs. |
+| [@shopify/remix-oxygen](https://shopify.dev/docs/storefronts/headless/hydrogen/getting-started) | Integration of Remix with Shopify's Oxygen Edge Runtime. |
+| [@shopify/mini-oxygen](https://www.npmjs.com/package/@shopify/mini-oxygen) | Local simulation of the Oxygen runtime environment. (Used for mocking data) |
+| [@remix-run/react](https://github.com/remix-run/remix) / server-runtime / fs-routes / route-config / dev | Core modules of the Remix framework, responsible for routing, data loading, building, etc. |
+| [react / react-dom](https://react.dev/reference/react-dom) | React core library and DOM renderer. |
+| [react-router-dom](https://reactrouter.remix.run) | Frontend routing navigation library. |
+| [graphql](https://graphql.org/) | Query language for APIs. |
 
+## Content Management & Experimentation System
 
-## 内容管理与实验系统
-
-| 包名 | 功能说明 |
+| Package | Description |
 |------|----------|
-| [@prismicio/client](https://github.com/prismicio/prismic-client) | [Prismic](https://prismic.io/) 集成，用于**内容管理和页面模块化**。 |
-| [@intelligems/headless](https://headless.intelligems.io/) | A/B 测试、定价实验与功能开关（feature flag）控制。 |
+| [@prismicio/client](https://github.com/prismicio/prismic-client) | [Prismic](https://prismic.io/) integration for **content management and modular page components**. |
+| [@intelligems/headless](https://headless.intelligems.io/) | A/B testing, pricing experiments, and feature flag control. |
 
 ---
 
-## 文件上传与媒体管理
+## File Upload & Media Management
 
-| 包名 | 功能说明 |
+| Package | Description |
 |------|----------|
-| uploadcare-widget | Uploadcare 原生上传控件，对应外部脚本 `uploadcare.full.min.js`。 |
-| @uploadcare/react-uploader | Uploadcare React 组件封装。 |
-| spark-md5 | 计算文件 MD5 值（用于缓存或上传校验）。 |
+| uploadcare-widget | Native Uploadcare upload control, corresponding to external script `uploadcare.full.min.js`. |
+| @uploadcare/react-uploader | React component wrapper for Uploadcare. |
+| spark-md5 | Computes file MD5 values (used for caching or upload verification). |
 
 ---
 
-## 邮件与通信
+## Email & Communication
 
-| 包名 | 功能说明 |
+| Package | Description |
 |------|----------|
-| [Frontapp](https://dev.frontapp.com/reference/installation) | 客服在线聊天工具 |
-| @emailjs/browser / emailjs | 使用 EmailJS 在前端直接发送邮件，无需服务器端配置。 |
-| nodemailer | 后端（Hydrogen Functions）发送邮件的 Node 库。 |
+| [Frontapp](https://dev.frontapp.com/reference/installation) | Customer service online chat tool. |
+| @emailjs/browser / emailjs | Sends emails directly from the frontend using EmailJS, requiring no server-side configuration. |
+| nodemailer | Node library for sending emails on the backend (Hydrogen Functions). |
 
 ---
 
-## 动画、UI 与交互
+## Animation, UI & Interaction
 
-| 包名 | 功能说明 |
+| Package | Description |
 |------|----------|
-| framer-motion | React 动画库，用于流畅过渡与动效。 |
-| gsap | 高性能动画引擎，支持复杂时间轴控制。 |
-| react-fast-marquee | 跑马灯效果组件。 |
-| react-zoom-pan-pinch | 图片/元素的缩放与拖动交互。 |
-| react-loading-skeleton | 页面骨架屏组件。 |
-| swiper | 幻灯片与轮播组件库。 |
-| tailwind-scrollbar | 美化滚动条的 Tailwind 插件。 |
+| framer-motion | React animation library for smooth transitions and effects. |
+| gsap | High-performance animation engine supporting complex timeline controls. |
+| react-fast-marquee | Marquee effect component. |
+| react-zoom-pan-pinch | Zoom and drag interaction for images/elements. |
+| react-loading-skeleton | Page skeleton screen component. |
+| swiper | Slideshow and carousel component library. |
+| tailwind-scrollbar | Tailwind plugin for styling scrollbars. |
 
 ---
 
-## 搜索、分享与分析
+## Search, Sharing & Analytics
 
-| 包名 | 功能说明 |
+| Package | Description |
 |------|----------|
-| fuse.js | 轻量级模糊搜索引擎，用于产品搜索。 |
-| react-share | 社交媒体分享按钮组件。 |
-| isbot | 检测访问者是否为搜索引擎爬虫，用于 SEO 优化。 |
-| qrcode.react | 生成二维码的 React 组件。 |
+| fuse.js | Lightweight fuzzy search engine for product searches. |
+| react-share | Social media sharing button components. |
+| isbot | Detects if a visitor is a search engine crawler, used for SEO optimization. |
+| qrcode.react | React component for generating QR codes. |
 
 ---
 
-## 辅助与工具类
+## Utilities & Tools
 
-| 包名 | 功能说明 |
+| Package | Description |
 |------|----------|
-| crypto-js | 加密工具库（SHA、AES 等算法）。 |
-| js-cookie | 浏览器 Cookie 管理。 |
-| remix-utils | Remix 辅助函数，如缓存与 session 管理。 |
+| crypto-js | Encryption utility library (SHA, AES, etc.). |
+| js-cookie | Browser cookie management. |
+| remix-utils | Remix helper functions, such as caching and session management. |
 
 ---
 
-## 开发与构建工具
+## Development & Build Tools
 
-| 包名 | 功能说明 |
+| Package | Description |
 |------|----------|
-| vite / vite-tsconfig-paths / vite-plugin-cjs-interop | 前端构建与打包工具。 |
-| vite-bundle-visualizer / rollup-plugin-visualizer | 打包体积分析工具。 |
-| eslint / eslint-plugin-hydrogen / @remix-run/eslint-config | 代码质量与规范检查。 |
-| tailwindcss / autoprefixer / postcss | 样式与 CSS 处理工具链。 |
-| typescript / @types/react / @types/react-dom / @types/eslint | TypeScript 支持与类型定义。 |
-| prettier / @shopify/prettier-config | 代码格式化。 |
-| @total-typescript/ts-reset | 重置 TypeScript 内置类型，增强类型安全。 |
-| @graphql-codegen/cli / graphql / graphql-tag | GraphQL 查询与类型生成工具。 |
+| vite / vite-tsconfig-paths / vite-plugin-cjs-interop | Frontend build and bundling tools. |
+| vite-bundle-visualizer / rollup-plugin-visualizer | Bundle size analysis tools. |
+| eslint / eslint-plugin-hydrogen / @remix-run/eslint-config | Code quality and style checking. |
+| tailwindcss / autoprefixer / postcss | Styling and CSS processing toolchain. |
+| typescript / @types/react / @types/react-dom / @types/eslint | TypeScript support and type definitions. |
+| prettier / @shopify/prettier-config | Code formatting. |
+| @total-typescript/ts-reset | Resets TypeScript built-in types for enhanced type safety. |
+| @graphql-codegen/cli / graphql / graphql-tag | GraphQL query and type generation tools. |
 
 ---
 
-##  Shopify CLI 与 Hydrogen 工具集
+## Shopify CLI & Hydrogen Tools
 
-| 包名 | 功能说明 |
+| Package | Description |
 |------|----------|
-| @shopify/cli | Shopify 官方 CLI 工具，用于 Hydrogen 开发与部署。 |
-| @shopify/hydrogen-codegen | 自动生成 GraphQL 查询与类型定义。 |
-| @shopify/oxygen-workers-types | Shopify Edge Runtime 类型定义。 |
+| @shopify/cli | Shopify's official CLI tool for Hydrogen development and deployment. |
+| @shopify/hydrogen-codegen | Automatically generates GraphQL queries and type definitions. |
+| @shopify/oxygen-workers-types | Shopify Edge Runtime type definitions. |
 
 ---
 
-## 其他实用组件
+## Other Useful Components
 
-| 包名 | 功能说明 |
+| Package | Description |
 |------|----------|
-| @stagewise/toolbar | 开发调试工具栏。 |
-| @react-icons/all-files / react-icons | 常用图标组件库（FontAwesome、Feather 等）。 |
+| @stagewise/toolbar | Development and debugging toolbar. |
+| @react-icons/all-files / react-icons | Commonly used icon component library (FontAwesome, Feather, etc.). |
 
 ---
 
-## 分类概览
+## Category Overview
 
-| 分类 | 功能方向 | 代表包 |
+| Category | Purpose | Key Packages |
 |------|----------|--------|
-| 核心框架 | Hydrogen + Remix | @shopify/hydrogen, @remix-run/react |
-| 内容管理 | CMS / 实验系统 | @prismicio/*, @intelligems/headless |
-| 上传系统 | 文件上传/CDN | uploadcare-widget, @uploadcare/react-uploader |
-| 动画与交互 | UI 动效与交互 | framer-motion, gsap, swiper |
-| 邮件系统 | 邮件发送 | emailjs, nodemailer |
-| 搜索与分享 | 搜索与社交分享 | fuse.js, react-share, isbot |
-| 构建优化 | Vite + ESLint + Prettier | vite, eslint, prettier |
+| Core Frameworks | Hydrogen + Remix | @shopify/hydrogen, @remix-run/react |
+| Content Management | CMS / Experimentation System | @prismicio/*, @intelligems/headless |
+| Upload System | File upload/CDN | uploadcare-widget, @uploadcare/react-uploader |
+| Animation & Interaction | UI Effects & Interactions | framer-motion, gsap, swiper |
+| Email System | Email Sending | emailjs, nodemailer |
+| Search & Sharing | Search & Social Sharing | fuse.js, react-share, isbot |
+| Build Optimization | Vite + ESLint + Prettier | vite, eslint, prettier |
 
 ---
-

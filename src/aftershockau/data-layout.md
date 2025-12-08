@@ -12,7 +12,14 @@
 
 #### 数据源
 
-目前在 [Prismic](https://aftershockpc.prismic.io/builder/pages/Zip6gxcAAKUIv3ry?s=published) 维护活动的内容等。
+目前在 [Prismic](https://aftershockpc.prismic.io/builder/pages/Zip6gxcAAKUIv3ry?s=published) 维护活动的内容等。具体业务流程如下：
+
+```mermaid
+flowchart LR
+
+Prismic --webhook--> SM[Shoipfy Metaobject] --GraphQL--> SA[Storefront API]
+```
+
 
 ![aftershock](/screenshots/ScreenShot_2025-11-27_080611_384.png "aftershock")
 
@@ -24,7 +31,9 @@ app\components\Header\ShippingBanner\index.jsx
 
 组件被调用的地方为 Header 组件，但是数据传入的地方为 root.jsx，关键代码如下：
 
-1. 在 root.jsx 的 loader 中加载所有 Metaobjects 数据，其中就包含 shippingBanner 的数据，然后将数据传入到 PageLayout 组件
+1. 在 root.jsx 的 loader 中加载所有 Metaobjects 数据。
+
+    其中就包含 shippingBanner 的数据，然后将数据传入到 PageLayout 组件
 
 ```jsx
 // root.jsx
@@ -66,7 +75,7 @@ app\components\Aside\AsideProvider\index.jsx
 
 
 >[!NOTE]
->[provider](https://react.dev/reference/react/createContext#provider)的使用
+>[provider](https://react.dev/reference/react/createContext#provider) 的使用
 
 ```jsx
 // PageLayout/index.jsx
@@ -123,8 +132,11 @@ export function Header({
 
 ##### 组件引用结构链
 
-- app\components\Header\index.jsx 👇
-- app\components\Header\LogoLink\index.jsx
+```bash
+app\components\Header\index.jsx 👇
+app\components\Header\LogoLink\index.jsx
+```
+
 
 <details>
 <summary>查看代码</summary>
@@ -177,7 +189,7 @@ export function LogoLink() {
 
 #### 数据源
 
-这里实际上是从[Metaobjects](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004)调取的数据
+这里是从[Metaobjects](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004)调取的数据
 
 **引用流程**
 
@@ -263,9 +275,12 @@ export function Layout({ children }) {
 }
 ```
 
-- [Remix React useRouteLoaderData('root')](https://remix.org.cn/docs/en/main/hooks/use-route-loader-data#userouteloaderdata)
-- [Hydrogen storefront 文档](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
-- [createStorefrontClient](https://shopify.dev/docs/api/hydrogen/latest/utilities/createstorefrontclient?utm_source=chatgpt.com)
+>[!NOTE]
+>[Remix React useRouteLoaderData('root')](https://remix.org.cn/docs/en/main/hooks/use-route-loader-data#userouteloaderdata)
+>
+>[Hydrogen storefront 文档](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
+>
+>[createStorefrontClient 文档](https://shopify.dev/docs/api/hydrogen/latest/utilities/createstorefrontclient?utm_source=chatgpt.com)
 
 2. app\components\PageLayout.jsx 中的调用 👇
 
@@ -442,11 +457,9 @@ export { DesktopMenu };
 
 ### Menu 移动端(菜单栏)
 
-![aftershock](/screenshots/ScreenShot_2025-11-26_160405_772.png "aftershock")
-
 #### 数据源
 
-这里实际上也是从[Metaobjects](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004)调取的数据
+这里实际上也是从 [Metaobjects](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004) 调取的数据
 
 #### 组件引用结构链
 
@@ -515,9 +528,13 @@ export function Layout({ children }) {
 }
 ```
 
-- [Remix React useRouteLoaderData('root')](https://remix.org.cn/docs/en/main/hooks/use-route-loader-data#userouteloaderdata)
-- [Hydrogen storefront 文档](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
-- [createStorefrontClient](https://shopify.dev/docs/api/hydrogen/latest/utilities/createstorefrontclient?utm_source=chatgpt.com)
+>[!NOTE]
+>[Remix React useRouteLoaderData('root') 文档](https://remix.org.cn/docs/en/main/hooks/use-route-loader-data#userouteloaderdata)
+>
+>[Hydrogen storefront 文档](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
+>
+>[createStorefrontClient 文档](https://shopify.dev/docs/api/hydrogen/latest/utilities/createstorefrontclient?utm_source=chatgpt.com)
+
 
 2. app\components\PageLayout.jsx 中的调用 👇
 
@@ -616,11 +633,14 @@ function fetchResults(event) {
 }
 ```
 
-4. 接口地址 **/search** 的来源：
+4. 接口地址 `/search` 的来源：
 
-组件地址: app\routes\search.jsx
+```bash
+app\routes\search.jsx
+```
 
-因为 remix 就是服务端语言，因此它在 search.jsx 中做了一个搜索接口去查询内容。
+
+因为 remix 就是服务端语言，因此它在 `search.jsx` 中做了一个搜索接口去查询内容。
 
 搜索的核心代码如下：
 
@@ -629,10 +649,12 @@ async function predictiveSearch({ request, context }) {
   // 代码太多建议直接去看
 }
 ```
-
-- 这里大量使用了 [Graphql](https://graphql.cn/)
-- 需要去看[search](https://shopify.dev/docs/api/storefront/latest/queries/search)的相关代码
-- 另外还要去查看 [Hydrogen Graphi](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching/graphiql#graphiql)
+>[!NOTE]
+>这里大量使用了 [Graphql](https://graphql.cn/)
+>
+>需要去看 [search](https://shopify.dev/docs/api/storefront/latest/queries/search) 的相关代码
+>
+>另外还要去查看 [Hydrogen Graphi](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching/graphiql#graphiql)
 
 #### 组件引用结构链
 
@@ -712,11 +734,16 @@ export function PageLayout() {
 
 在点击查看即时消息的时候会有以下选项
 
-- （Live Chat）在线聊天工具，
-- （Knowledge Hub）帮助中心
-- （Flagship Showroom）展厅信息
-- （Contact Us）联系我们
-- Check Your Build Status
+>[!IMPORTANT]
+> 💬 Live Chat 在线聊天工具
+>
+> 📚 Knowledge Hub 帮助中心
+>
+> 🏢 Flagship Showroom 展厅信息
+>
+> 📞 Contact Us 联系我们
+>
+> 🔍 Check Your Build Status
 
 #### 插件
 
@@ -1099,7 +1126,7 @@ const nonTracked = cartData.lines.nodes
 #### 组件引用结构链
 
 > [!INFO]
-> 这里需要特别注意的是使用到了 shopify 的 hydrogen 组件的 [Analytics.Provider](https://shopify.dev/docs/api/hydrogen/2024-04)和[Analytics.CartView](https://shopify.dev/docs/api/hydrogen/2024-04/components/analytics/analytics-cartview)组件
+> 这里需要特别注意的是使用到了 shopify 的 hydrogen 组件的 [Analytics.Provider](https://shopify.dev/docs/api/hydrogen/2024-04) 和 [Analytics.CartView](https://shopify.dev/docs/api/hydrogen/2024-04/components/analytics/analytics-cartview)组件
 
 ```mermaid
 flowchart LR
@@ -1110,7 +1137,7 @@ root.jsx --> Analytics.Provider --> PageLayout --> AsideProvider --> CartAside -
 
 ### 数据源
 
-footer 组件的数据源实际上跟 header 的一模一样，因为都是从 metaobjects 中取的
+`Footer` 组件的数据源实际上跟 `Header` 的一模一样，因为都是从 `metaobjects` 中取的
 
 ```jsx
 const [footerTemp] = await Promise.all([
