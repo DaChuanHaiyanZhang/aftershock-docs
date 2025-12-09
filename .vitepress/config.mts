@@ -64,6 +64,7 @@ export default withMermaid(
                       { text: "Products", link: "/en/aftershockau/data-products" },
                       { text: "Workstations", link: "/en/aftershockau/data-workstations" },
                       { text: "PC Models", link: "/en/aftershockau/data-pc-models" },
+                      { text: "Custom Servers", link: "/en/aftershockau/data-server-landing-page" },
                     ],
                   },
 
@@ -229,18 +230,14 @@ export default withMermaid(
                 collapsed: true,
                 items: [
                   { text: "Sale 促销界面", link: "/aftershockau/data-sale" },
-                  {
-                    text: "Read To Ship",
-                    link: "/aftershockau/data-ready-to-ship",
-                  },
+                  { text: "Read To Ship", link: "/aftershockau/data-ready-to-ship", },
                   { text: "Collection", link: "/aftershockau/data-collection" },
                   { text: "SLP", link: "/aftershockau/data-series" },
-                  {
-                    text: "Limited Edition",
-                    link: "/aftershockau/data-limited-edition",
-                  },
+                  { text: "Limited Edition", link: "/aftershockau/data-limited-edition", },
                   { text: "Products", link: "/aftershockau/data-products" },
                   { text: "Workstations", link: "/aftershockau/data-workstations" },
+                  { text: "PC Models", link: "/aftershockau/data-pc-models" },
+                  { text: "Custom Servers", link: "/aftershockau/data-server-landing-page" },
                 ],
               },
 
