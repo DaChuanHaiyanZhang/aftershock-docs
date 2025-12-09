@@ -634,3 +634,90 @@ async function fetchFeaturesForModels(models, storefront, prismicData) {
 
 1. 在图片上传之前压缩。
 2. 在图片上传之后，技术端更新代码， Hydrogen 提供了 `OSS` 的能力，可以在具体布局的地方，在调用时进行裁剪，也可达到裁剪的效果。
+
+## Server 页面性能问题处理方案
+
+方案1：使用 GraphQL 别名查询，这个方案无法做到动态
+
+```javascript
+const MULTIPLE_METAOBJECTS_QUERY = `#graphql
+  query {
+    desktop: metaobject(handle: {type: "prismic_cache_sale_page", handle: "desktop"}) {
+      id
+      handle
+      fields {
+        key
+        value
+      }
+    }
+    workstation: metaobject(handle: {type: "prismic_cache_sale_page", handle: "workstation"}) {
+      id
+      handle
+      fields {
+        key
+        value
+      }
+    }
+    laptop: metaobject(handle: {type: "prismic_cache_sale_page", handle: "laptop"}) {
+      id
+      handle
+      fields {
+        key
+        value
+      }
+    }
+  }
+`;
+
+const result = await storefront.query(MULTIPLE_METAOBJECTS_QUERY);
+
+console.log(result.desktop);      // desktop 对象
+console.log(result.workstation);  // workstation 对象
+console.log(result.laptop);       // laptop 对象
+
+// 转换为数组
+const metaobjects = [
+  result.desktop,
+  result.workstation,
+  result.laptop
+].filter(Boolean);
+
+```
+
+方案2：动态生成 GraphQL 查询
+
+```javascript
+// app/lib/metaobject.ts
+
+/**
+ * 动态生成查询多个 metaobjects 的 GraphQL
+ */
+export function buildMultipleMetaobjectsQuery(
+  type: string,
+  handles: string[]
+) {
+  const queries = handles.map((handle, index) => `
+    item${index}: metaobject(handle: {type: "${type}", handle: "${handle}"}) {
+      id
+      handle
+      fields {
+        key
+        value
+      }
+    }
+  `).join('\n');
+  
+  return `query { ${queries} }`;
+}
+
+// 使用
+const handles = ['desktop', 'workstation', 'laptop'];
+const query = buildMultipleMetaobjectsQuery('prismic_cache_sale_page', handles);
+
+const result = await storefront.query(query);
+
+// 提取结果
+const metaobjects = Object.values(result).filter(Boolean);
+console.log(metaobjects); // [desktop对象, workstation对象, laptop对象]
+
+```

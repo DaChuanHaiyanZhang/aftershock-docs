@@ -1,57 +1,57 @@
-# 优化建议
+# Optimization Suggestions
 
 [[toc]]
 
-## 使用 FrontApp 做数据分析
+## Using FrontApp for Data Analysis
 
-也许我们后续还可以对用户在线聊天的信息进行数据分析，得出一些结论，方便做商业规划
+Perhaps we can later perform data analysis on user online chat information to draw conclusions and facilitate business planning.
 
 <details>
-<summary>查看AI建议指南</summary>
+<summary>View AI Suggestion Guide</summary>
 
-本文档整理了如何通过 **FrontApp API** 获取聊天记录以进行数据分析的方法。
+This document outlines how to retrieve chat logs via the **FrontApp API** for data analysis.
 
-### 1. FrontApp API 概览
+### 1. FrontApp API Overview
 
-FrontApp 提供两种主要 API：
+FrontApp provides two main APIs:
 
 - **REST API**: [https://dev.frontapp.com/reference](https://dev.frontapp.com/reference)
 - **GraphQL API**: [https://dev.frontapp.com/docs/graphql](https://dev.frontapp.com/docs/graphql)
 
-主要可访问的资源：
+Main accessible resources:
 
-| 资源               | 描述                                               |
-| ------------------ | -------------------------------------------------- |
-| `conversations`    | 所有会话/线程（邮件、聊天、Facebook Messenger 等） |
-| `messages`         | 每个 conversation 中的消息                         |
-| `contacts`         | 用户信息                                           |
-| `users`            | 团队成员信息                                       |
-| `tags` / `folders` | 对话分类                                           |
+| Resource           | Description                                                                 |
+| ------------------ | --------------------------------------------------------------------------- |
+| `conversations`    | All conversations/threads (emails, chats, Facebook Messenger, etc.)         |
+| `messages`         | Messages within each conversation                                           |
+| `contacts`         | User information                                                            |
+| `users`            | Team member information                                                     |
+| `tags` / `folders` | Conversation categorization                                                 |
 
-> 理论上，可以通过这些资源获取所有聊天记录及用户信息。
+> In theory, all chat logs and user information can be accessed through these resources.
 
 ---
 
-### 2. 获取聊天记录步骤
+### 2. Steps to Retrieve Chat Logs
 
-#### 步骤一：获取对话列表
+#### Step 1: Fetch Conversation List
 
 ```http
 GET /conversations
 Authorization: Bearer <API_TOKEN>
 ```
 
-- API 返回分页数据，需循环翻页（`page` / `per_page`）。
-- 可使用 filter 筛选特定类型对话。
+- The API returns paginated data, requiring pagination loops (`page` / `per_page`).
+- Filters can be used to screen specific types of conversations.
 
-#### 步骤二：获取每个对话的消息
+#### Step 2: Fetch Messages for Each Conversation
 
 ```http
 GET /conversations/{conversation_id}/messages
 Authorization: Bearer <API_TOKEN>
 ```
 
-返回内容示例：
+Example response:
 
 ```json
 [
@@ -66,41 +66,41 @@ Authorization: Bearer <API_TOKEN>
 ]
 ```
 
-#### 步骤三：获取用户信息
+#### Step 3: Fetch User Information
 
-- `from` / `to` 对应 `contacts` 或 `users`。
-- 可批量查询或缓存用户信息。
-
----
-
-### 3. 注意事项
-
-1. **API 速率限制**
-
-   - Front API 对每个 token 有调用限制，需要处理分页 + 延时请求。
-
-2. **权限问题**
-
-   - 只能访问有权限的对话。
-   - 获取全量数据需管理员权限。
-
-3. **数据量大**
-
-   - 大团队可能几十万条消息。
-   - 建议直接保存到数据库或 CSV，再分析。
-
-4. **敏感数据**
-   - 消息可能包含用户隐私信息。分析前应考虑脱敏或合规处理。
+- `from` / `to` correspond to `contacts` or `users`.
+- Can query in batches or cache user information.
 
 ---
 
-### 4. Node.js 示例（REST API）
+### 3. Considerations
+
+1. **API Rate Limits**
+
+   - Front API has call limits per token; requires handling pagination + delayed requests.
+
+2. **Permission Issues**
+
+   - Only conversations you have permission to access.
+   - Admin rights needed for full data access.
+
+3. **Large Data Volume**
+
+   - Large teams may have hundreds of thousands of messages.
+   - Recommend saving directly to a database or CSV before analysis.
+
+4. **Sensitive Data**
+   - Messages may contain user private information. Consider desensitization or compliance handling before analysis.
+
+---
+
+### 4. Node.js Example (REST API)
 
 ```js
 const fetch = require("node-fetch");
 const API_TOKEN = process.env.FRONT_API_TOKEN;
 
-// 获取所有对话
+// Fetch all conversations
 async function getAllConversations() {
   let conversations = [];
   let page = 1;
@@ -122,7 +122,7 @@ async function getAllConversations() {
   return conversations;
 }
 
-// 获取单个对话消息
+// Fetch messages for a single conversation
 async function getMessages(conversationId) {
   const res = await fetch(
     `https://api2.frontapp.com/conversations/${conversationId}/messages`,
@@ -136,38 +136,38 @@ async function getMessages(conversationId) {
 
 ---
 
-### 5. 总结
+### 5. Summary
 
-- **可以通过 FrontApp API 下载聊天记录**，适合数据分析。
-- 需要满足以下条件：
+- **Chat logs can be downloaded via the FrontApp API**, suitable for data analysis.
+- Must meet the following conditions:
 
-  1. 拥有管理员权限
-  2. 处理分页与速率限制
-  3. 注意隐私与合规
+  1. Have admin rights.
+  2. Handle pagination and rate limits.
+  3. Consider privacy and compliance.
 
-- 推荐流程：
-  1. 获取会话列表
-  2. 获取每个会话消息
-  3. 获取用户信息
-  4. 保存数据到数据库/CSV
-  5. 进行分析
+- Recommended process:
+  1. Get conversation list.
+  2. Get messages for each conversation.
+  3. Get user information.
+  4. Save data to database/CSV.
+  5. Perform analysis.
 
 ---
 
-**备注**：建议先做小规模测试，确保数据量可控，并验证权限和 API 限制。
+**Note**: Suggest starting with a small-scale test to ensure manageable data volume and verify permissions and API limits.
 
 </details>
 
-## HeroBanner 组件优化
+## HeroBanner Component Optimization
 
 ```bash
 app\components\Slices\LandingPageSlices\HeroBanner\index.jsx
 ```
 
-应该使用更高效率的循环去匹配指定的组件，而不是 switch 去判断。问题代码：
+Should use more efficient loops to match specified components instead of switch statements. Problematic code:
 
 > [!WARNING]
-> 循环次数太多，需要使用其他方案代替
+> Too many loops; need alternative solution.
 
 ```jsx
 function renderSlice(slice, index) {
@@ -224,17 +224,17 @@ export function SliceRenderer({ slices }) {
 }
 ```
 
-## Swiper 插件的优化
+## Swiper Plugin Optimization
 
-因为很多地方都使用了 swiper ，而且在修饰商品详情页时，为了一些动画效果也会使用到，所以我更建议在引入 swiper 之后将 swiper 对象注册到全局。
+Since Swiper is used in many places, and to achieve certain animation effects in product detail pages, it is also used, I suggest registering the Swiper object globally after importing it.
 
 >[!NOTE]
->如果后续要在 Static Code 做 Swiper 效果，则需要全局注册，这样能较少很多不必要的脚本引入，也能减少脚本引用和使用的困难。
+>If Swiper effects are needed in Static Code later, global registration is required. This can reduce unnecessary script imports and ease difficulties in script referencing and usage.
 
-## NewCategories 的优化方案
+## NewCategories Optimization Solution
 
 <details>
-<summary>查看源代码</summary>
+<summary>View Source Code</summary>
 
 ```jsx
 <div
@@ -305,20 +305,20 @@ export function SliceRenderer({ slices }) {
 
 </details>
 
-实际上这里完全没有必要使用 gsap，因为它只是在做：
+Actually, there is no need to use gsap here because it is only:
 
-- hover 时给图片加 filter: drop-shadow(...)
-- 离开时去掉 filter
+- Adding filter: drop-shadow(...) to the image on hover
+- Removing filter on leave
 
-这本质是：
+This essentially is:
 
 ```css
 filter: drop-shadow(...);
 ```
 
-➡ CSS 已经原生支持，没有任何动画复杂度，不需要 GSAP。
+➡ CSS natively supports this; no animation complexity, no need for GSAP.
 
-CSS hover 完全能替代你当前 GSAP 的所有功能，等价的 css 就是：
+CSS hover can completely replace all your current GSAP functions. The equivalent CSS is:
 
 ```css
 .img {
@@ -330,57 +330,55 @@ CSS hover 完全能替代你当前 GSAP 的所有功能，等价的 css 就是�
 }
 ```
 
+- GSAP is only necessary in **the following cases**:
 
+  If you need these, then use GSAP:
 
-- GSAP 只有在“以下情况”才有必要：
+  ✔ Complex animation sequences
 
-  如果你需要这些，那才用 GSAP：
+  For example: color → blur → spread → breathing effect → glowing wave spreading outward.
 
-  ✔ 复杂动画序列
+  ✔ Multi-stage gradient animations
 
-  比如：色彩 → 模糊 → 扩散 → 呼吸效果 → 发光波动往外扩散
+  For example: brighten at 50% hover, brighter at 70%, add blur at 100%.
 
-  ✔ 多段渐变动画
+  ✔ ScrollTrigger scroll-triggered
 
-  比如：hover 到 50% 才变亮、70% 变更亮、100% 再加模糊
+  Brightness increases based on scroll progress.
 
-  ✔ ScrollTrigger 滚动触发
+  ✔ Multi-element delay, staggering, timeline synchronization
 
-  页面滚动时根据进度亮度增强
+  For example, 5 images flashing in sequence on hover.
 
-  ✔ 多元素延迟、交错、时间轴同步
+  ✔ GPU physical animations (inertia, spring)
 
-  比如 5 张图片 hover 时按序闪光
+  Hard to express with CSS, need GSAP's physical model.
 
-  ✔ GPU 物理动画（惯性、spring）
+Performance Comparison Results
 
-  CSS 不好表达，需要 GSAP 的物理模型
+| Metric               | CSS Hover Filter | GSAP Filter    |
+| -------------------- | ---------------- | -------------- |
+| Main Thread Usage    | ★★★★★ Lowest      | ★★★✩✩ Medium-high |
+| FPS Stability        | ★★★★★            | ★★★            |
+| Layout/Repaint Count | ★★★★★            | ★★             |
+| Memory Usage         | ★★★★★            | ★★★            |
+| Code Complexity      | ★★★★★            | ★★★            |
+| Animation Control    | ★★               | ★★★★★          |
 
-性能对比结果
+## Homepage EXPLORE OUR RANGE (DesktopsCarousell) Component Optimization Suggestion
 
-| 指标                | CSS Hover Filter | GSAP Filter    |
-| ------------------- | ---------------- | -------------- |
-| 主线程占用          | ★★★★★ 最低       | ★★★✩✩ 中等偏高 |
-| FPS 稳定性          | ★★★★★            | ★★★            |
-| Layout/Repaint 次数 | ★★★★★            | ★★             |
-| 内存占用            | ★★★★★            | ★★★            |
-| 代码复杂度          | ★★★★★            | ★★★            |
-| 动画可控性          | ★★               | ★★★★★          |
+This component uses simple, crude tab switching. Consider implementing tab switching with a slider effect; other plugins may also be used.
 
+## TrackerForm Defect
 
-## 首页 EXPLORE OUR RANGE （DesktopsCarousell） 组件优化建议
+- Root Cause
 
-该组件是简单粗暴的tabs点击切换，是否可以考虑使用滑块效果做tabs，使用其他插件也可。
+  Shopify Storefront API does not have a direct `orderByNumber` query, resulting in only being able to query through a list and then analyze/query on the frontend.
 
-## TrackerForm 缺陷
+- Current Solution
 
-- 产生根本原因
+  - Users logged in: Upon entering the page, first cache 100 orders, then use the `find` method on the frontend to query.
 
-  Shopify Storefront API 没有直接的 `orderByNumber` 查询，导致只能通过列表查询，然后前端进行分析、查询。
-
-- 当前解决方案
-  - 登录状态下的用户进入该界面后，先缓存100条订单数据，然后前端使用 `find` 方法进行查询。
-    
     ```jsx
     //  order-tracker.jsx
     export async function loader({context}) {
@@ -404,75 +402,76 @@ CSS hover 完全能替代你当前 GSAP 的所有功能，等价的 css 就是�
     }
 
     ```
-    - ❌ 缺陷：
-      1. 导致前端进入页面时的卡顿
-      2. **只能从100条**的数据中查询订单信息
-    - ✅ 优势：
-      1. 用户在查询的时候会非常快，因为直接从前端缓存中获取数据。
-      2. 一般的用户不可能下100个订单，这就导致实际上这个缺陷也不是尖锐的缺陷。但是实际上还是有业务逻辑的缺陷。
-    - 🛠️ 解决方案：
-      
-      在用户进入界面后，输入订单号查询时再查询数据，或者先缓存前100条，如果数据量大于100，且没有查询到的情况下，则向下查询，这样会保证如果订单号存在的情况下，不论如何都能查询到数据。
 
-  - 登录状态下的用户，进入页面，在查询的时候，先查询前面100条，然后前端使用 `find` 方法进行查询。
+    - ❌ Defects:
+      1. Causes lag when the frontend enters the page.
+      2. **Can only query from 100** order data.
+    - ✅ Advantages:
+      1. User queries are very fast because data is fetched directly from frontend cache.
+      2. Most users won't have 100 orders, so this defect may not be critical. However, there is still a business logic defect.
+    - 🛠️ Solution:
 
-      ```jsx
-      // OrderTracker\index.jsx
-      const handleSearch = async () => {
-        try {
-          const requestBody = {
-            orderNumber: orderNum,
-            email: emailValue.trim(),
-          };
+      After the user enters the page, query data when entering the order number for search, or cache the first 100 first. If the data volume exceeds 100 and no result is found, query further down. This ensures that if the order number exists, it can be found regardless.
 
-          const response = await fetch('/api/track-order', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(requestBody),
-          });
+  - Users not logged in: Upon entering the page, when querying, first query the first 100, then use the `find` method on the frontend to query.
 
-          const data = await response.json();
-          setApiLoading(false);
+    ```jsx
+    // OrderTracker\index.jsx
+    const handleSearch = async () => {
+      try {
+        const requestBody = {
+          orderNumber: orderNum,
+          email: emailValue.trim(),
+        };
 
-          if (data.error) {
-            if (data.error === 'Order number and email do not match') {
-              setOrderNumberError('Order number and email do not match');
-              setEmailError('Order number and email do not match');
-            } else if (data.error === 'Order not found') {
-              setOrderNumberError(
-                'Order number not found. New orders may take up to 24 hours to show. No email after 24 hours? Contact support',
-              );
-            } else if (data.error === 'Invalid email address') {
-              setEmailError('Invalid email address');
-            } else {
-              setStatusError(data.error);
-            }
-            return;
+        const response = await fetch('/api/track-order', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(requestBody),
+        });
+
+        const data = await response.json();
+        setApiLoading(false);
+
+        if (data.error) {
+          if (data.error === 'Order number and email do not match') {
+            setOrderNumberError('Order number and email do not match');
+            setEmailError('Order number and email do not match');
+          } else if (data.error === 'Order not found') {
+            setOrderNumberError(
+              'Order number not found. New orders may take up to 24 hours to show. No email after 24 hours? Contact support',
+            );
+          } else if (data.error === 'Invalid email address') {
+            setEmailError('Invalid email address');
+          } else {
+            setStatusError(data.error);
           }
-
-          setStatusError('');
-          setFetcherData(data);
-        } catch (err) {
-          setApiLoading(false);
-          console.error('API Error:', err);
-          setStatusError('Internal error');
+          return;
         }
+
+        setStatusError('');
+        setFetcherData(data);
+      } catch (err) {
+        setApiLoading(false);
+        console.error('API Error:', err);
+        setStatusError('Internal error');
       }
-      ```
+    }
+    ```
 
-    - ❌ 缺陷 **只能从100条**的数据中查询订单信息，可能导致数据缺失，前提是用户的订单数量超过100条。
-    - 🛠️ 解决方案：
+    - ❌ Defect: **Can only query from 100** order data, may lead to missing data if user has over 100 orders.
+    - 🛠️ Solution:
 
-      在用户进入界面后，输入订单号查询时再查询数据，或者先缓存前100条，如果数据量大于100，且没有查询到的情况下，则向下查询，这样会保证如果订单号存在的情况下，不论如何都能查询到数据。
+      After the user enters the page, query data when entering the order number for search, or cache the first 100 first. If the data volume exceeds 100 and no result is found, query further down. This ensures that if the order number exists, it can be found regardless.
 
-
-## toStaticCode 优化方案
+## toStaticCode Optimization Solution
 
 ::: code-group
 
 ```bash
 app\routes\products.$handle.jsx
 ```
+
 ```javascript
 function toStaticCode(metaobject) {
   const fields = metaobject?.fields || [];
@@ -489,25 +488,25 @@ function toStaticCode(metaobject) {
   };
 }
 ```
+
 :::
 
+### Issues with the original code:
 
+1. Fields are hardcoded, only returning html/css/js. If metaobject adds a json field later → code needs changes.
+2. JSON strings cannot be parsed. If a field itself is JSON (common in your project), the original code returns a string, which is unusable.
+3. This code converts empty strings to `""`, not `null`, causing frontend type inconsistencies.
+4. If a field doesn't exist, `map.html` will be `undefined` → fallback to `null`, behavior may be incorrect.
 
-### 原代码的问题是：
+### Real Benefits
 
-1. 字段是写死的，只返回 html/css/js，如果以后 metaobject 多加一个 json 字段 → 要改代码。
-2. JSON 字符串无法解析，如果字段本身是 JSON（你项目里经常这样），原代码会返回字符串，不可用。
-3. 这段代码会把空字符串变成 ""，而不是 null，造成前端类型不一致。
-4. 如果字段不存在，map.html 会是 undefined → fallback 到 null，行为可能不对
+1. ✔ More robust: automatically handles multiple fields, automatically parses JSON, handles null, avoids bugs.
+2. ✔ More maintainable: when metaobject adds fields later, no code changes needed anywhere.
+3. ✔ Safer: no errors due to JSON strings, won't return incorrect formats.
+4. ✔ Code is shorter and more readable, especially the Object.fromEntries version.
 
-### 真实收益
+### Optimization Result
 
-1. ✔ 更健壮，自动处理多字段，自动解析 JSON，处理 null，避免 bug
-2. ✔ 更可维护，以后 metaobject 再加字段，不用改任何地方
-3. ✔ 更安全，不会因为 JSON 字符串导致报错，不会返回错误格式
-4. ✔ 代码更短更可读，尤其是 Object.fromEntries 版本
-
-### 优化结果
 ```javascript
 function toStaticCode(metaobject) {
   return Object.fromEntries(
@@ -519,40 +518,40 @@ function toStaticCode(metaobject) {
 }
 ```
 
-## 商品详情业务逻辑优化
+## Product Details Business Logic Optimization
 
 ```bash
 app\routes\products.$handle.jsx
 ```
 
 >[!DANGER]
->看了 `promise.all` 基本无法淡定。
+>Seeing `Promise.all` makes it hard to stay calm.
 
-### 优化原因
+### Optimization Reason
 
-代码逻辑繁杂，导致浏览很费时费力。
+Complex code logic makes browsing time-consuming and laborious.
 
-### 优化策略
+### Optimization Strategy
 
-封装、业务逻辑分离。
+Encapsulate and separate business logic.
 
-## ErrorBoundary 优化
+## ErrorBoundary Optimization
 
-### 问题
+### Problem
 
-每次在跳转到其他界面，在发生错误时，先会跳转到最基础的错误界面，然后再跳转到对应的错误界面。整个 redirect 过程是明显可见的。
+Every time jumping to another page, when an error occurs, it first jumps to the most basic error page, then redirects to the corresponding error page. The entire redirect process is noticeably visible.
 
-### 解决方案
+### Solution
 
-希望每次在跳转到错误界面时，都可以秒到错误界面，而不是 redirect 过去。目前还不知道是否可以实现，因为貌似可以通过不同的组件替换实现。
+Hope that every time jumping to an error page, it instantly reaches the error page instead of redirecting. Currently unsure if achievable, as it might be possible through different component replacements.
 
-## Workstations 页面 `fetchFeaturesForModels` 方法替代方案。
+## Workstations Page `fetchFeaturesForModels` Method Alternative.
 
-### 问题
+### Problem
 
-如果一直使用 `Promise.all` 会导致比较严重的性能问题，举个例子👉，有10条数据，原本一次可以拉取完成，但是我要在服务器查询10回完成。性能影响可能不止10倍。
+Consistently using `Promise.all` can cause serious performance issues. For example 👉, with 10 pieces of data, originally could be fetched in one go, but I query the server 10 times to complete. Performance impact may be more than 10x.
 
-问题代码片段：
+Problem code snippet:
 
 ```javascript
 async function fetchFeaturesForModels(models, storefront, prismicData) {
@@ -593,9 +592,10 @@ async function fetchFeaturesForModels(models, storefront, prismicData) {
     );
   }
 ```
-### 解决方案
 
-使用 [metaobjects](https://shopify.dev/docs/api/admin-graphql/latest/queries/metaobjects?example=fetch-metaobjects-with-string-search) 替代现有的 `metaobject`，这样可以一次性查询完成，而不是查询N次✌️。
+### Solution
+
+Use [metaobjects](https://shopify.dev/docs/api/admin-graphql/latest/queries/metaobjects?example=fetch-metaobjects-with-string-search) to replace the current `metaobject`, allowing batch querying in one go instead of N queries✌️.
 
 ```javascript
 async function fetchFeaturesForModels(models, storefront, prismicData) {
@@ -613,7 +613,7 @@ async function fetchFeaturesForModels(models, storefront, prismicData) {
     }
   `;
   // code ...
-  // 批量查询 handles
+  // Batch query handles
   const handles = uniqueFeatureIds.map(id => ({
     handle: id,
     type: 'prismic_cache_features_list'
@@ -625,5 +625,100 @@ async function fetchFeaturesForModels(models, storefront, prismicData) {
   // code ...
 }
 ```
+
 >[!NOTE]
->多看看其他地方的 `Promise.all` 或许都可以通过这个方式解决。
+>Check other places using `Promise.all`; perhaps all can be solved this way.
+
+## Original Image Size Issue - Technical Side Suggestion.
+
+Original image loading does consume a lot of resources due to image size, ultimately causing slow loading. To solve this, preparation is needed from both ends.
+
+1. Compress before image upload.
+2. After image upload, update code on the technical side. Hydrogen provides `OSS` capability, allowing cropping at the specific layout location during calls, which can also achieve cropping effects.
+
+## Server Page Performance Issue Handling Solution
+
+Solution 1: Use GraphQL alias query; this solution cannot be dynamic.
+
+```javascript
+const MULTIPLE_METAOBJECTS_QUERY = `#graphql
+  query {
+    desktop: metaobject(handle: {type: "prismic_cache_sale_page", handle: "desktop"}) {
+      id
+      handle
+      fields {
+        key
+        value
+      }
+    }
+    workstation: metaobject(handle: {type: "prismic_cache_sale_page", handle: "workstation"}) {
+      id
+      handle
+      fields {
+        key
+        value
+      }
+    }
+    laptop: metaobject(handle: {type: "prismic_cache_sale_page", handle: "laptop"}) {
+      id
+      handle
+      fields {
+        key
+        value
+      }
+    }
+  }
+`;
+
+const result = await storefront.query(MULTIPLE_METAOBJECTS_QUERY);
+
+console.log(result.desktop);      // desktop object
+console.log(result.workstation);  // workstation object
+console.log(result.laptop);       // laptop object
+
+// Convert to array
+const metaobjects = [
+  result.desktop,
+  result.workstation,
+  result.laptop
+].filter(Boolean);
+
+```
+
+Solution 2: Dynamically generate GraphQL query.
+
+```javascript
+// app/lib/metaobject.ts
+
+/**
+ * Dynamically generate GraphQL query for multiple metaobjects
+ */
+export function buildMultipleMetaobjectsQuery(
+  type: string,
+  handles: string[]
+) {
+  const queries = handles.map((handle, index) => `
+    item${index}: metaobject(handle: {type: "${type}", handle: "${handle}"}) {
+      id
+      handle
+      fields {
+        key
+        value
+      }
+    }
+  `).join('\n');
+  
+  return `query { ${queries} }`;
+}
+
+// Usage
+const handles = ['desktop', 'workstation', 'laptop'];
+const query = buildMultipleMetaobjectsQuery('prismic_cache_sale_page', handles);
+
+const result = await storefront.query(query);
+
+// Extract results
+const metaobjects = Object.values(result).filter(Boolean);
+console.log(metaobjects); // [desktop object, workstation object, laptop object]
+
+```

@@ -10,17 +10,17 @@ export default withMermaid(
     base: "/aftershock-docs/",
     head: [
       // https://cdn.shopify.com/s/files/1/0522/3320/7988/files/favicon.ico?v=1726679956
-      ['link', { rel: 'icon', href: '/favicon.svg' }]
+      ["link", { rel: "icon", href: "/favicon.svg" }],
     ],
-    locales:{
+    locales: {
       root: {
-        label: '简体中文',
-        lang: 'zh-CN',
+        label: "简体中文",
+        lang: "zh-CN",
       },
       en: {
-        label: 'English',
-        lang: 'en-US',
-        link: '/en/',
+        label: "English",
+        lang: "en-US",
+        link: "/en/",
         themeConfig: {
           outline: {
             label: "On this page",
@@ -40,11 +40,17 @@ export default withMermaid(
             "/en/aftershockau/": [
               { text: "Overview", link: "/en/aftershockau/index" },
               { text: "Page Structure", link: "/en/aftershockau/routes" },
-              { text: "Plugins and Dependencies", link: "/en/aftershockau/dependencies" },
+              {
+                text: "Plugins and Dependencies",
+                link: "/en/aftershockau/dependencies",
+              },
               {
                 text: "Data Flow",
                 items: [
-                  { text: "Layout Global Data Flow", link: "/en/aftershockau/data-layout" },
+                  {
+                    text: "Layout Global Data Flow",
+                    link: "/en/aftershockau/data-layout",
+                  },
                   { text: "Home Page", link: "/en/aftershockau/data-home" },
                   {
                     text: "Products",
@@ -55,16 +61,31 @@ export default withMermaid(
                         text: "Read To Ship",
                         link: "/en/aftershockau/data-ready-to-ship",
                       },
-                      { text: "Collection", link: "/en/aftershockau/data-collection" },
+                      {
+                        text: "Collection",
+                        link: "/en/aftershockau/data-collection",
+                      },
                       { text: "SLP", link: "/en/aftershockau/data-series" },
                       {
                         text: "Limited Edition",
                         link: "/en/aftershockau/data-limited-edition",
                       },
-                      { text: "Products", link: "/en/aftershockau/data-products" },
-                      { text: "Workstations", link: "/en/aftershockau/data-workstations" },
-                      { text: "PC Models", link: "/en/aftershockau/data-pc-models" },
-                      { text: "Custom Servers", link: "/en/aftershockau/data-server-landing-page" },
+                      {
+                        text: "Products",
+                        link: "/en/aftershockau/data-products",
+                      },
+                      {
+                        text: "Workstations",
+                        link: "/en/aftershockau/data-workstations",
+                      },
+                      {
+                        text: "PC Models",
+                        link: "/en/aftershockau/data-pc-models",
+                      },
+                      {
+                        text: "Custom Servers",
+                        link: "/en/aftershockau/data-server-landing-page",
+                      },
                     ],
                   },
 
@@ -76,7 +97,10 @@ export default withMermaid(
                     text: "Flagship Showroom",
                     link: "/en/aftershockau/data-flagship-showroom",
                   },
-                  { text: "Contact us", link: "/en/aftershockau/data-contact-us" },
+                  {
+                    text: "Contact us",
+                    link: "/en/aftershockau/data-contact-us",
+                  },
                   { text: "FAQ Hub", link: "/en/aftershockau/data-faq-hub" },
                   { text: "Careers", link: "/en/aftershockau/data-careers" },
                   { text: "About us", link: "/en/aftershockau/data-about-us" },
@@ -121,7 +145,10 @@ export default withMermaid(
                         text: "Limited Edition",
                         link: "/en/aftershockau/routes-limited-edition",
                       },
-                      { text: "Products", link: "/en/aftershockau/routes-products" },
+                      {
+                        text: "Products",
+                        link: "/en/aftershockau/routes-products",
+                      },
                     ],
                   },
 
@@ -150,8 +177,14 @@ export default withMermaid(
                   },
                   { text: "FAQ Hub", link: "/en/aftershockau/routes-faq-hub" },
                   { text: "Careers", link: "/en/aftershockau/routes-careers" },
-                  { text: "About Us", link: "/en/aftershockau/routes-about-us" },
-                  { text: "Warranty", link: "/en/aftershockau/routes-warranty" },
+                  {
+                    text: "About Us",
+                    link: "/en/aftershockau/routes-about-us",
+                  },
+                  {
+                    text: "Warranty",
+                    link: "/en/aftershockau/routes-warranty",
+                  },
                   { text: "Drivers", link: "/en/aftershockau/routes-drivers" },
                   {
                     text: "User Info",
@@ -175,7 +208,7 @@ export default withMermaid(
               },
             ],
           },
-        }
+        },
       },
     },
     mermaid: {
@@ -189,7 +222,7 @@ export default withMermaid(
        */
       theme: "forest",
       markdownAutoWrap: true, // 是否自动换行
-      look: 'handDrawn'
+      look: "handDrawn",
     },
     mermaidPlugin: {
       class: "mermaid my-class", // set additional css classes for parent container
@@ -207,6 +240,13 @@ export default withMermaid(
       },
       nav: [
         { text: "概述", link: "/" },
+        {
+          text: "Shopify",
+          items: [
+            { text: "Hydrogen", link: "/shopify/index" },
+            { text: "Metaobjects", link: "/shopify/metaobjects" },
+          ],
+        },
         {
           text: "站点",
           items: [
@@ -230,14 +270,26 @@ export default withMermaid(
                 collapsed: true,
                 items: [
                   { text: "Sale 促销界面", link: "/aftershockau/data-sale" },
-                  { text: "Read To Ship", link: "/aftershockau/data-ready-to-ship", },
+                  {
+                    text: "Read To Ship",
+                    link: "/aftershockau/data-ready-to-ship",
+                  },
                   { text: "Collection", link: "/aftershockau/data-collection" },
                   { text: "SLP", link: "/aftershockau/data-series" },
-                  { text: "Limited Edition", link: "/aftershockau/data-limited-edition", },
+                  {
+                    text: "Limited Edition",
+                    link: "/aftershockau/data-limited-edition",
+                  },
                   { text: "Products", link: "/aftershockau/data-products" },
-                  { text: "Workstations", link: "/aftershockau/data-workstations" },
+                  {
+                    text: "Workstations",
+                    link: "/aftershockau/data-workstations",
+                  },
                   { text: "PC Models", link: "/aftershockau/data-pc-models" },
-                  { text: "Custom Servers", link: "/aftershockau/data-server-landing-page" },
+                  {
+                    text: "Custom Servers",
+                    link: "/aftershockau/data-server-landing-page",
+                  },
                 ],
               },
 
