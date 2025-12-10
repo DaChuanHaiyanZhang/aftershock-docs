@@ -64,4 +64,4 @@ Because some API and component documentation can be hard to find, here is a quic
 
 This section displays documentation for some commonly used `APIs` currently known. Please refer to the English documentation for specifics.
 
-- Hydrogen [Storefront API](./hydrogen/storefront-api.md)
+- Hydrogen [Storefront API](./shopify/storefront-api.md)

@@ -64,4 +64,4 @@ features:
 
 这里文档展示的是，目前已知的一些常用的 `API` 文档，具体要参照英文文档。
 
-- Hydrogen [Storefront API](./hydrogen/storefront-api.md)
+- Hydrogen [Storefront API](./shopify/storefront-api.md)
