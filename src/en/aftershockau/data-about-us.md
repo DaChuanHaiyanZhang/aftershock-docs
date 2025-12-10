@@ -6,6 +6,11 @@
 
 The data source for this interface is `Prismic`, [`#aux-aboutus`](https://aftershockpc.prismic.io/builder/pages/YECxIRAAACcAA8zx?s=published).
 
+```mermaid
+flowchart LR
+Prismic --webhooks--> SM[Shopify Metaobject] --GraphQL--> Hydrogen
+```
+
 ## Component Reference Chain
 
 The entry file for this interface is `pages.$handle.jsx`.

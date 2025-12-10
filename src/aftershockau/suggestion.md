@@ -330,8 +330,6 @@ CSS hover 完全能替代你当前 GSAP 的所有功能，等价的 css 就是�
 }
 ```
 
-
-
 - GSAP 只有在“以下情况”才有必要：
 
   如果你需要这些，那才用 GSAP：
@@ -491,8 +489,6 @@ function toStaticCode(metaobject) {
 ```
 :::
 
-
-
 ### 原代码的问题是：
 
 1. 字段是写死的，只返回 html/css/js，如果以后 metaobject 多加一个 json 字段 → 要改代码。
@@ -595,35 +591,42 @@ async function fetchFeaturesForModels(models, storefront, prismicData) {
 ```
 ### 解决方案
 
-使用 [metaobjects](https://shopify.dev/docs/api/admin-graphql/latest/queries/metaobjects?example=fetch-metaobjects-with-string-search) 替代现有的 `metaobject`，这样可以一次性查询完成，而不是查询N次✌️。
+动态生成 GraphQL 查询
 
 ```javascript
-async function fetchFeaturesForModels(models, storefront, prismicData) {
-  const METAOBJECTS_BATCH_QUERY = `
-    query GetMetaobjectsBatch($handles: [MetaobjectHandleInput!]!) {
-      metaobjects(handles: $handles, first: 100) {
-        nodes {
-          handle
-          fields {
-            key
-            value
-          }
-        }
+// app/lib/metaobject.ts
+
+/**
+ * 动态生成查询多个 metaobjects 的 GraphQL
+ */
+export function buildMultipleMetaobjectsQuery(
+  type: string,
+  handles: string[]
+) {
+  const queries = handles.map((handle, index) => `
+    item${index}: metaobject(handle: {type: "${type}", handle: "${handle}"}) {
+      id
+      handle
+      fields {
+        key
+        value
       }
     }
-  `;
-  // code ...
-  // 批量查询 handles
-  const handles = uniqueFeatureIds.map(id => ({
-    handle: id,
-    type: 'prismic_cache_features_list'
-  }));
-  // code ...
-  const result = await storefront.query(METAOBJECTS_BATCH_QUERY, {
-    variables: { handles }
-  });
-  // code ...
+  `).join('\n');
+  
+  return `query { ${queries} }`;
 }
+
+// 使用
+const handles = ['desktop', 'workstation', 'laptop'];
+const query = buildMultipleMetaobjectsQuery('prismic_cache_sale_page', handles);
+
+const result = await storefront.query(query);
+
+// 提取结果
+const metaobjects = Object.values(result).filter(Boolean);
+console.log(metaobjects); // [desktop对象, workstation对象, laptop对象]
+
 ```
 >[!NOTE]
 >多看看其他地方的 `Promise.all` 或许都可以通过这个方式解决。

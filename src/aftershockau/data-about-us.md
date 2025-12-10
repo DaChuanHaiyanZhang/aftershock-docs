@@ -6,13 +6,18 @@
 
 该界面的数据源为 `Prismic`，[`#aux-aboutus`](https://aftershockpc.prismic.io/builder/pages/YECxIRAAACcAA8zx?s=published)
 
+```mermaid
+flowchart LR
+Prismic --webhooks--> SM[Shopify Metaobject] --GraphQL--> Hydrogen
+```
+
 
 ## 组件引用结构链
 
 该界面的入口文件为 pages.$hanlde.jsx
 
 ```mermaid
-flowchart TB
+flowchart LR
 
 pages.$hanlde.jsx --> AuxSliceRenderer 
 
