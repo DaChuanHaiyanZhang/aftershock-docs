@@ -62,6 +62,6 @@ Because some API and component documentation can be hard to find, here is a quic
 
 ## Common API Documentation
 
-This section displays documentation for some commonly used `APIs` currently known. Please refer to the English documentation for specifics.
+This section displays documentation for some commonly used `APIs` currently known. Please refer to the English documentation for specifics
 
 - Hydrogen [Storefront API](./shopify/storefront-api.md)
