@@ -3,7 +3,7 @@
 [[toc]]
 
 
-## 什么是 `Metaobjects`
+## 什么是 [`Metaobjects`](https://help.shopify.com/en/manual/custom-data/metaobjects)
 
 Metaobjects 是 Shopify 提供的一种自定义数据结构，让你可以创建和存储额外的结构化信息。
 

@@ -29,6 +29,13 @@ export default withMermaid(
           nav: [
             { text: "Overview", link: "/en/" },
             {
+              text: "Shopify",
+              items: [
+                { text: "Hydrogen", link: "/en/shopify/index" },
+                { text: "Metaobjects", link: "/en/shopify/metaobjects" },
+              ],
+            },
+            {
               text: "Sites",
               items: [
                 { text: "Aftershock AU", link: "/en/aftershockau" },
