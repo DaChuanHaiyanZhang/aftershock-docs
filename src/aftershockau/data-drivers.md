@@ -4,7 +4,12 @@
 
 ## 数据源
 
-数据源在Prismic当中。[`#aux-drivers`](https://aftershockpc.prismic.io/builder/pages/YGUNZBAAACAAJhCu?s=published)
+数据在 `Prismic` 中维护以后，通过 `webhook` 保存到 `Shopify Metaobjects`，而后使用 `Storefront API` 调用，[`#aux-drivers`](https://aftershockpc.prismic.io/builder/pages/YGUNZBAAACAAJhCu?s=published)
+
+```mermaid
+flowchart LR
+Prismic --webhooks--> SM[Shopify Metaobject] --GraphQL--> Hydrogen
+```
 
 ## 组件引用结构链
 

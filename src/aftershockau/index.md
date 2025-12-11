@@ -106,13 +106,21 @@ npx shopify hydrogen link
 npm run dev
 ```
 
-### 3. 发布到 Oxygen
+### 3. 发布到 `Oxygen` 测试服
+
+每次你推送或合并 Hydrogen 仓库的更改时，Oxygen 都会自动部署到测试服。前提条件是
+
+1. 你创建了新分支
+2. 你提交了新分支的代码
+3. 你把新分支的代码合并到了对应的分支
+
+>[!IMPORTANT]
+>`Oxygen` 会自动发布到测试服，并提供测试服地址。[参考文档](https://shopify.dev/docs/storefronts/headless/hydrogen/deployments/github?utm_source=chatgpt.com)
+
+### 4. 发布到 `Oxygen`
 ```bash
 npx shopify hydrogen deploy
 ```
-
->[!WARNING]
->😒目前还不知道怎么发布到测试服。
 
 ## 开发工具
 

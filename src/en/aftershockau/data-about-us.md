@@ -4,7 +4,7 @@
 
 ## Data Source
 
-The data source for this interface is `Prismic`, [`#aux-aboutus`](https://aftershockpc.prismic.io/builder/pages/YECxIRAAACcAA8zx?s=published).
+After being maintained in `Prismic`, the data is saved to `Shopify Metaobjects` via `webhook`, and then fetched using the `Storefront API`. [`#aux-aboutus`](https://aftershockpc.prismic.io/builder/pages/YECxIRAAACcAA8zx?s=published).
 
 ```mermaid
 flowchart LR

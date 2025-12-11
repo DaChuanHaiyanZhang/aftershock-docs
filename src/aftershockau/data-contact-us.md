@@ -4,7 +4,7 @@
 
 ## 数据流
 
-数据保存在 `Prismic` 中，[`#aux-contactus`](https://aftershockpc.prismic.io/builder/pages/ZMdk_REAACQAnDmw?s=published)
+数据在 `Prismic` 中维护以后，通过 `webhook` 保存到 `Shopify Metaobjects`，而后使用 `Storefront API` 调用，[`#aux-contactus`](https://aftershockpc.prismic.io/builder/pages/ZMdk_REAACQAnDmw?s=published)
 
 在 page.$handle.jsx 文件中与其他/page/页面一样统一调入数据。
 

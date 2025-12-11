@@ -4,22 +4,12 @@
 
 ## Data Flow
 
-Data is maintained on Prismic, [`#aux-flagship-showroom`](https://aftershockpc.prismic.io/builder/pages/ZUxSRhYAACYAIJby?s=published).
+After being maintained in `Prismic`, the data is saved to `Shopify Metaobjects` via `webhook`, and then fetched using the `Storefront API`. [`#aux-flagship-showroom`](https://aftershockpc.prismic.io/builder/pages/ZUxSRhYAACYAIJby?s=published).
 
-The data is then fetched via an API and rendered.
 
-```jsx
-const page = await prismicClient.getByUID("aux_page", params.handle, {
-  ref: previewRef,
-});
-
-const documentId = url.searchParams.get("documentId");
-if (documentId) {
-  const page = await prismicClient.getByID(documentId, {
-    ref: previewRef,
-  });
-  previewData = page;
-}
+```mermaid
+flowchart LR
+Prismic --> page.$handle.jsx --> Data Analysis --> Specific Handle
 ```
 
 ## Component Usage

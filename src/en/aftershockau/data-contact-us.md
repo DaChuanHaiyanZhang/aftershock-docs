@@ -4,7 +4,7 @@
 
 ## Data Flow
 
-Data is stored in `Prismic`, [`#aux-contactus`](https://aftershockpc.prismic.io/builder/pages/ZMdk_REAACQAnDmw?s=published)
+After being maintained in `Prismic`, the data is saved to `Shopify Metaobjects` via `webhook`, and then fetched using the `Storefront API`. [`#aux-contactus`](https://aftershockpc.prismic.io/builder/pages/ZMdk_REAACQAnDmw?s=published)
 
 In the `page.$handle.jsx` file, data is loaded similarly to other `/page/` pages.
 

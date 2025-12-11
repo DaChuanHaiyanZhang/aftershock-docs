@@ -4,23 +4,13 @@
 
 ## 数据流
 
-数据在 Prismic 上维护，[`#aux-flagship-showroom`](https://aftershockpc.prismic.io/builder/pages/ZUxSRhYAACYAIJby?s=published)
+数据在 `Prismic` 中维护以后，通过 `webhook` 保存到 `Shopify Metaobjects`，而后使用 `Storefront API` 调用，[`#aux-flagship-showroom`](https://aftershockpc.prismic.io/builder/pages/ZUxSRhYAACYAIJby?s=published)
 
-然后通过 API 的形式调取到数据，并完成渲染。
-
-```jsx
-const page = await prismicClient.getByUID("aux_page", params.handle, {
-  ref: previewRef,
-});
-
-const documentId = url.searchParams.get("documentId");
-if (documentId) {
-  const page = await prismicClient.getByID(documentId, {
-    ref: previewRef,
-  });
-  previewData = page;
-}
+```mermaid
+flowchart LR
+Prismic --> page.$handle.jsx --> Data Analysis --> Specific Handle
 ```
+
 
 ## 组件使用
 
