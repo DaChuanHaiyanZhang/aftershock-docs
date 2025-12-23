@@ -252,6 +252,9 @@ export default withMermaid(
           items: [
             { text: "Hydrogen", link: "/shopify/index" },
             { text: "Metaobjects", link: "/shopify/metaobjects" },
+            { text: "Liquid", items: [
+              { text: "Liquid Objects", link: "/shopify/liquid-objects" }
+            ] }
           ],
         },
         {
