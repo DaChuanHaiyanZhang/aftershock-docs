@@ -112,15 +112,16 @@ npm run dev
 
 1. 你创建了新分支
 2. 你提交了新分支的代码
-3. 你把新分支的代码合并到了对应的分支
+3. 创建新的合并请求。
+
+>[!IMPORTANT]
+>⚠️注意！此时还未确认合并代码，先**不要**确认合并。
 
 >[!IMPORTANT]
 >`Oxygen` 会自动发布到测试服，并提供测试服地址。[参考文档](https://shopify.dev/docs/storefronts/headless/hydrogen/deployments/github?utm_source=chatgpt.com)
 
 ### 4. 发布到 `Oxygen`
-```bash
-npx shopify hydrogen deploy
-```
+代码在确认合并之后会**自动**发布到 `Oxygen` 无需多余的操作。
 
 ## 开发工具
 
