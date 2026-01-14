@@ -35,6 +35,7 @@ export default withMermaid(
                 { text: "Metaobjects", link: "/en/shopify/metaobjects" },
               ],
             },
+            { text: "Prismic", link: "/en/prismic/" },
             {
               text: "Sites",
               items: [
@@ -257,6 +258,7 @@ export default withMermaid(
             ] }
           ],
         },
+        { text: "Prismic", link: "/en/prismic/" },
         {
           text: "站点",
           items: [
