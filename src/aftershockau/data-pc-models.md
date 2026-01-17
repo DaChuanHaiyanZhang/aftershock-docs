@@ -152,9 +152,9 @@ setDynamicCompareAt(baseCompareAt + optionsCompareAt);
 
 这里用到了三个 `API`
 ```bash
-/api/searchProduct --> api.createProduct.jsx
+/api/searchProduct --> api.searchProduct.jsx
 /api/updateProductPrice --> api.updateProductPrice.jsx
-/api/createProduct --> api.searchProduct.jsx
+/api/createProduct --> api.createProduct.jsx
 ```
 
 ### 核心内容
