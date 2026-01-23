@@ -37,6 +37,10 @@ export default withMermaid(
             },
             { text: "Prismic", link: "/en/prismic/" },
             {
+              text: "Plugins",
+              items: [{ text: "Instant.one", link: "/en/plugins/instant-one" }],
+            },
+            {
               text: "Sites",
               items: [
                 { text: "Aftershock AU", link: "/en/aftershockau" },
@@ -253,12 +257,19 @@ export default withMermaid(
           items: [
             { text: "Hydrogen", link: "/shopify/index" },
             { text: "Metaobjects", link: "/shopify/metaobjects" },
-            { text: "Liquid", items: [
-              { text: "Liquid Objects", link: "/shopify/liquid-objects" }
-            ] }
+            {
+              text: "Liquid",
+              items: [
+                { text: "Liquid Objects", link: "/shopify/liquid-objects" },
+              ],
+            },
           ],
         },
-        { text: "Prismic", link: "/en/prismic/" },
+        { text: "Prismic", link: "/prismic/" },
+        {
+          text: "插件",
+          items: [{ text: "Instant.one", link: "/plugins/instant-one" }],
+        },
         {
           text: "站点",
           items: [
@@ -419,5 +430,5 @@ export default withMermaid(
         },
       ],
     },
-  })
+  }),
 );
