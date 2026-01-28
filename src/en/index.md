@@ -56,6 +56,7 @@ Because some API and component documentation can be hard to find, here is a quic
 - [Vite](https://vitejs.dev/guide/)
 - [Swiper](https://swiperjs.com/)
 - [GSAP.js](https://gsap.com/)
+- [Google Merchant Center(GMC)](https://support.google.com/merchants/answer/7052112?sjid=16591523785496226500-NC#Definitions)
 
 > [!WARNING]
 > Gotta vent a little! 😂 The content in the `Hydrogen` and `Shopify` documentation is often hard to find; one really wonders if it was written by humans.

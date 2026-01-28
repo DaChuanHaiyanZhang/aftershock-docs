@@ -56,6 +56,7 @@ features:
 - [Vite](https://vitejs.cn/vite3-cn/guide/)
 - [Swiper](https://swiperjs.com/)
 - [gsap.js](https://gsap.com/)
+- [Google Merchant Center(GMC)](https://support.google.com/merchants/answer/7052112?sjid=16591523785496226500-NC#Definitions)
 
 > [!WARNING]
 > 实名吐槽！😂 `Hydrogen`、`Shopify` 的文档里面的内容很难找，真怀疑是不是人类写出来的。
