@@ -121,7 +121,10 @@ npm run dev
 >`Oxygen` 会自动发布到测试服，并提供测试服地址。[参考文档](https://shopify.dev/docs/storefronts/headless/hydrogen/deployments/github?utm_source=chatgpt.com)
 
 ### 4. 发布到 `Oxygen`
-代码在确认合并之后会**自动**发布到 `Oxygen` 无需多余的操作。
+代码在确认合并之后会**自动**发布到 `Oxygen` 无需多余的操作。整个发布过程需要3-5分钟，可以在[这里](https://admin.shopify.com/store/aftershockpcau/hydrogen/1000024079)查看部署进度，以及部署记录
+
+### 5. 修改密钥
+[PRIVATE_STOREFRONT_API_TOKEN](https://shopify.dev/docs/storefronts/headless/hydrogen/environments#rotate-your-private-storefront-api-token)
 
 ## 开发工具
 

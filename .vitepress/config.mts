@@ -38,7 +38,10 @@ export default withMermaid(
             { text: "Prismic", link: "/en/prismic/" },
             {
               text: "Plugins",
-              items: [{ text: "Instant.one", link: "/en/plugins/instant-one" }],
+              items: [
+                { text: "Instant.one", link: "/en/plugins/instant-one" },
+                { text: "Reviews.io", link: "/en/plugins/reviews" },
+              ],
             },
             {
               text: "Sites",
@@ -268,7 +271,10 @@ export default withMermaid(
         { text: "Prismic", link: "/prismic/" },
         {
           text: "插件",
-          items: [{ text: "Instant.one", link: "/plugins/instant-one" }],
+          items: [
+            { text: "Instant.one", link: "/plugins/instant-one" },
+            { text: "Reviews.io", link: "/plugins/reviews" }
+          ],
         },
         {
           text: "站点",
