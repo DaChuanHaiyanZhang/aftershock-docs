@@ -1,0 +1,75 @@
+name: Deploy VitePress to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master  # 或者 master，根据你的默认分支名
+  # 允许手动触发
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # 关键：添加权限配置
+    permissions:
+      contents: write  # 允许写入仓库
+      pages: write     # 允许写入 GitHub Pages
+      id-token: write  # 允许 OIDC 令牌
+      
+    steps:
+      # 1. 检出代码
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取所有历史以便正确生成 lastUpdated
+      
+      # 2. 设置 Node.js 环境
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.21.0'
+          cache: 'npm'
+      
+      # 3. 安装依赖
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps  # 强制忽略 peer 依赖冲突
+      
+      # 4. 构建项目
+      - name: Build VitePress
+        run: npm run docs:build
+        
+      # 🔥 关键修复：手动创建 .nojekyll 文件
+      - name: Create .nojekyll file to disable Jekyll
+        run: |
+          echo "Disabling Jekyll processing" > ./.vitepress/dist/.nojekyll
+          echo "✅ 验证文件已创建11:"
+          ls -la ./.vitepress/dist/.nojekyll
+
+      # 5. 部署到 gh-pages 分支
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          # 使用自动生成的 token，无需额外配置
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          
+          # 发布目录：VitePress 构建输出的目录
+          # 如果在根目录，使用：./.vitepress/dist
+          publish_dir: ./.vitepress/dist
+          
+          # 发布到的分支
+          publish_branch: gh-pages
+
+          # 关键修复
+          enable_jekyll: false
+
+          keep_files: false  # 每次完全清理 gh-pages 分支
+          
+          # 可选：如果之前已经存在 gh-pages 分支，是否强制推送
+          force_orphan: true
+          
+          # 可选：每次提交的用户信息
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          
+          # 可选：提交信息
+          commit_message: ${{ github.event.head_commit.message }}

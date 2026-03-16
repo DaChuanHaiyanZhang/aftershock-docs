@@ -38,7 +38,7 @@ import {
   watchEffect
 } from "./chunk-DEFK5HPI.js";
 
-// node_modules/@vueuse/shared/dist/index.js
+// node_modules/.pnpm/@vueuse+shared@14.1.0_vue@3.5.25/node_modules/@vueuse/shared/dist/index.js
 function computedEager(fn, options) {
   var _options$flush;
   const result = shallowRef();
@@ -188,7 +188,7 @@ var hasOwn = (val, key) => Object.prototype.hasOwnProperty.call(val, key);
 var isIOS = getIsIOS();
 function getIsIOS() {
   var _window, _window2, _window3;
-  return isClient && ((_window = window) === null || _window === void 0 || (_window = _window.navigator) === null || _window === void 0 ? void 0 : _window.userAgent) && (/iP(?:ad|hone|od)/.test(window.navigator.userAgent) || ((_window2 = window) === null || _window2 === void 0 || (_window2 = _window2.navigator) === null || _window2 === void 0 ? void 0 : _window2.maxTouchPoints) > 2 && /iPad|Macintosh/.test((_window3 = window) === null || _window3 === void 0 ? void 0 : _window3.navigator.userAgent));
+  return isClient && !!((_window = window) === null || _window === void 0 || (_window = _window.navigator) === null || _window === void 0 ? void 0 : _window.userAgent) && (/iP(?:ad|hone|od)/.test(window.navigator.userAgent) || ((_window2 = window) === null || _window2 === void 0 || (_window2 = _window2.navigator) === null || _window2 === void 0 ? void 0 : _window2.maxTouchPoints) > 2 && /iPad|Macintosh/.test((_window3 = window) === null || _window3 === void 0 ? void 0 : _window3.navigator.userAgent));
 }
 function toRef2(...args) {
   if (args.length !== 1) return toRef(...args);
@@ -1361,7 +1361,7 @@ function whenever(source, cb, options) {
   return stop;
 }
 
-// node_modules/@vueuse/core/dist/index.js
+// node_modules/.pnpm/@vueuse+core@14.1.0_vue@3.5.25/node_modules/@vueuse/core/dist/index.js
 function computedAsync(evaluationCallback, initialState, optionsOrRef) {
   var _globalThis$reportErr;
   let options;
@@ -1503,11 +1503,6 @@ function unrefElement(elRef) {
   return (_$el = plain === null || plain === void 0 ? void 0 : plain.$el) !== null && _$el !== void 0 ? _$el : plain;
 }
 function useEventListener(...args) {
-  const cleanups = [];
-  const cleanup = () => {
-    cleanups.forEach((fn) => fn());
-    cleanups.length = 0;
-  };
   const register = (el, event, listener, options) => {
     el.addEventListener(event, listener, options);
     return () => el.removeEventListener(event, listener, options);
@@ -1516,7 +1511,7 @@ function useEventListener(...args) {
     const test = toArray(toValue(args[0])).filter((e) => e != null);
     return test.every((e) => typeof e !== "string") ? test : void 0;
   });
-  const stopWatch = watchImmediate(() => {
+  return watchImmediate(() => {
     var _firstParamTargets$va, _firstParamTargets$va2;
     return [
       (_firstParamTargets$va = (_firstParamTargets$va2 = firstParamTargets.value) === null || _firstParamTargets$va2 === void 0 ? void 0 : _firstParamTargets$va2.map((e) => unrefElement(e))) !== null && _firstParamTargets$va !== void 0 ? _firstParamTargets$va : [defaultWindow].filter((e) => e != null),
@@ -1524,18 +1519,14 @@ function useEventListener(...args) {
       toArray(unref(firstParamTargets.value ? args[2] : args[1])),
       toValue(firstParamTargets.value ? args[3] : args[2])
     ];
-  }, ([raw_targets, raw_events, raw_listeners, raw_options]) => {
-    cleanup();
+  }, ([raw_targets, raw_events, raw_listeners, raw_options], _, onCleanup) => {
     if (!(raw_targets === null || raw_targets === void 0 ? void 0 : raw_targets.length) || !(raw_events === null || raw_events === void 0 ? void 0 : raw_events.length) || !(raw_listeners === null || raw_listeners === void 0 ? void 0 : raw_listeners.length)) return;
     const optionsClone = isObject(raw_options) ? { ...raw_options } : raw_options;
-    cleanups.push(...raw_targets.flatMap((el) => raw_events.flatMap((event) => raw_listeners.map((listener) => register(el, event, listener, optionsClone)))));
+    const cleanups = raw_targets.flatMap((el) => raw_events.flatMap((event) => raw_listeners.map((listener) => register(el, event, listener, optionsClone))));
+    onCleanup(() => {
+      cleanups.forEach((fn) => fn());
+    });
   }, { flush: "post" });
-  const stop = () => {
-    stopWatch();
-    cleanup();
-  };
-  tryOnScopeDispose(cleanup);
-  return stop;
 }
 var _iOSWorkaround = false;
 function onClickOutside(target, handler, options = {}) {
@@ -2195,6 +2186,7 @@ function useAsyncQueue(tasks, options) {
       }
       updateResult(promiseState.rejected, e);
       onError();
+      if (activeIndex.value === tasks.length - 1) onFinished();
       return e;
     });
   }, Promise.resolve());
@@ -2780,6 +2772,7 @@ function useClipboard(options = {}) {
     ta.value = value;
     ta.style.position = "absolute";
     ta.style.opacity = "0";
+    ta.setAttribute("readonly", "");
     document.body.appendChild(ta);
     ta.select();
     document.execCommand("copy");
@@ -3732,6 +3725,7 @@ function useDropZone(target, options = {}) {
       return types.every((type) => dataTypes.some((allowedType) => type.includes(allowedType)));
     };
     const checkValidity = (items) => {
+      if (_options.checkValidity) return _options.checkValidity(items);
       const dataTypesValid = checkDataTypes(Array.from(items !== null && items !== void 0 ? items : []).map((item) => item.type));
       const multipleFilesValid = multiple || items.length <= 1;
       return dataTypesValid && multipleFilesValid;
@@ -4018,8 +4012,8 @@ function useIntersectionObserver(target, callback, options = {}) {
   };
 }
 function useElementVisibility(element, options = {}) {
-  const { window: window$1 = defaultWindow, scrollTarget, threshold = 0, rootMargin, once = false } = options;
-  const elementIsVisible = shallowRef(false);
+  const { window: window$1 = defaultWindow, scrollTarget, threshold = 0, rootMargin, once = false, initialValue = false } = options;
+  const elementIsVisible = shallowRef(initialValue);
   const { stop } = useIntersectionObserver(element, (intersectionObserverEntries) => {
     let isIntersecting = elementIsVisible.value;
     let latestTime = 0;
@@ -5124,7 +5118,7 @@ function useScroll(element, options = {}) {
     var _document2;
     if (!window$1) return;
     const el = (target === null || target === void 0 || (_document2 = target.document) === null || _document2 === void 0 ? void 0 : _document2.documentElement) || (target === null || target === void 0 ? void 0 : target.documentElement) || unrefElement(target);
-    const { display, flexDirection, direction } = getComputedStyle(el);
+    const { display, flexDirection, direction } = window$1.getComputedStyle(el);
     const directionMultipler = direction === "rtl" ? -1 : 1;
     const scrollLeft = el.scrollLeft;
     directions.left = scrollLeft < internalX.value;
@@ -5210,9 +5204,13 @@ function useInfiniteScroll(element, onLoadMore, options = {}) {
     return resolveElement(toValue(element));
   });
   const isElementVisible = useElementVisibility(observedElement);
+  const canLoad = computed(() => {
+    if (!observedElement.value) return false;
+    return canLoadMore(observedElement.value);
+  });
   function checkAndLoad() {
     state.measure();
-    if (!observedElement.value || !isElementVisible.value || !canLoadMore(observedElement.value)) return;
+    if (!observedElement.value || !isElementVisible.value || !canLoad.value) return;
     const { scrollHeight, clientHeight, scrollWidth, clientWidth } = observedElement.value;
     const isNarrower = direction === "bottom" || direction === "top" ? scrollHeight <= clientHeight : scrollWidth <= clientWidth;
     if (state.arrivedState[direction] || isNarrower) {
@@ -5222,7 +5220,11 @@ function useInfiniteScroll(element, onLoadMore, options = {}) {
       });
     }
   }
-  tryOnUnmounted(watch(() => [state.arrivedState[direction], isElementVisible.value], checkAndLoad, { immediate: true }));
+  tryOnUnmounted(watch(() => [
+    state.arrivedState[direction],
+    isElementVisible.value,
+    canLoad.value
+  ], checkAndLoad, { immediate: true }));
   return {
     isLoading,
     reset() {
@@ -5311,6 +5313,7 @@ function useMagicKeys(options = {}) {
     var _e$key, _e$code;
     const key = (_e$key = e.key) === null || _e$key === void 0 ? void 0 : _e$key.toLowerCase();
     const values = [(_e$code = e.code) === null || _e$code === void 0 ? void 0 : _e$code.toLowerCase(), key].filter(Boolean);
+    if (key === "") return;
     if (key) if (value) current.add(key);
     else current.delete(key);
     for (const key$1 of values) {
@@ -5686,17 +5689,20 @@ function useMouseInElement(target, options = {}) {
     if (!window$1) return;
     const el = unrefElement(targetRef);
     if (!el || !(el instanceof Element)) return;
-    const { left, top, width, height } = el.getBoundingClientRect();
-    elementPositionX.value = left + (type === "page" ? window$1.pageXOffset : 0);
-    elementPositionY.value = top + (type === "page" ? window$1.pageYOffset : 0);
-    elementHeight.value = height;
-    elementWidth.value = width;
-    const elX = x.value - elementPositionX.value;
-    const elY = y.value - elementPositionY.value;
-    isOutside.value = width === 0 || height === 0 || elX < 0 || elY < 0 || elX > width || elY > height;
-    if (handleOutside || !isOutside.value) {
-      elementX.value = elX;
-      elementY.value = elY;
+    for (const rect of el.getClientRects()) {
+      const { left, top, width, height } = rect;
+      elementPositionX.value = left + (type === "page" ? window$1.pageXOffset : 0);
+      elementPositionY.value = top + (type === "page" ? window$1.pageYOffset : 0);
+      elementHeight.value = height;
+      elementWidth.value = width;
+      const elX = x.value - elementPositionX.value;
+      const elY = y.value - elementPositionY.value;
+      isOutside.value = width === 0 || height === 0 || elX < 0 || elY < 0 || elX > width || elY > height;
+      if (handleOutside || !isOutside.value) {
+        elementX.value = elX;
+        elementY.value = elY;
+      }
+      if (!isOutside.value) break;
     }
   }
   const stopFnList = [];
@@ -6533,8 +6539,12 @@ function useSpeechRecognition(options = {}) {
     };
     watch(isListening, (newValue, oldValue) => {
       if (newValue === oldValue) return;
-      if (newValue) recognition.start();
-      else recognition.stop();
+      try {
+        if (newValue) recognition.start();
+        else recognition.stop();
+      } catch (err) {
+        error.value = err;
+      }
     });
   }
   tryOnScopeDispose(() => {
@@ -7132,18 +7142,20 @@ function formatTimeAgoIntl(from, options = {}, now2 = Date.now()) {
   });
 }
 function getTimeAgoIntlResult(from, options = {}, now2 = Date.now()) {
+  var _options$units;
   const { locale, relativeTimeFormatOptions = { numeric: "auto" } } = options;
   const rtf = new Intl.RelativeTimeFormat(locale, relativeTimeFormatOptions);
   const { locale: resolvedLocale } = rtf.resolvedOptions();
   const diff = +from - +now2;
   const absDiff = Math.abs(diff);
-  for (const { name, ms } of UNITS) if (absDiff >= ms) return {
+  const units = (_options$units = options.units) !== null && _options$units !== void 0 ? _options$units : UNITS;
+  for (const { name, ms } of units) if (absDiff >= ms) return {
     resolvedLocale,
     parts: rtf.formatToParts(Math.round(diff / ms), name)
   };
   return {
     resolvedLocale,
-    parts: rtf.formatToParts(0, "second")
+    parts: rtf.formatToParts(0, units[units.length - 1].name)
   };
 }
 function formatTimeAgoIntlParts(parts, options = {}) {
@@ -8016,7 +8028,8 @@ function useWebSocket(url, options = {}) {
         const { retries = -1, delay = 1e3, onFailed } = resolveNestedOptions(options.autoReconnect);
         if ((typeof retries === "function" ? retries : () => typeof retries === "number" && (retries < 0 || retried < retries))(retried)) {
           retried += 1;
-          retryTimeout = setTimeout(_init, delay);
+          const delayTime = typeof delay === "function" ? delay(retried) : delay;
+          retryTimeout = setTimeout(_init, delayTime);
         } else onFailed === null || onFailed === void 0 || onFailed();
       }
     };
@@ -8546,4 +8559,4 @@ export {
   useWindowScroll,
   useWindowSize
 };
-//# sourceMappingURL=chunk-3Y7RVRZG.js.map
+//# sourceMappingURL=chunk-ZAC2JORU.js.map

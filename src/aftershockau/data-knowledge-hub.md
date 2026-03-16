@@ -1,5 +1,7 @@
 # Knowledge Hub
 
+[[toc]]
+
 ## 首页
 
 ### 数据流
@@ -181,9 +183,10 @@ storefront.query(GET_METAOBJECTS, {
 });
 ```
 
-> Tips: [Storefront Api 文档地址](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
-
-> Tips: [Metaobjects 文档地址](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004)
+>[!NOTE]
+> [Storefront Api 文档地址](https://shopify.dev/docs/storefronts/headless/hydrogen/data-fetching)
+>
+> [Metaobjects 文档地址](https://admin.shopify.com/store/aftershockpcau/content/metaobjects/entries/prismic_cache_global_data/99848782004)
 
 该组件有两个组件控制数据的渲染和输出：
 
@@ -204,13 +207,13 @@ app\components\KnowledgeHub\FeaturedList\index.jsx
 
 ## Categories 分组页面
 
-/knowledge-hub/$handle
+`/knowledge-hub/$handle`
 
 Categories 的数据源于 CategoriesList 界面的传入，向上反推即可：
 
-knowledge-hub.jsx(获取数据) 👉 KnowledgeHub 👉 CategoriesList
-
-![aftershock](/screenshots/ScreenShot_2025-11-27_155935_897.png "aftershock")
+```mermaid
+knowledge-hub.jsx(获取数据) --> KnowledgeHub --> CategoriesList
+```
 
 ```jsx
 import { CategoriesList } from "./CategoriesList";
@@ -250,6 +253,9 @@ export function CategoryCard({ category }) {
   );
 }
 ```
+
+>[!NOTE] 
+>[Image 组件地址](https://shopify.dev/docs/api/hydrogen/latest/components/image)
 
 ### 数据源
 
@@ -319,7 +325,8 @@ export async function loader({ context, params, request }) {
 }
 ```
 
-> Tips: [client.getByUID](https://prismic.io/docs/technical-reference/prismicio-client/v7#getbyuid)
+>[!NOTE]
+>[client.getByUID](https://prismic.io/docs/technical-reference/prismicio-client/v7#getbyuid)
 
 ### 组件引用链
 
